@@ -1,0 +1,311 @@
+/* font-weight: Use a value from 100 to 900 */
+
+* {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 250;
+  font-style: normal;
+}
+
+.nav-header {
+  width: 95%;
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 40px;
+  max-height: 60px;
+}
+
+.nav-header nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 40px;
+  align-items: center;
+  margin-top: -15px;
+}
+
+.nav-header nav a {
+  font-weight: 500;
+  text-decoration: none;
+}
+
+#repo-nya {
+  margin-right: 100px;
+}
+
+#repo-nya a {
+  display: flex;
+  justify-content: center;
+  color: white;
+  transition: 0.35s;
+}
+
+#repo-nya a:hover {
+  color: #97c1ff;
+}
+
+#repo-nya svg {
+  margin-top: 15px;
+  margin-left: 15px;
+  width: 30px;
+  height: 30px;
+}
+
+#TitleKel8 {
+  background-color: #97c1ff;
+  border-radius: 50px;
+  padding: 0px 15px;
+  margin-left: -30px;
+}
+
+#TitleKel8 h1 {
+  font-weight: 500;
+  text-decoration: none;
+  color: white;
+  padding: 10px 30px;
+}
+
+body {
+  color: white;
+  background-image: linear-gradient(
+    to top right,
+    #54bf65,
+    #e3a84f 50%,
+    #68b975 100%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100vh;
+  margin: 0px;
+}
+
+.invisible-waifu {
+  height: 25px;
+  width: 25px;
+}
+
+.body-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+#go-far-ehe {
+  filter: blur(4px);
+  background-image: url(imgs/go_far_ehe.webp);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  width: 100%;
+  margin-top: 45px;
+  z-index: -1;
+  position: absolute;
+}
+
+.home-cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 95px;
+  height: 250px;
+  width: 100%;
+  /* background-image: url(imgs/go_far_ehe.webp);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center; */
+}
+
+.home-cover h1 {
+  font-weight: 700;
+}
+
+.home-cover h2 {
+  font-weight: 400;
+}
+
+.that-two-card {
+  display: flex;
+  flex-direction: row;
+  margin-top: 60px;
+  height: 100vh;
+  padding: 10px;
+  gap: 10px;
+}
+
+.card-list-anggota {
+  background-color: #1a1c1c;
+  border-radius: 10px;
+  width: 45%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  clip-path: fill-box;
+}
+
+.card-list-anggota svg {
+  height: 200px;
+  width: 200px;
+  fill: #e3a84f;
+  position: fixed;
+  bottom: 0%;
+  left: 0%;
+  transform: translate(0%, 30%);
+  overflow: hidden;
+}
+
+.list-anggota {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+}
+
+.list-anggota h1 {
+  font-weight: 500;
+  font-size: 27px;
+}
+
+.list-anggota nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-anggota nav a {
+  font-weight: 400;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.card-crud-launcher {
+  background-color: #1a1c1c;
+  border-radius: 10px;
+  width: 45%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  clip-path: fill-box;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card-crud-launcher #card-crud-launcher-decoration {
+  height: 200px;
+  width: 200px;
+  fill: #e3a84f;
+  position: fixed;
+  bottom: 0%;
+  right: 0%;
+  transform: translate(20%, -180%);
+  overflow: hidden;
+}
+
+.crud-launcher-text{
+    margin-bottom: 30px;
+}
+
+.crud-launcher-text h1 {
+  font-weight: 400;
+  font-size: 37px;
+  margin: 0px;
+}
+.crud-launcher-text h2 {
+  font-weight: 400;
+  font-size: 50px;
+  color: #ffb118;
+  margin: 0px;
+}
+.crud-launcher-text h3 {
+  font-weight: 700;
+  font-size: 45px;
+  margin: 0px;
+}
+
+input[type='radio'] {
+    accent-color: #e3a84f;
+}
+
+.pov-args {
+  border-radius: 10px;
+  border: 3px white;
+  border-style: solid;
+  padding: 10px;
+}
+
+.pov-args h1 {
+  font-weight: 400;
+  font-size: 12px;
+  margin: -20px 0px 0px 0px;
+  background-color: #1a1c1c;
+  max-width: 26px;
+}
+
+.pov-args form {
+  display: flex;
+  gap: 10px;
+}
+
+.pov-args form label {
+  font-weight: 400;
+  font-size: 17px;
+}
+
+.btn-field {
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+#btn-do-crud {
+  background: #b78740;
+  padding: 10px 50px;
+  display: flex;
+  border-radius: 20px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+#btn-do-crud:hover {
+  background: linear-gradient(to top right, #c69143, #7d5d2b 50%, #b78740 100%);
+}
+
+#btn-do-crud h1 {
+  font-weight: 500;
+  font-size: 22px;
+}
+
+#btn-advance-launch svg {
+  stroke: white;
+  height: 40px;
+  width: 40px;
+  transition: 0.35s;
+  cursor: pointer;
+}
+
+#btn-advance-launch svg:hover {
+    stroke: grey;
+  }
+
+.connection-status-field {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  position: relative;
+  bottom: 0%;
+}
+
+.connection-status-field h1 {
+  font-weight: 500;
+  font-size: 16px;
+}
