@@ -3,7 +3,8 @@
 try {
     $conn = mysqli_connect("localhost", "root", "", "db_koperasi_organisasi");
 } catch (Exception $e) {
-    header("Location: pages/error_page.php?errorLog=" . $e->getMessage());
+    // Raruu: Mending bikin dialog dari pada ganti page - saran
+    // header("Location: pages/error_page.php?errorLog=" . $e->getMessage());
 }
 
 // MENGECEK KONEKSI
