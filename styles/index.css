@@ -208,8 +208,8 @@ body {
   overflow: hidden;
 }
 
-.crud-launcher-text{
-    margin-bottom: 30px;
+.crud-launcher-text {
+  margin-bottom: 30px;
 }
 
 .crud-launcher-text h1 {
@@ -229,8 +229,8 @@ body {
   margin: 0px;
 }
 
-input[type='radio'] {
-    accent-color: #e3a84f;
+input[type="radio"] {
+  accent-color: #e3a84f;
 }
 
 .pov-args {
@@ -267,17 +267,18 @@ input[type='radio'] {
 }
 
 #btn-do-crud {
-  background: #b78740;
+  background-color: #b78740;
+  background: linear-gradient(to top right, #c69143, rgba(0,0,0,0) 50%, #b78740 100%);
   padding: 10px 50px;
   display: flex;
   border-radius: 20px;
   text-decoration: none;
   cursor: pointer;
-  transition: 0.5s;
+  transition: 0.35s;
 }
 
 #btn-do-crud:hover {
-  background: linear-gradient(to top right, #c69143, #7d5d2b 50%, #b78740 100%);
+  background-color: #ffb118;
 }
 
 #btn-do-crud h1 {
@@ -294,8 +295,8 @@ input[type='radio'] {
 }
 
 #btn-advance-launch svg:hover {
-    stroke: grey;
-  }
+  stroke: grey;
+}
 
 .connection-status-field {
   display: flex;

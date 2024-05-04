@@ -4,7 +4,8 @@ require 'core/functions.php';
 // Mengecek koneksi, jika terdapat error langsung di arahkan ke page error_page.php;
 $getResult = checkConnection();
 if ($getResult != null) {
-    header("Location: pages/error_page.php?errorLog=$getResult");
+    // Raruu: Mending bikin dialog dari pada ganti page - saran
+    // header("Location: pages/error_page.php?errorLog=$getResult");
 }
 ?>
 
@@ -77,8 +78,9 @@ if ($getResult != null) {
                 </nav>
                 <div class="pov-args">
                     <h1>POV</h1>
-                    <form>
-                        <input type="radio" id="petugas" name="pov" value="petugas">
+                    <!-- <form method="post" action="process.php"> -->
+                    <form id="pov-radio">
+                        <input type="radio" id="petugas" name="pov" value="petugas" checked="checked">
                         <label for="petugas">Petugas</label><br>
                         <input type="radio" id="pembeli" name="pov" value="pembeli">
                         <label for="pembeli">Pembeli</label><br>
@@ -87,7 +89,7 @@ if ($getResult != null) {
                     </form>
                 </div>
                 <div class="btn-field">
-                    <a id="btn-do-crud">
+                    <a id="btn-do-crud" onclick="redirectToPOV()">
                         <h1>DO CRUD</h1>
                     </a>
                     <a id="btn-advance-launch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -99,7 +101,7 @@ if ($getResult != null) {
                 </div>
                 <div class="connection-status-field">
                     <h1>Connection: </h1>
-                    <h1>OWO</h1>
+                    <h1 id="connection-status-what">OWO</h1>
                 </div>
             </div>
         </div>
@@ -122,5 +124,31 @@ if ($getResult != null) {
         </li>
     </ul> -->
 </body>
+
+<script>
+    function redirectToPOV() {
+        const povRadio = document.getElementById('pov-radio').elements['pov'];
+        for (var i = 0; i < povRadio.length; i++) {
+            if (povRadio[i].checked) {          
+                window.open(`pages/${povRadio[i].value}.php`,"_self")
+                break;
+            }
+        }
+    }
+
+    function checkConnection() {
+        var connectionStatus = "<?= $getResult ?>";
+        const statusTextElement = document.getElementById('connection-status-what');
+        if (connectionStatus != '') {
+            statusTextElement.textContent = 'YABAI';
+            statusTextElement.style.color = 'red';
+        } else {
+            statusTextElement.textContent = 'OK!';
+            statusTextElement.style.color = 'green';
+        }
+    }
+
+    checkConnection();
+</script>
 
 </html>
