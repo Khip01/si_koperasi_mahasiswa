@@ -187,20 +187,18 @@ require '../core/functions.php';
     loadThings('Pesanan', 2, <?= $barang ?>);
 
     var rowEditTableOpen = false;
+    var rowEditTableLastOpen = null;
 
     function generateFormTextField(x) {
         if (rowEditTableOpen == true) {
             let editField;
-            if (x == 0) {
-                editField = document.getElementsByClassName('table-edit-row')[1];
-            } else {
-                editField = document.getElementsByClassName('table-edit-row')[0];
-            }
+            editField = document.getElementsByClassName('table-edit-row')[rowEditTableLastOpen];
             editField.innerHTML = '';
-            editField.style.margin = '0px 25px 0px 0px';
+            editField.style.margin = null;
             rowEditTableOpen = false;
         }
         rowEditTableOpen = true;
+        rowEditTableLastOpen = x;
         const editField = document.getElementsByClassName('table-edit-row')[x];
         if (x == 2) {
             editField.innerHTML = editFieldPetugasDialog;
@@ -245,6 +243,7 @@ require '../core/functions.php';
         editField.innerHTML = '';
         editField.style.margin = '0px 25px 0px 0px';
         editSelectedRowWidget.style.backgroundColor = null;
+        editSelectedRowWidget = null;
     }
 
     function saveFormTextField(x) {
@@ -258,22 +257,30 @@ require '../core/functions.php';
         console.log(valueToSubmit);
     }
 
-    function showPetugasFormAdd(){
+    function showPetugasFormAdd() {
+        loadThings('Pesanan', 2, <?= $barang ?>);
         const formAddData = document.getElementsByClassName('petugas-form-add-data')[0];
         const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
         formAddDataFilter.style.pointerEvents = 'all';
-        formAddDataFilter.onclick = function(){closePetugasAddDataForm();};       
+        formAddDataFilter.onclick = function() {
+            closePetugasAddDataForm();
+        };
         formAddData.style.top = '50%';
     }
 
-    function closePetugasAddDataForm(){
+    function closePetugasAddDataForm() {
         const formAddData = document.getElementsByClassName('petugas-form-add-data')[0];
         const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
         formAddDataFilter.style.pointerEvents = 'none';
         formAddDataFilter.onclick = null;
         formAddData.style.top = '150%';
+        const editField = document.getElementsByClassName('table-edit-row')[2];
+        editField.innerHTML = '';
+        editField.style.margin = '0px 10px 50px 1px';
+        editSelectedRowWidget.style.backgroundColor = null;
+        editSelectedRowWidget = null;
     }
 
     function addPetugasAddDataForm() {
