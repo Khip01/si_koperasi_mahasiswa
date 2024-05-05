@@ -51,107 +51,211 @@ require '../core/functions.php';
         $barang = json_encode($barang);
     }
     ?>
-    <div class="table-field">
-        <div class="table-database">
-            <h1>Daftar Barang</h1>
-            <div class="table-wrapper">
-                <table></table>
+    <div class="table-field-wrapper">
+        <div class="table-field">
+            <div class="table-database" id="table-database-0">
+                <h1>Daftar Barang</h1>
+                <div class="table-wrapper">
+                    <table></table>
+                </div>
+            </div>
+            <div class="table-edit-row"> </div>
+        </div>
+        <div class="table-field">
+            <div class="table-database" id="table-database-1">
+                <h1>Daftar Barang</h1>
+                <div class="table-wrapper">
+                    <table></table>
+                </div>
+            </div>
+            <div class="table-edit-row"> </div>
+        </div>
+    </div>
+
+    <div class="form-add-data-filter"> </div>
+    <div class="form-add-data">
+        <div class="top-bar-form-add-data">
+            <h1>Form Tambah Transaksi</h1>
+        </div>
+        <div class="form-add-data-fieldtext">
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Kode Transaksi Supplier</label>
+                </div>
+            </div>
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Harga Total</label>
+                </div>
+            </div>
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Quantity</label>
+                </div>
+            </div>
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Kode Petugas</label>
+                </div>
+            </div>
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Kode Supplier</label>
+                </div>
+            </div>
+            <!-- TODO: Add Date Selector -->
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Tanggal Transaksi</label>
+                </div>
             </div>
         </div>
-        <div class="table-edit-row">
-            <h1>Edit Row</h1>
-            <div class="table-edit-field-wrapper">
-                <!-- <div class="material-text-box">
-                    <div class="group">
-                        <input type="text" required="required"/>
-                        <label>Name</label>
-                    </div>
-                </div>                 -->
+        <div class="btn-field-accept-cancle">
+            <div class="btn-cancle" onclick="closeAddDataForm()">
+                <h1>Discard</h1>
             </div>
-            <div class="btn-field">
-                <div id="btn-discard">
-                    <h1>Discard</h1>
-                </div>
-                <div id="btn-save" onclick="saveFormTextField()">
-                    <h1>Save</h1>
-                </div>
+            <div class="btn-accept" onclick="addAddDataForm()">
+                <h1>Add</h1>
             </div>
         </div>
     </div>
+
 </body>
 
-<footer class="nav-bottom" onclick="addData()">
+<footer class=" nav-bottom" onclick="showAddDataForm()">
     <div id="btn-add">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             <path fill="currentColor" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32v144H48c-17.7 0-32 14.3-32 32s14.3 32 32 32h144v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256z" />
         </svg>
-        <h1>Add Data</h1>
+        <h1>Tambah Transaksi</h1>
     </div>
 </footer>
 
 <script>
     const strTableHeader = ['Kode Barang', 'Kode Supplier', 'Kode Transaksi Supplier', 'Kode Transaksi Pembeli', 'Nama Barang', 'Qty', 'Harga Item'];
+    const editFieldOrigin = '<h1>Edit Data</h1> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
 
-    function loadBarang() {
-        const barang = <?= $barang ?>;
-        const tabelBarang = document.getElementsByClassName('table-database')[0];
-        const tabel = tabelBarang.children[1].children[0];
-        const title = tabelBarang.children[0];
+    function loadThings(strTitile, x, things) {
+        // const things = ;
+        const tabelthings = document.getElementsByClassName('table-database')[x];
+        const tabel = tabelthings.children[1].children[0];
+        const title = tabelthings.children[0];
 
-        console.log(`barang: ${barang}`);
-        if (barang == true) {
-            title.textContent = 'Barang kosong kak';
+        console.log(`things: ${things}`);
+        if (things == true) {
+            title.textContent = `${strTitile} kosong kak`;
         } else {
-            title.textContent = 'Daftar Barang';
+            title.textContent = `Daftar ${strTitile}`;
             let generateHeader = '<tr>';
             for (let index = 0; index < strTableHeader.length; index++) {
                 generateHeader += '<th>' + strTableHeader[index] + '</th>';
             }
             generateHeader += '</tr>';
             tabel.innerHTML = generateHeader;
-            for (let i = 0; i < barang.length; i++) {
+            for (let i = 0; i < things.length; i++) {
                 tabel.innerHTML += "<tr onclick='editSelectedRow(this)'>" +
-                    "<td>" + barang[i].kode_barang + "</td>" +
-                    "<td>" + barang[i].kode_supplier + "</td>" +
-                    "<td>" + barang[i].kode_transaksi_supplier + "</td>" +
-                    "<td>" + barang[i].kode_transaksi_pembeli + "</td>" +
-                    "<td>" + barang[i].nama_barang + "</td>" +
-                    "<td>" + barang[i].qty + "</td>" +
-                    "<td>" + barang[i].harga_item + "</td>" +
+                    "<td>" + things[i].kode_barang + "</td>" +
+                    "<td>" + things[i].kode_supplier + "</td>" +
+                    "<td>" + things[i].kode_transaksi_supplier + "</td>" +
+                    "<td>" + things[i].kode_transaksi_pembeli + "</td>" +
+                    "<td>" + things[i].nama_barang + "</td>" +
+                    "<td>" + things[i].qty + "</td>" +
+                    "<td>" + things[i].harga_item + "</td>" +
                     "</tr>";
             }
         }
     }
-    loadBarang();
+    loadThings('Barang', 0, <?= $barang ?>);
+    loadThings('Pesanan', 1, <?= $barang ?>);
 
-    function generateFormTextField() {
+    var rowEditTableOpen = false;
+
+    function generateFormTextField(x) {
+        if (rowEditTableOpen == true) {
+            let editField;
+            if (x == 0) {
+                editField = document.getElementsByClassName('table-edit-row')[1];
+            } else {
+                editField = document.getElementsByClassName('table-edit-row')[0];
+            }
+            editField.innerHTML = '';
+            editField.style.margin = '0px 25px 0px 0px';
+            rowEditTableOpen = false;
+        }
+        rowEditTableOpen = true;
+        const editField = document.getElementsByClassName('table-edit-row')[x];
+        editField.style.margin = `50px 50px 50px 25px`;
+        editField.innerHTML = editFieldOrigin;
         const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
         for (let index = 0; index < strTableHeader.length; index++) {
             editFieldWrapper.innerHTML += '<div class="material-text-box"> <div class="group"> <input type="text" required="required"/> <label>' +
                 strTableHeader[index] + '</label> </div> </div>';
         }
     }
-    generateFormTextField();
+
+    function getParentId_tableEditRow(x) {
+        return x[x.length - 1];
+    }
 
     function editSelectedRow(x) {
+        generateFormTextField(getParentId_tableEditRow(x.parentNode.parentNode.parentNode.parentNode.id));
         const td = x.children;
         const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
         for (let index = 0; index < td.length; index++) {
-            editFieldWrapper.children[index].children[0].children[0].value = td[index].innerHTML;            
+            editFieldWrapper.children[index].children[0].children[0].value = td[index].innerHTML;
         }
     }
 
-    function saveFormTextField() {
+    function discardFormTextField(x) {
+        const editField = document.getElementsByClassName('table-edit-row')[getParentId_tableEditRow(x.parentNode.parentNode.parentNode.children[0].id)];
+        editField.innerHTML = '';
+        editField.style.margin = '0px 25px 0px 0px';
+    }
+
+    function saveFormTextField(x) {
         const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
         let valueToSubmit = [];
         for (let index = 0; index < editFieldWrapper.children.length; index++) {
             valueToSubmit.push(editFieldWrapper.children[index].children[0].children[0].value);
 
         }
+        discardFormTextField(x);
         console.log(valueToSubmit);
     }
 
-    function addData(){
+    function showAddDataForm() {
+        //TODO: Animate Later
+        //Malas pakai modal ehe
+        const formAddData = document.getElementsByClassName('form-add-data')[0];
+        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
+        formAddDataFilter.style.pointerEvents = 'all';
+        formAddData.style.top = '50%';
+    }
+
+    function closeAddDataForm() {
+        const formAddData = document.getElementsByClassName('form-add-data')[0];
+        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
+        formAddDataFilter.style.pointerEvents = 'none';
+        formAddData.style.top = '150%';
+    }
+
+    function addAddDataForm() {
+        const formAddData = document.getElementsByClassName('form-add-data-fieldtext')[0];
+        let valueToSubmit = [];
+        for (let index = 0; index < formAddData.children.length; index++) {
+            valueToSubmit.push(formAddData.children[index].children[0].children[0].value);
+
+        }
+        console.log(valueToSubmit);
+        closeAddDataForm();
         //TODO: Add data to database
         console.log("UwU");
     }
