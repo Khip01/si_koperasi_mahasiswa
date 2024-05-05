@@ -85,6 +85,7 @@ require '../core/functions.php';
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             <path fill="currentColor" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32v144H48c-17.7 0-32 14.3-32 32s14.3 32 32 32h144v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256z" />
         </svg>
+        <h1>Add Data</h1>
     </div>
 </footer>
 
@@ -109,7 +110,7 @@ require '../core/functions.php';
             generateHeader += '</tr>';
             tabel.innerHTML = generateHeader;
             for (let i = 0; i < barang.length; i++) {
-                tabel.innerHTML += "<tr>" +
+                tabel.innerHTML += "<tr onclick='editSelectedRow(this)'>" +
                     "<td>" + barang[i].kode_barang + "</td>" +
                     "<td>" + barang[i].kode_supplier + "</td>" +
                     "<td>" + barang[i].kode_transaksi_supplier + "</td>" +
@@ -131,6 +132,14 @@ require '../core/functions.php';
         }
     }
     generateFormTextField();
+
+    function editSelectedRow(x) {
+        const td = x.children;
+        const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
+        for (let index = 0; index < td.length; index++) {
+            editFieldWrapper.children[index].children[0].children[0].value = td[index].innerHTML;            
+        }
+    }
 
     function saveFormTextField() {
         const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];

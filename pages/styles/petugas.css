@@ -258,7 +258,7 @@ textarea:focus ~ .bar:before {
 .nav-bottom {
   /* width: 85%; */
   position: fixed;
-  bottom: 5%;
+  bottom: 0%;
   left: 50%;
   transform: translate(-50%, -50%);
   overflow: hidden;
@@ -271,18 +271,35 @@ textarea:focus ~ .bar:before {
   align-items: center;
   padding: 10px 14px;
   transition: 0.35s;
-  cursor: pointer;
 }
 
 .nav-bottom:hover{
     background-color: rgba(0, 0, 0, 0.7);
 }
 
+#btn-add{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.35s;
+}
 
-.nav-bottom div svg{
+#btn-add svg{
     width: 20px;
     height: 20px;
     padding: 4px 0px;
-    margin-bottom: -4px;
-    
+}
+
+#btn-add h1{
+    font-weight: 300;
+    font-size: 0px;
+    margin-left: -10px;
+}
+
+#btn-add:hover h1{
+    font-size: 12px;
+    margin-left: 0px;
 }
