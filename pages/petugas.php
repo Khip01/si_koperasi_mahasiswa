@@ -73,6 +73,17 @@ require '../core/functions.php';
     </div>
 
     <div class="form-add-data-filter"> </div>
+    <div class="petugas-form-add-data">
+        <div class="table-field">
+            <div class="table-database" id="table-database-2">
+                <h1>Daftar Barang</h1>
+                <div class="table-wrapper">
+                    <table></table>
+                </div>
+            </div>
+            <div class="table-edit-row"> </div>
+        </div>
+    </div>
     <div class="form-add-data">
         <div class="top-bar-form-add-data">
             <h1>Form Tambah Transaksi</h1>
@@ -125,10 +136,9 @@ require '../core/functions.php';
             </div>
         </div>
     </div>
-
 </body>
 
-<footer class=" nav-bottom" onclick="showAddDataForm()">
+<footer class=" nav-bottom" onclick="showPetugasFormAdd()" onmousewheel="showAddDataForm()">
     <div id="btn-add">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             <path fill="currentColor" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32v144H48c-17.7 0-32 14.3-32 32s14.3 32 32 32h144v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256z" />
@@ -140,6 +150,7 @@ require '../core/functions.php';
 <script>
     const strTableHeader = ['Kode Barang', 'Kode Supplier', 'Kode Transaksi Supplier', 'Kode Transaksi Pembeli', 'Nama Barang', 'Qty', 'Harga Item'];
     const editFieldOrigin = '<h1>Edit Data</h1> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
+    const editFieldPetugasDialog = '<div class="petugas-form-add-data-dialog"> <h1>Tambahakan terpilih ke transaksi_supplier?</h1> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closePetugasAddDataForm()"> <h1>Discard</h1> </div> <div class="btn-accept" onclick="addPetugasAddDataForm()"> <h1>Add</h1> </div> </div> </div>';
 
     function loadThings(strTitile, x, things) {
         // const things = ;
@@ -172,7 +183,8 @@ require '../core/functions.php';
         }
     }
     loadThings('Barang', 0, <?= $barang ?>);
-    loadThings('Pesanan', 1, <?= $barang ?>);
+    loadThings('Transaksi Supplier', 1, <?= $barang ?>);
+    loadThings('Pesanan', 2, <?= $barang ?>);
 
     var rowEditTableOpen = false;
 
@@ -190,12 +202,16 @@ require '../core/functions.php';
         }
         rowEditTableOpen = true;
         const editField = document.getElementsByClassName('table-edit-row')[x];
-        editField.style.margin = `50px 50px 50px 25px`;
-        editField.innerHTML = editFieldOrigin;
-        const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
-        for (let index = 0; index < strTableHeader.length; index++) {
-            editFieldWrapper.innerHTML += '<div class="material-text-box"> <div class="group"> <input type="text" required="required"/> <label>' +
-                strTableHeader[index] + '</label> </div> </div>';
+        if (x == 2) {
+            editField.innerHTML = editFieldPetugasDialog;
+        } else {
+            editField.style.margin = `50px 50px 50px 25px`;
+            editField.innerHTML = editFieldOrigin;
+            const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
+            for (let index = 0; index < strTableHeader.length; index++) {
+                editFieldWrapper.innerHTML += '<div class="material-text-box"> <div class="group"> <input type="text" required="required"/> <label>' +
+                    strTableHeader[index] + '</label> </div> </div>';
+            }
         }
     }
 
@@ -203,8 +219,20 @@ require '../core/functions.php';
         return x[x.length - 1];
     }
 
+    var editSelectedRowWidget = null;
+
     function editSelectedRow(x) {
-        generateFormTextField(getParentId_tableEditRow(x.parentNode.parentNode.parentNode.parentNode.id));
+        if (editSelectedRowWidget != null) {
+            editSelectedRowWidget.style.backgroundColor = null;
+        }
+        editSelectedRowWidget = x;
+        editSelectedRowWidget.style.backgroundColor = `rgba(194, 182, 182, 0.7)`;
+        let parentId = getParentId_tableEditRow(x.parentNode.parentNode.parentNode.parentNode.id);
+        generateFormTextField(parentId);
+        console.log(parentId);
+        if (parentId == 2) {
+            return;
+        }
         const td = x.children;
         const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
         for (let index = 0; index < td.length; index++) {
@@ -216,6 +244,7 @@ require '../core/functions.php';
         const editField = document.getElementsByClassName('table-edit-row')[getParentId_tableEditRow(x.parentNode.parentNode.parentNode.children[0].id)];
         editField.innerHTML = '';
         editField.style.margin = '0px 25px 0px 0px';
+        editSelectedRowWidget.style.backgroundColor = null;
     }
 
     function saveFormTextField(x) {
@@ -229,6 +258,42 @@ require '../core/functions.php';
         console.log(valueToSubmit);
     }
 
+    function showPetugasFormAdd(){
+        const formAddData = document.getElementsByClassName('petugas-form-add-data')[0];
+        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
+        formAddDataFilter.style.pointerEvents = 'all';
+        formAddDataFilter.onclick = function(){closePetugasAddDataForm();};       
+        formAddData.style.top = '50%';
+    }
+
+    function closePetugasAddDataForm(){
+        const formAddData = document.getElementsByClassName('petugas-form-add-data')[0];
+        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
+        formAddDataFilter.style.pointerEvents = 'none';
+        formAddDataFilter.onclick = null;
+        formAddData.style.top = '150%';
+    }
+
+    function addPetugasAddDataForm() {
+        const formAddData = editSelectedRowWidget;
+        let valueToSubmit = [];
+        for (let index = 0; index < formAddData.children.length; index++) {
+            valueToSubmit.push(formAddData.children[index].innerHTML);
+
+        }
+        console.log(valueToSubmit);
+        closePetugasAddDataForm();
+        //TODO: Add data to database
+        console.log("UwU");
+    }
+
+
+
+
+
+    // double click form
     function showAddDataForm() {
         //TODO: Animate Later
         //Malas pakai modal ehe
@@ -256,7 +321,7 @@ require '../core/functions.php';
         }
         console.log(valueToSubmit);
         closeAddDataForm();
-        //TODO: Add data to database
+        //TODO: BUAT GO FAR
         console.log("UwU");
     }
 </script>
