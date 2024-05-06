@@ -216,6 +216,8 @@ th:last-child {
   }
 }
 
+/* table 150% */
+
 @media (-webkit-min-device-pixel-ratio: 1.5) {
   .table-field-wrapper{
     gap: 10px;
