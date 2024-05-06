@@ -55,11 +55,11 @@ function printData($query){
 
 if (isset($_POST["action"])) {
     if ($_POST["action"] == "insert") {
-        insert();
+        tambahPesanan();
     }
 }
 
-function insert(){
+function tambahPesanan(){
     global $conn;
     $kd_transaksi = $_POST["kode_transaksi_pembeli"];
     $kd_brg = $_POST["kode_barang"];

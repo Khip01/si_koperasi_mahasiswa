@@ -101,7 +101,7 @@
             <option value="<?= htmlspecialchars($org['nim']); ?>"><?= htmlspecialchars($org['nama_mhs']); ?></option>
             <?php endforeach;?>
         </select> <br><br>
-        <button type="button" onclick="submitData('insert')">Submit</button>
+        <button type="button" onclick="submitPesan('insert')">Submit</button>
     </form>
     <?php require '../core/script.php';?>
 </body>
