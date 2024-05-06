@@ -41,118 +41,353 @@ require '../core/functions.php';
 
 <body>
     <?php
-    // testing query
-    $query = "SELECT * FROM barang";
-    $barang = getDataFromQuery($query);
-    if ($barang === false) {
-        header("Location: error_page.php?errorLog=Tabel barang tidak ditemukan");
-        exit;
-    } else if ($barang != null) {
-        $barang = json_encode($barang);
-    }
+    $barang = getDataFromQuery("SELECT * FROM barang WHERE kode_transaksi_pembeli IS NOT NULL AND kode_transaksi_supplier IS NULL");
+    // $barang = getDataFromQuery("SELECT * FROM barang ");
+    $barang = json_encode($barang);
+
+    $transaksi_pembeli = getDataFromQuery("SELECT * FROM transaksi_pembeli");
+    $transaksi_pembeli = json_encode($transaksi_pembeli);
+
+    $petugas = getDataFromQuery("SELECT * FROM petugas");
+    $petugas = json_encode($petugas);
     ?>
-    <div class="table-field">
-        <div class="table-database">
-            <h1>Daftar Barang</h1>
-            <div class="table-wrapper">
-                <table></table>
+    <div class="table-field-wrapper">
+        <div class="table-field">
+            <div class="table-database" id="table-database-0">
+                <h1>Daftar Barang</h1>
+                <div class="table-wrapper">
+                    <table></table>
+                </div>
+            </div>
+            <div class="table-edit-row"> </div>
+        </div>
+        <div class="table-field">
+            <div class="table-database" id="table-database-1">
+                <h1>Daftar Barang</h1>
+                <div class="table-wrapper">
+                    <table></table>
+                </div>
+            </div>
+            <div class="table-edit-row"> </div>
+        </div>
+    </div>
+
+    <div class="form-add-data-filter"> </div>
+    <div class="petugas-form-add-data">
+        <div class="table-field">
+            <div class="table-database" id="table-database-2">
+                <h1>Daftar Barang</h1>
+                <div class="table-wrapper">
+                    <table></table>
+                </div>
+            </div>
+            <div class="table-edit-row"> </div>
+        </div>
+    </div>
+    <div class="form-add-data">
+        <div class="top-bar-form-add-data">
+            <h1>Form Tambah Transaksi</h1>
+        </div>
+        <div class="form-add-data-fieldtext">
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Kode Transaksi Supplier</label>
+                </div>
+            </div>
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Harga Total</label>
+                </div>
+            </div>
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Quantity</label>
+                </div>
+            </div>
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Kode Petugas</label>
+                </div>
+            </div>
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Kode Supplier</label>
+                </div>
+            </div>
+            <!-- TODO: Add Date Selector -->
+            <div class="material-text-box">
+                <div class="group">
+                    <input type="text" required="required" />
+                    <label>Tanggal Transaksi</label>
+                </div>
             </div>
         </div>
-        <div class="table-edit-row">
-            <h1>Edit Row</h1>
-            <div class="table-edit-field-wrapper">
-                <!-- <div class="material-text-box">
-                    <div class="group">
-                        <input type="text" required="required"/>
-                        <label>Name</label>
-                    </div>
-                </div>                 -->
+        <div class="btn-field-accept-cancle">
+            <div class="btn-cancle" onclick="closeAddDataForm()">
+                <h1>Discard</h1>
             </div>
-            <div class="btn-field">
-                <div id="btn-discard">
-                    <h1>Discard</h1>
-                </div>
-                <div id="btn-save" onclick="saveFormTextField()">
-                    <h1>Save</h1>
-                </div>
+            <div class="btn-accept" onclick="addAddDataForm()">
+                <h1>Add</h1>
             </div>
         </div>
     </div>
 </body>
 
-<footer class="nav-bottom" onclick="addData()">
+<footer class=" nav-bottom" onclick="showPetugasFormAdd()" onmousewheel="showAddDataForm()">
     <div id="btn-add">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-            <path fill="currentColor" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32v144H48c-17.7 0-32 14.3-32 32s14.3 32 32 32h144v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256z" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+            <circle cx="12" cy="6" r="4" fill="currentColor" />
+            <path fill="currentColor" d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5" opacity="0.5" />
         </svg>
-        <h1>Add Data</h1>
+        <h1 id="currentPetugas">Pilih Onichan yang Bertugas</h1>
     </div>
 </footer>
 
 <script>
-    const strTableHeader = ['Kode Barang', 'Kode Supplier', 'Kode Transaksi Supplier', 'Kode Transaksi Pembeli', 'Nama Barang', 'Qty', 'Harga Item'];
+    function setWidgetRatioByScreen(){
+        console.log('devicePixelRatio: ' + window.devicePixelRatio);
+        if(window.devicePixelRatio > 1){
+            let scale = 1 - ((1 - window.devicePixelRatio) * -1);
+            console.log('Scale: ' + scale);
+            const tableField = document.getElementsByClassName('table-field');
+            for (let index = 0; index < tableField.length; index++) {
+                tableField[index].children[0].style.transform = `scale(${scale})`;
+                tableField[index].children[1].style.transform = `scale(${scale})`;             
+            }
+        }
+    }
+    setWidgetRatioByScreen();
 
-    function loadBarang() {
-        const barang = <?= $barang ?>;
-        const tabelBarang = document.getElementsByClassName('table-database')[0];
-        const tabel = tabelBarang.children[1].children[0];
-        const title = tabelBarang.children[0];
+    var strTableHeader = [
+        [],
+        [],
+        []
+    ];
+    const editFieldOrigin = '<h1>Edit Data</h1> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
+    const editFieldPetugasDialog = '<div class="petugas-form-add-data-dialog"> <h1>Kore wa onii-chan?</h1> <h2 id="onii-chan-name"></h2> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closePetugasAddDataForm()"> <h1>いいえ</h1> </div> <div class="btn-accept" onclick="addPetugasAddDataForm()"> <h1>はい〜</h1> </div> </div> </div>';
 
-        console.log(`barang: ${barang}`);
-        if (barang == true) {
-            title.textContent = 'Barang kosong kak';
+    function getParentId_tableEditRow(x) {
+        return x[x.length - 1];
+    }
+
+    function loadThings(strTitile, x, things) {
+        const tabelthings = document.getElementsByClassName('table-database')[x];
+        const tabel = tabelthings.children[1].children[0];
+        const title = tabelthings.children[0];
+
+        console.log('things:');
+        console.log(things);
+        // console.log(Object.keys(things).length == 0);
+        if (Object.keys(things).length == 0) {
+            title.textContent = `${strTitile} kosong kak`;
+            tabelthings.parentElement.style.flex = `4`;
         } else {
-            title.textContent = 'Daftar Barang';
+            let arrHeader = [];
+            for (let index = 0; index < Object.keys(things[0]).length; index++) {
+                arrHeader.push(Object.keys(things[0])[index]);
+                // console.log(Object.keys(things[0]));
+            }
+            strTableHeader[x] = arrHeader;
+
+            title.textContent = strTitile;
             let generateHeader = '<tr>';
-            for (let index = 0; index < strTableHeader.length; index++) {
-                generateHeader += '<th>' + strTableHeader[index] + '</th>';
+            for (let index = 0; index < strTableHeader[x].length; index++) {
+                generateHeader += '<th>' + strTableHeader[x][index] + '</th>';
             }
             generateHeader += '</tr>';
             tabel.innerHTML = generateHeader;
-            for (let i = 0; i < barang.length; i++) {
-                tabel.innerHTML += "<tr onclick='editSelectedRow(this)'>" +
-                    "<td>" + barang[i].kode_barang + "</td>" +
-                    "<td>" + barang[i].kode_supplier + "</td>" +
-                    "<td>" + barang[i].kode_transaksi_supplier + "</td>" +
-                    "<td>" + barang[i].kode_transaksi_pembeli + "</td>" +
-                    "<td>" + barang[i].nama_barang + "</td>" +
-                    "<td>" + barang[i].qty + "</td>" +
-                    "<td>" + barang[i].harga_item + "</td>" +
-                    "</tr>";
+            for (let i = 0; i < things.length; i++) {
+                let tableContent = "<tr onclick='editSelectedRow(this)'>";
+                for (let index = 0; index < strTableHeader[x].length; index++) {
+                    const element = things[i][strTableHeader[x][index]];
+                    // console.log(element);
+                    tableContent += "<td>" + element + "</td>";
+                }
+                tableContent += "</tr>";
+                tabel.innerHTML += tableContent;
+            }
+
+        }
+    }
+
+    // For Update values
+    var tableLoader = {
+        '0': function () {
+            loadThings('Daftar Pesanan Pembeli', 0, <?= $barang ?>);
+        },
+        '1': function () {
+            loadThings('Transaksi Supplier', 1, <?= $transaksi_pembeli ?>);
+        }, 
+    };
+    tableLoader['0']();
+    tableLoader['1']();
+
+
+    var rowEditTableOpen = false;
+    var rowEditTableLastOpen = null;
+
+    function generateFormTextField(x) {
+        if (rowEditTableOpen == true && x != 2) {
+            let editField;
+            editField = document.getElementsByClassName('table-edit-row')[rowEditTableLastOpen];
+            editField.innerHTML = '';
+            editField.style.margin = null;
+            rowEditTableOpen = false;
+        }
+        rowEditTableOpen = true;
+        rowEditTableLastOpen = x;
+        const editField = document.getElementsByClassName('table-edit-row')[x];
+        if (x == 2) {
+            editField.innerHTML = editFieldPetugasDialog;
+        } else {
+            editField.style.margin = `50px 50px 50px 25px`;
+            editField.innerHTML = editFieldOrigin;
+            const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
+            for (let index = 0; index < strTableHeader[x].length; index++) {
+                editFieldWrapper.innerHTML += '<div class="material-text-box"> <div class="group"> <input type="text" required="required"/> <label>' +
+                    strTableHeader[x][index] + '</label> </div> </div>';
             }
         }
     }
-    loadBarang();
 
-    function generateFormTextField() {
-        const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
-        for (let index = 0; index < strTableHeader.length; index++) {
-            editFieldWrapper.innerHTML += '<div class="material-text-box"> <div class="group"> <input type="text" required="required"/> <label>' +
-                strTableHeader[index] + '</label> </div> </div>';
-        }
-    }
-    generateFormTextField();
-
+    var editSelectedRowWidget = null;
+    var hideTableFieldId = null;
     function editSelectedRow(x) {
+        if (editSelectedRowWidget != null) {
+            editSelectedRowWidget.style.backgroundColor = null;
+        }
+        editSelectedRowWidget = x;
+        editSelectedRowWidget.style.backgroundColor = `rgba(194, 182, 182, 0.7)`;
+        let parentId = getParentId_tableEditRow(x.parentNode.parentNode.parentNode.parentNode.id);
+        generateFormTextField(parentId);
+        console.log(parentId);
+
+        let parent = document.getElementsByClassName('table-database')[parentId].parentElement;
+        parent.style.padding = `0px 6.25rem`;
+
         const td = x.children;
+        if (parentId == 2) {
+            const isThisOniichan = document.getElementById('onii-chan-name');
+            isThisOniichan.textContent = td[2].innerHTML;
+            return;
+        }        
+        hideTableFieldId = parentId == 1 ? 0 : 1;
+        const toHideTableField = document.getElementsByClassName('table-field')[hideTableFieldId];
+        toHideTableField.style.marginLeft = `-700px`;
+        toHideTableField.style.visibility = 'hidden';
+
         const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
         for (let index = 0; index < td.length; index++) {
-            editFieldWrapper.children[index].children[0].children[0].value = td[index].innerHTML;            
+            editFieldWrapper.children[index].children[0].children[0].value = td[index].innerHTML;
         }
     }
 
-    function saveFormTextField() {
+    function discardFormTextField(x) {
+        let parentId = getParentId_tableEditRow(x.parentNode.parentNode.parentNode.children[0].id);
+        tableLoader[parentId]();        
+        const editField = document.getElementsByClassName('table-edit-row')[parentId];
+        editField.innerHTML = '';
+        editField.style.margin = '0px 25px 0px 0px';
+        editSelectedRowWidget.style.backgroundColor = null;
+        editSelectedRowWidget = null;
+
+        let parent = document.getElementsByClassName('table-database')[rowEditTableLastOpen].parentElement;
+        parent.style.padding = null;
+        const toHideTableField = document.getElementsByClassName('table-field')[hideTableFieldId];
+        toHideTableField.style = null;
+    }
+
+    function saveFormTextField(x) {
         const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
         let valueToSubmit = [];
         for (let index = 0; index < editFieldWrapper.children.length; index++) {
             valueToSubmit.push(editFieldWrapper.children[index].children[0].children[0].value);
 
         }
+        discardFormTextField(x);
         console.log(valueToSubmit);
     }
 
-    function addData(){
+    function showPetugasFormAdd() {
+        loadThings('Onii-chan~ wa dare?', 2, <?= $petugas ?>);
+        const formAddData = document.getElementsByClassName('petugas-form-add-data')[0];
+        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
+        formAddDataFilter.style.pointerEvents = 'all';
+        formAddDataFilter.onclick = function() {
+            closePetugasAddDataForm();
+        };
+        formAddData.style.top = '50%';
+    }
+
+    function closePetugasAddDataForm() {
+        const formAddData = document.getElementsByClassName('petugas-form-add-data')[0];
+        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
+        formAddDataFilter.style.pointerEvents = 'none';
+        formAddDataFilter.onclick = null;
+        formAddData.style.top = '150%';
+        const editField = document.getElementsByClassName('table-edit-row')[2];
+        editField.innerHTML = '';
+        editField.style.margin = '0px 10px 50px 1px';
+        editSelectedRowWidget.style.backgroundColor = null;
+        editSelectedRowWidget = null;
+        let parent = document.getElementsByClassName('table-database')[2].parentElement;
+        parent.style.padding = null;
+    }
+
+    function addPetugasAddDataForm() {
+        const formAddData = editSelectedRowWidget;
+        let valueToSubmit = [];
+        for (let index = 0; index < formAddData.children.length; index++) {
+            valueToSubmit.push(formAddData.children[index].innerHTML);
+
+        }
+        document.getElementById('currentPetugas').innerText = valueToSubmit[2];
+        console.log(valueToSubmit);
+        closePetugasAddDataForm();
         //TODO: Add data to database
+        console.log("UwU");
+    }
+
+
+
+
+
+    // double click form
+    function showAddDataForm() {
+        //TODO: Animate Later
+        //Malas pakai modal ehe
+        const formAddData = document.getElementsByClassName('form-add-data')[0];
+        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
+        formAddDataFilter.style.pointerEvents = 'all';
+        formAddData.style.top = '50%';
+    }
+
+    function closeAddDataForm() {
+        const formAddData = document.getElementsByClassName('form-add-data')[0];
+        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
+        formAddDataFilter.style.pointerEvents = 'none';
+        formAddData.style.top = '150%';
+    }
+
+    function addAddDataForm() {
+        const formAddData = document.getElementsByClassName('form-add-data-fieldtext')[0];
+        let valueToSubmit = [];
+        for (let index = 0; index < formAddData.children.length; index++) {
+            valueToSubmit.push(formAddData.children[index].children[0].children[0].value);
+
+        }
+        console.log(valueToSubmit);
+        closeAddDataForm();
+        //TODO: BUAT GO FAR
         console.log("UwU");
     }
 </script>
