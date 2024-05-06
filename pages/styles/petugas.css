@@ -149,8 +149,9 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   justify-content: center;
-  align-items: end;
+  align-items: center;
   padding: 0px 10px;
+  flex: 10;
 }
 
 .table-wrapper {
@@ -189,7 +190,6 @@ th:first-child {
 th:last-child {
   border-right: 1px solid black;
 }
-
 .table-wrapper table tr:hover td {
   background-color: #dddddd;
   cursor: pointer;
@@ -199,13 +199,21 @@ th:last-child {
 .table-edit-row {
   color: black;
   margin: 50px 25px 50px 50px;
+  /* max-width: 60%; */
+  align-items: center;
 }
 
 .table-edit-row {
   margin: 0px 25px 0px 0px;
   display: flex;
   flex-direction: column;
+  align-items: start;
 }
+
+.table-field-wrapper .table-field:nth-child(1){
+  pointer-events: none;
+}
+
 
 /* doksil https://stackoverflow.com/a/58968110 */
 
@@ -275,6 +283,7 @@ textarea:focus ~ .bar:before {
   justify-content: end;
   gap: 0px;
   margin-top: 20px;
+  width: 100%;
 }
 
 .btn-field-accept-cancle h1 {
@@ -392,6 +401,9 @@ textarea:focus ~ .bar:before {
   padding: 0px 10px 50px 1px;
 }
 
+.petugas-form-add-data-dialog h1 {
+  min-width: 400px;
+}
 
 
 

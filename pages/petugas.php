@@ -41,15 +41,15 @@ require '../core/functions.php';
 
 <body>
     <?php
-    // testing query
-    $query = "SELECT * FROM barang";
-    $barang = getDataFromQuery($query);
-    if ($barang === false) {
-        header("Location: error_page.php?errorLog=Tabel barang tidak ditemukan");
-        exit;
-    } else if ($barang != null) {
-        $barang = json_encode($barang);
-    }
+    $barang = getDataFromQuery("SELECT * FROM barang WHERE kode_transaksi_pembeli IS NOT NULL AND kode_transaksi_supplier IS NULL");
+    // $barang = getDataFromQuery("SELECT * FROM barang ");
+    $barang = json_encode($barang);
+
+    $transaksi_pembeli = getDataFromQuery("SELECT * FROM transaksi_pembeli");
+    $transaksi_pembeli = json_encode($transaksi_pembeli);
+
+    $petugas = getDataFromQuery("SELECT * FROM petugas");
+    $petugas = json_encode($petugas);
     ?>
     <div class="table-field-wrapper">
         <div class="table-field">
@@ -140,17 +140,26 @@ require '../core/functions.php';
 
 <footer class=" nav-bottom" onclick="showPetugasFormAdd()" onmousewheel="showAddDataForm()">
     <div id="btn-add">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-            <path fill="currentColor" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32v144H48c-17.7 0-32 14.3-32 32s14.3 32 32 32h144v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256z" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+            <circle cx="12" cy="6" r="4" fill="currentColor" />
+            <path fill="currentColor" d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5" opacity="0.5" />
         </svg>
-        <h1>Tambah Transaksi</h1>
+        <h1 id="currentPetugas">Pilih Onichan yang Bertugas</h1>
     </div>
 </footer>
 
 <script>
-    const strTableHeader = ['Kode Barang', 'Kode Supplier', 'Kode Transaksi Supplier', 'Kode Transaksi Pembeli', 'Nama Barang', 'Qty', 'Harga Item'];
+    var strTableHeader = [
+        [],
+        [],
+        []
+    ];
     const editFieldOrigin = '<h1>Edit Data</h1> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
-    const editFieldPetugasDialog = '<div class="petugas-form-add-data-dialog"> <h1>Tambahakan terpilih ke transaksi_supplier?</h1> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closePetugasAddDataForm()"> <h1>Discard</h1> </div> <div class="btn-accept" onclick="addPetugasAddDataForm()"> <h1>Add</h1> </div> </div> </div>';
+    const editFieldPetugasDialog = '<div class="petugas-form-add-data-dialog"> <h1>Kore wa onii-chan?</h1> <h2 id="onii-chan-name"></h2> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closePetugasAddDataForm()"> <h1>いいえ</h1> </div> <div class="btn-accept" onclick="addPetugasAddDataForm()"> <h1>はい〜</h1> </div> </div> </div>';
+
+    function getParentId_tableEditRow(x) {
+        return x[x.length - 1];
+    }
 
     function loadThings(strTitile, x, things) {
         // const things = ;
@@ -158,33 +167,42 @@ require '../core/functions.php';
         const tabel = tabelthings.children[1].children[0];
         const title = tabelthings.children[0];
 
-        console.log(`things: ${things}`);
-        if (things == true) {
+        console.log('things:');
+        console.log(things);
+        // console.log(Object.keys(things).length == 0);
+        if (Object.keys(things).length == 0) {
             title.textContent = `${strTitile} kosong kak`;
+            tabelthings.parentElement.style.flex = `4`;
         } else {
-            title.textContent = `Daftar ${strTitile}`;
+            let arrHeader = [];
+            for (let index = 0; index < Object.keys(things[0]).length; index++) {
+                arrHeader.push(Object.keys(things[0])[index]);
+                // console.log(Object.keys(things[0]));
+            }
+            strTableHeader[x] = arrHeader;
+
+            title.textContent = strTitile;
             let generateHeader = '<tr>';
-            for (let index = 0; index < strTableHeader.length; index++) {
-                generateHeader += '<th>' + strTableHeader[index] + '</th>';
+            for (let index = 0; index < strTableHeader[x].length; index++) {
+                generateHeader += '<th>' + strTableHeader[x][index] + '</th>';
             }
             generateHeader += '</tr>';
             tabel.innerHTML = generateHeader;
             for (let i = 0; i < things.length; i++) {
-                tabel.innerHTML += "<tr onclick='editSelectedRow(this)'>" +
-                    "<td>" + things[i].kode_barang + "</td>" +
-                    "<td>" + things[i].kode_supplier + "</td>" +
-                    "<td>" + things[i].kode_transaksi_supplier + "</td>" +
-                    "<td>" + things[i].kode_transaksi_pembeli + "</td>" +
-                    "<td>" + things[i].nama_barang + "</td>" +
-                    "<td>" + things[i].qty + "</td>" +
-                    "<td>" + things[i].harga_item + "</td>" +
-                    "</tr>";
+                let tableContent = "<tr onclick='editSelectedRow(this)'>";
+                for (let index = 0; index < strTableHeader[x].length; index++) {
+                    const element = things[i][strTableHeader[x][index]];
+                    console.log(element);
+                    tableContent += "<td>" + element + "</td>";
+                }
+                tableContent += "</tr>";
+                tabel.innerHTML += tableContent;
             }
+
         }
     }
-    loadThings('Barang', 0, <?= $barang ?>);
-    loadThings('Transaksi Supplier', 1, <?= $barang ?>);
-    loadThings('Pesanan', 2, <?= $barang ?>);
+    loadThings('Daftar Pesanan Pembeli', 0, <?= $barang ?>);
+    loadThings('Transaksi Supplier', 1, <?= $transaksi_pembeli ?>);
 
     var rowEditTableOpen = false;
     var rowEditTableLastOpen = null;
@@ -206,15 +224,11 @@ require '../core/functions.php';
             editField.style.margin = `50px 50px 50px 25px`;
             editField.innerHTML = editFieldOrigin;
             const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
-            for (let index = 0; index < strTableHeader.length; index++) {
+            for (let index = 0; index < strTableHeader[x].length; index++) {
                 editFieldWrapper.innerHTML += '<div class="material-text-box"> <div class="group"> <input type="text" required="required"/> <label>' +
-                    strTableHeader[index] + '</label> </div> </div>';
+                    strTableHeader[x][index] + '</label> </div> </div>';
             }
         }
-    }
-
-    function getParentId_tableEditRow(x) {
-        return x[x.length - 1];
     }
 
     var editSelectedRowWidget = null;
@@ -228,10 +242,16 @@ require '../core/functions.php';
         let parentId = getParentId_tableEditRow(x.parentNode.parentNode.parentNode.parentNode.id);
         generateFormTextField(parentId);
         console.log(parentId);
-        if (parentId == 2) {
-            return;
-        }
+
+        let parent = document.getElementsByClassName('table-database')[parentId].parentElement;
+        parent.style.padding = `0px 300px`;
+
         const td = x.children;
+        if (parentId == 2) {
+            const isThisOniichan = document.getElementById('onii-chan-name');
+            isThisOniichan.textContent = td[2].innerHTML;
+            return;
+        }        
         const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
         for (let index = 0; index < td.length; index++) {
             editFieldWrapper.children[index].children[0].children[0].value = td[index].innerHTML;
@@ -244,6 +264,9 @@ require '../core/functions.php';
         editField.style.margin = '0px 25px 0px 0px';
         editSelectedRowWidget.style.backgroundColor = null;
         editSelectedRowWidget = null;
+
+        let parent = document.getElementsByClassName('table-database')[rowEditTableLastOpen].parentElement;
+        parent.style.padding = null;
     }
 
     function saveFormTextField(x) {
@@ -258,7 +281,7 @@ require '../core/functions.php';
     }
 
     function showPetugasFormAdd() {
-        loadThings('Pesanan', 2, <?= $barang ?>);
+        loadThings('Onii-chan~ wa dare?', 2, <?= $petugas ?>);
         const formAddData = document.getElementsByClassName('petugas-form-add-data')[0];
         const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
@@ -281,6 +304,8 @@ require '../core/functions.php';
         editField.style.margin = '0px 10px 50px 1px';
         editSelectedRowWidget.style.backgroundColor = null;
         editSelectedRowWidget = null;
+        let parent = document.getElementsByClassName('table-database')[2].parentElement;
+        parent.style.padding = null;
     }
 
     function addPetugasAddDataForm() {
@@ -290,6 +315,7 @@ require '../core/functions.php';
             valueToSubmit.push(formAddData.children[index].innerHTML);
 
         }
+        document.getElementById('currentPetugas').innerText = valueToSubmit[2];
         console.log(valueToSubmit);
         closePetugasAddDataForm();
         //TODO: Add data to database
