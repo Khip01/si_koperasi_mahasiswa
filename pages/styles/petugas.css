@@ -152,6 +152,7 @@ body {
   align-items: center;
   padding: 0px 10px;
   flex: 10;
+  min-height: 15%;
 }
 
 .table-wrapper {
@@ -402,7 +403,7 @@ textarea:focus ~ .bar:before {
 }
 
 .petugas-form-add-data-dialog h1 {
-  min-width: 400px;
+  min-width: 7rem;
 }
 
 
