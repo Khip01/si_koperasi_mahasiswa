@@ -149,20 +149,6 @@ require '../core/functions.php';
 </footer>
 
 <script>
-    function setWidgetRatioByScreen(){
-        console.log('devicePixelRatio: ' + window.devicePixelRatio);
-        if(window.devicePixelRatio > 1){
-            let scale = 1 - ((1 - window.devicePixelRatio) * -1);
-            console.log('Scale: ' + scale);
-            const tableField = document.getElementsByClassName('table-field');
-            for (let index = 0; index < tableField.length; index++) {
-                tableField[index].children[0].style.transform = `scale(${scale})`;
-                tableField[index].children[1].style.transform = `scale(${scale})`;             
-            }
-        }
-    }
-    setWidgetRatioByScreen();
-
     var strTableHeader = [
         [],
         [],
@@ -185,7 +171,7 @@ require '../core/functions.php';
         // console.log(Object.keys(things).length == 0);
         if (Object.keys(things).length == 0) {
             title.textContent = `${strTitile} kosong kak`;
-            tabelthings.parentElement.style.flex = `4`;
+            // tabelthings.parentElement.style.flex = `4`;
         } else {
             let arrHeader = [];
             for (let index = 0; index < Object.keys(things[0]).length; index++) {
@@ -217,12 +203,12 @@ require '../core/functions.php';
 
     // For Update values
     var tableLoader = {
-        '0': function () {
+        '0': function() {
             loadThings('Daftar Pesanan Pembeli', 0, <?= $barang ?>);
         },
-        '1': function () {
+        '1': function() {
             loadThings('Transaksi Supplier', 1, <?= $transaksi_pembeli ?>);
-        }, 
+        },
     };
     tableLoader['0']();
     tableLoader['1']();
@@ -245,7 +231,7 @@ require '../core/functions.php';
         if (x == 2) {
             editField.innerHTML = editFieldPetugasDialog;
         } else {
-            editField.style.margin = `50px 50px 50px 25px`;
+            editField.style.margin = `30px 20px 30px 25px`;
             editField.innerHTML = editFieldOrigin;
             const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
             for (let index = 0; index < strTableHeader[x].length; index++) {
@@ -256,7 +242,7 @@ require '../core/functions.php';
     }
 
     var editSelectedRowWidget = null;
-    var hideTableFieldId = null;
+
     function editSelectedRow(x) {
         if (editSelectedRowWidget != null) {
             editSelectedRowWidget.style.backgroundColor = null;
@@ -267,29 +253,38 @@ require '../core/functions.php';
         generateFormTextField(parentId);
         console.log(parentId);
 
-        let parent = document.getElementsByClassName('table-database')[parentId].parentElement;
-        parent.style.padding = `0px 6.25rem`;
-
+        let parentTableField = document.getElementsByClassName('table-database')[parentId].parentElement;
+        parentTableField.style.padding = `0px 3.25rem`;
         const td = x.children;
         if (parentId == 2) {
             const isThisOniichan = document.getElementById('onii-chan-name');
             isThisOniichan.textContent = td[2].innerHTML;
             return;
-        }        
-        hideTableFieldId = parentId == 1 ? 0 : 1;
-        const toHideTableField = document.getElementsByClassName('table-field')[hideTableFieldId];
-        toHideTableField.style.marginLeft = `-700px`;
-        toHideTableField.style.visibility = 'hidden';
+        } else {
+            let tableField;
+            if (parentId == 0) {
+                tableField = document.getElementsByClassName('table-field')[1];                
+            }
+            if (parentId == 1) {
+                tableField = document.getElementsByClassName('table-field')[0];    
+            }
+            tableField.style.position = 'absolute';
+            tableField.style.top = '50%';
+            tableField.style.left = '25%';
+            // tableField.style.opacity = '0.5';
+            tableField.style.transform = ('translate(-50%, -50%)');
+            tableField.style.zIndex = `-1`;
 
-        const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
-        for (let index = 0; index < td.length; index++) {
-            editFieldWrapper.children[index].children[0].children[0].value = td[index].innerHTML;
+            const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
+            for (let index = 0; index < td.length; index++) {
+                editFieldWrapper.children[index].children[0].children[0].value = td[index].innerHTML;
+            }
         }
     }
 
     function discardFormTextField(x) {
         let parentId = getParentId_tableEditRow(x.parentNode.parentNode.parentNode.children[0].id);
-        tableLoader[parentId]();        
+        tableLoader[parentId]();
         const editField = document.getElementsByClassName('table-edit-row')[parentId];
         editField.innerHTML = '';
         editField.style.margin = '0px 25px 0px 0px';
@@ -298,8 +293,15 @@ require '../core/functions.php';
 
         let parent = document.getElementsByClassName('table-database')[rowEditTableLastOpen].parentElement;
         parent.style.padding = null;
-        const toHideTableField = document.getElementsByClassName('table-field')[hideTableFieldId];
-        toHideTableField.style = null;
+
+        let tableField;
+            if (parentId == 0) {
+                tableField = document.getElementsByClassName('table-field')[1];                
+            }
+            if (parentId == 1) {
+                tableField = document.getElementsByClassName('table-field')[0];    
+            }
+            tableField.style = null;
     }
 
     function saveFormTextField(x) {
@@ -331,7 +333,7 @@ require '../core/functions.php';
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
         formAddDataFilter.style.pointerEvents = 'none';
         formAddDataFilter.onclick = null;
-        formAddData.style.top = '150%';
+        formAddData.style.top = '1500%';
         const editField = document.getElementsByClassName('table-edit-row')[2];
         editField.innerHTML = '';
         editField.style.margin = '0px 10px 50px 1px';
@@ -375,7 +377,7 @@ require '../core/functions.php';
         const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
         formAddDataFilter.style.pointerEvents = 'none';
-        formAddData.style.top = '150%';
+        formAddData.style.top = '1500%';
     }
 
     function addAddDataForm() {

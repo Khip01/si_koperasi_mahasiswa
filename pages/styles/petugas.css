@@ -69,8 +69,8 @@
   margin-top: 1px;
 }
 
-#nav-pov-mode a:first-child{
-    pointer-events: none;
+#nav-pov-mode a:first-child {
+  pointer-events: none;
 }
 
 #nav-pov-mode a {
@@ -91,12 +91,12 @@
   transition: 0.35s;
 }
 
-.nav-header  a:hover h1::after {
+.nav-header a:hover h1::after {
   background: #ffb118;
   width: 100%;
 }
 
-.nav-header  a:hover h1 {
+.nav-header a:hover h1 {
   color: #ffb118;
 }
 
@@ -140,10 +140,6 @@ body {
   max-width: 90%;
   max-height: 80%;
   background-color: white;
-  /* position: absolute;
-  top: 53%;
-  left: 50%;
-  transform: translate(-50%, -50%); */
   display: flex;
   flex-direction: row;
   overflow-y: auto;
@@ -151,7 +147,6 @@ body {
   justify-content: center;
   align-items: center;
   padding: 0px 10px;
-  flex: 10;
   min-height: 15%;
 }
 
@@ -199,7 +194,7 @@ th:last-child {
 .table-database,
 .table-edit-row {
   color: black;
-  margin: 50px 25px 50px 50px;
+  margin: 30px 25px 30px 50px;
   /* max-width: 60%; */
   align-items: center;
 }
@@ -211,10 +206,30 @@ th:last-child {
   align-items: start;
 }
 
-.table-field-wrapper .table-field:nth-child(1){
+.table-field-wrapper .table-field:nth-child(1) {
   pointer-events: none;
 }
 
+/* table 125% */
+@media (-webkit-min-device-pixel-ratio: 1.25) {
+  .table-wrapper table tr th, td {
+    font-size: 10px;
+  }
+}
+
+/* table 150% */
+
+@media (-webkit-min-device-pixel-ratio: 1.5) {
+  .table-field-wrapper{
+    gap: 10px;
+    max-height: 80%;
+    flex-direction: column;
+  }
+
+  .table-wrapper table tr th, td {
+    font-size: 8px;
+  }
+}
 
 /* doksil https://stackoverflow.com/a/58968110 */
 
@@ -380,13 +395,13 @@ textarea:focus ~ .bar:before {
   margin-left: 0px;
 }
 
-.petugas-form-add-data{
+.petugas-form-add-data {
   border-radius: 20px;
   z-index: 10;
   position: absolute;
   max-width: 90%;
   max-height: 80%;
-  top: 150%;
+  top: 1500%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
@@ -394,28 +409,16 @@ textarea:focus ~ .bar:before {
   overflow-y: auto;
 }
 
-
-.petugas-form-add-data-dialog{
+.petugas-form-add-data-dialog {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 0px 10px 50px 1px;
+  padding: 0px 10px 0px 1px;
 }
 
 .petugas-form-add-data-dialog h1 {
   min-width: 7rem;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */
 
@@ -423,7 +426,7 @@ textarea:focus ~ .bar:before {
   z-index: 10;
   position: absolute;
   width: 30%;
-  top: 150%;
+  top: 1500%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
