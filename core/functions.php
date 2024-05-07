@@ -57,6 +57,9 @@ if (isset($_POST["action"])) {
     if ($_POST["action"] == "insert") {
         tambahPesanan();
     }
+    if ($_POST["action"] == "select") {
+        echo json_encode(getDataFromQuery($_POST["query"]));
+    }
 }
 
 function tambahPesanan(){
@@ -80,5 +83,17 @@ function tambahPesanan(){
 //     $
 //     mysqli_query($conn, $query);
 // }
+
+function pembeliMaxKd(){
+    global $conn;
+    $result = mysqli_query($conn, "SELECT MAX(RIGHT(kode_transaksi_pembeli, 4)) as kode FROM transaksi_pembeli");
+    $q = mysqli_fetch_object($result);
+    if ($q && $q->kode) {
+        $kd = sprintf("%04s", ((int)$q->kode) + 1);
+    } else {
+        $kd = "0005";
+    }
+    echo htmlspecialchars('TP' . $kd);
+}
 
 ?>
