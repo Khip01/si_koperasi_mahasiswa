@@ -210,7 +210,7 @@ th:last-child {
 }
 
 .table-field-wrapper .table-field:nth-child(1) {
-  /* pointer-events: none; */
+  pointer-events: none;
 }
 
 /* table 125% */

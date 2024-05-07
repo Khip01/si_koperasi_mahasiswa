@@ -101,7 +101,7 @@ $pembeli = "SELECT * FROM pembeli";
 
     const tableFormId = 2;
     const formWithTableDialog =
-        '<div class="form-with-table-dialog"> <h1>Tambahkan?</h1> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(1)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable()"> <h1>Untuk Nyata</h1> </div> </div> </div>';
+        '<div class="form-with-table-dialog"> <h1>Tambahkan?</h1> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(this)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable()"> <h1>Untuk Nyata</h1> </div> </div> </div>';
     var formWithTableDialog_HighlightIdx = 0;
 
     var strTableHeader = [];
@@ -323,7 +323,7 @@ $pembeli = "SELECT * FROM pembeli";
             formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
             formAddDataFilter.style.pointerEvents = "all";
             formAddDataFilter.onclick = function() {
-                closeFormWithTable(0);
+                // closeFormWithTable(0);
             };
             formAddData.style.top = "50%";
             dialogPageAt = 0;
@@ -340,6 +340,9 @@ $pembeli = "SELECT * FROM pembeli";
     function closeFormWithTable(x) {
         dialogPageAt -= 1;
         if (x == 0 || dialogPageAt < 0) {
+            let parentId = getParentId_tableEditRow(x.parentElement.parentElement.parentElement.parentElement.children[0].id);
+            
+            
             dialogPageAt = -1;
             const formAddData = document.getElementsByClassName("form-with-table")[0];
             const formAddDataFilter = document.getElementsByClassName(
@@ -350,13 +353,14 @@ $pembeli = "SELECT * FROM pembeli";
             formAddDataFilter.onclick = null;
             formAddData.style.top = "1500%";
             const editField =
-                document.getElementsByClassName("table-edit-row")[tableFormId];
+                document.getElementsByClassName("table-edit-row")[parentId];
+            console.log(editField);
             editField.innerHTML = "";
             editField.style.margin = "0px 10px 50px 1px";
             editSelectedRowWidget.style.backgroundColor = null;
             editSelectedRowWidget = null;
             let parent =
-                document.getElementsByClassName("table-database")[tableFormId]
+                document.getElementsByClassName("table-database")[parentId]
                 .parentElement;
             parent.style.padding = null;
             return;
