@@ -1,5 +1,10 @@
 <?php
 require '../core/functions.php';
+require '../core/script.php';
+
+$barang = "SELECT * FROM barang WHERE kode_transaksi_pembeli IS NOT NULL AND kode_transaksi_supplier IS NULL";
+$transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
+$petugas = "SELECT * FROM petugas";
 ?>
 
 <!DOCTYPE html>
@@ -40,17 +45,6 @@ require '../core/functions.php';
 </header>
 
 <body>
-    <?php
-    $barang = getDataFromQuery("SELECT * FROM barang WHERE kode_transaksi_pembeli IS NOT NULL AND kode_transaksi_supplier IS NULL");
-    // $barang = getDataFromQuery("SELECT * FROM barang ");
-    $barang = json_encode($barang);
-
-    $transaksi_pembeli = getDataFromQuery("SELECT * FROM transaksi_pembeli");
-    $transaksi_pembeli = json_encode($transaksi_pembeli);
-
-    $petugas = getDataFromQuery("SELECT * FROM petugas");
-    $petugas = json_encode($petugas);
-    ?>
     <div class="table-field-wrapper">
         <div class="table-field">
             <div class="table-database" id="table-database-0">
@@ -73,7 +67,7 @@ require '../core/functions.php';
     </div>
 
     <div class="form-add-data-filter"> </div>
-    <div class="petugas-form-add-data">
+    <div class="form-with-table">
         <div class="table-field">
             <div class="table-database" id="table-database-2">
                 <h1>Daftar Barang</h1>
@@ -138,7 +132,7 @@ require '../core/functions.php';
     </div>
 </body>
 
-<footer class=" nav-bottom" onclick="showPetugasFormAdd()" onmousewheel="showAddDataForm()">
+<footer class=" nav-bottom" onclick="showFormWithTable()" onmousewheel="showAddDataForm()">
     <div id="btn-add">
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
             <circle cx="12" cy="6" r="4" fill="currentColor" />
@@ -149,24 +143,32 @@ require '../core/functions.php';
 </footer>
 
 <script>
-    var strTableHeader = [
-        [],
-        [],
-        []
+    const tables = [
+        ["Daftar Pesanan Pembeli", "<?= $barang ?>"],
+        ["Daftar Transaksi Pembeli", "<?= $transaksi_pembeli ?>"],
+        ["Siapa yang Bertugas?", "<?= $petugas ?>"],
     ];
-    const editFieldOrigin = '<h1>Edit Data</h1> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
-    const editFieldPetugasDialog = '<div class="petugas-form-add-data-dialog"> <h1>Kore wa onii-chan?</h1> <h2 id="onii-chan-name"></h2> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closePetugasAddDataForm()"> <h1>いいえ</h1> </div> <div class="btn-accept" onclick="addPetugasAddDataForm()"> <h1>はい〜</h1> </div> </div> </div>';
+    const tableFormId = tables.length - 1;
+    const formWithTableDialog =
+        '<div class="form-with-table-dialog"> <h1>Anda adalah?</h1> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(1)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable()"> <h1>Untuk Nyata</h1> </div> </div> </div>';
+    const formWithTableDialog_HighlightIdx = 2;
+
+
+    var strTableHeader = [];
+    const editFieldOrigin =
+        '<h1>Edit Data</h1> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
 
     function getParentId_tableEditRow(x) {
-        return x[x.length - 1];
+        let id = x[x.length - 1];
+        return id;
     }
 
     function loadThings(strTitile, x, things) {
-        const tabelthings = document.getElementsByClassName('table-database')[x];
+        const tabelthings = document.getElementsByClassName("table-database")[x];
         const tabel = tabelthings.children[1].children[0];
         const title = tabelthings.children[0];
 
-        console.log('things:');
+        console.log("things:");
         console.log(things);
         // console.log(Object.keys(things).length == 0);
         if (Object.keys(things).length == 0) {
@@ -181,11 +183,11 @@ require '../core/functions.php';
             strTableHeader[x] = arrHeader;
 
             title.textContent = strTitile;
-            let generateHeader = '<tr>';
+            let generateHeader = "<tr>";
             for (let index = 0; index < strTableHeader[x].length; index++) {
-                generateHeader += '<th>' + strTableHeader[x][index] + '</th>';
+                generateHeader += "<th>" + strTableHeader[x][index] + "</th>";
             }
-            generateHeader += '</tr>';
+            generateHeader += "</tr>";
             tabel.innerHTML = generateHeader;
             for (let i = 0; i < things.length; i++) {
                 let tableContent = "<tr onclick='editSelectedRow(this)'>";
@@ -197,46 +199,48 @@ require '../core/functions.php';
                 tableContent += "</tr>";
                 tabel.innerHTML += tableContent;
             }
-
         }
     }
 
     // For Update values
-    var tableLoader = {
-        '0': function() {
-            loadThings('Daftar Pesanan Pembeli', 0, <?= $barang ?>);
-        },
-        '1': function() {
-            loadThings('Transaksi Supplier', 1, <?= $transaksi_pembeli ?>);
-        },
-    };
-    tableLoader['0']();
-    tableLoader['1']();
-
+    async function tableLoader() {
+        for (let index = 0; index < tables.length; index++) {
+            loadThings(tables[index][0], index, await selectTable(tables[index][1]));
+        }
+    }
+    tableLoader(tables);
 
     var rowEditTableOpen = false;
     var rowEditTableLastOpen = null;
 
     function generateFormTextField(x) {
-        if (rowEditTableOpen == true && x != 2) {
+        if (rowEditTableOpen == true && x != tableFormId) {
             let editField;
-            editField = document.getElementsByClassName('table-edit-row')[rowEditTableLastOpen];
-            editField.innerHTML = '';
+            editField =
+                document.getElementsByClassName("table-edit-row")[rowEditTableLastOpen];
+            editField.innerHTML = "";
             editField.style.margin = null;
             rowEditTableOpen = false;
         }
         rowEditTableOpen = true;
         rowEditTableLastOpen = x;
-        const editField = document.getElementsByClassName('table-edit-row')[x];
-        if (x == 2) {
-            editField.innerHTML = editFieldPetugasDialog;
+        let editField = document.getElementsByClassName("table-edit-row")[x];
+        console.log(x);
+        if (x == tableFormId) {
+            editField =
+                document.getElementsByClassName("table-edit-row")[tables.length - 1];
+            editField.innerHTML = formWithTableDialog;
         } else {
             editField.style.margin = `30px 20px 30px 25px`;
             editField.innerHTML = editFieldOrigin;
-            const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
+            const editFieldWrapper = document.getElementsByClassName(
+                "table-edit-field-wrapper"
+            )[0];
             for (let index = 0; index < strTableHeader[x].length; index++) {
-                editFieldWrapper.innerHTML += '<div class="material-text-box"> <div class="group"> <input type="text" required="required"/> <label>' +
-                    strTableHeader[x][index] + '</label> </div> </div>';
+                editFieldWrapper.innerHTML +=
+                    '<div class="material-text-box"> <div class="group"> <input type="text" required="required"/> <label>' +
+                    strTableHeader[x][index] +
+                    "</label> </div> </div>";
             }
         }
     }
@@ -249,147 +253,167 @@ require '../core/functions.php';
         }
         editSelectedRowWidget = x;
         editSelectedRowWidget.style.backgroundColor = `rgba(194, 182, 182, 0.7)`;
-        let parentId = getParentId_tableEditRow(x.parentNode.parentNode.parentNode.parentNode.id);
+        let parentId = getParentId_tableEditRow(
+            x.parentNode.parentNode.parentNode.parentNode.id
+        );
         generateFormTextField(parentId);
         console.log(parentId);
 
-        let parentTableField = document.getElementsByClassName('table-database')[parentId].parentElement;
+        let parentTableField =
+            document.getElementsByClassName("table-database")[parentId].parentElement;
         parentTableField.style.padding = `0px 3.25rem`;
         const td = x.children;
-        if (parentId == 2) {
-            const isThisOniichan = document.getElementById('onii-chan-name');
-            isThisOniichan.textContent = td[2].innerHTML;
+        console.log(parentId + tableFormId);
+        if (parentId == tableFormId) {
+            const highLightSelVal = document.getElementById("form-with-table-highlight-sel-val");
+            highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
             return;
         } else {
-            let tableField;
-            if (parentId == 0) {
-                tableField = document.getElementsByClassName('table-field')[1];                
+            if (tables.length > 2) {
+                let tableField;
+                if (parentId == 0) {
+                    tableField = document.getElementsByClassName("table-field")[1];
+                }
+                if (parentId == 1) {
+                    tableField = document.getElementsByClassName("table-field")[0];
+                }
+                tableField.style.position = "absolute";
+                tableField.style.top = "50%";
+                tableField.style.left = "-1250%";
+                // tableField.style.visibility = 'hidden';
+                tableField.style.transform = "translate(-50%, -50%)";
+                tableField.style.zIndex = `-1`;
             }
-            if (parentId == 1) {
-                tableField = document.getElementsByClassName('table-field')[0];    
-            }
-            tableField.style.position = 'absolute';
-            tableField.style.top = '50%';
-            tableField.style.left = '25%';
-            // tableField.style.opacity = '0.5';
-            tableField.style.transform = ('translate(-50%, -50%)');
-            tableField.style.zIndex = `-1`;
 
-            const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
+            const editFieldWrapper = document.getElementsByClassName(
+                "table-edit-field-wrapper"
+            )[0];
             for (let index = 0; index < td.length; index++) {
-                editFieldWrapper.children[index].children[0].children[0].value = td[index].innerHTML;
+                editFieldWrapper.children[index].children[0].children[0].value =
+                    td[index].innerHTML;
             }
         }
     }
 
     function discardFormTextField(x) {
-        let parentId = getParentId_tableEditRow(x.parentNode.parentNode.parentNode.children[0].id);
-        tableLoader[parentId]();
-        const editField = document.getElementsByClassName('table-edit-row')[parentId];
-        editField.innerHTML = '';
-        editField.style.margin = '0px 25px 0px 0px';
+        let parentId = getParentId_tableEditRow(
+            x.parentNode.parentNode.parentNode.children[0].id
+        );
+        tableLoader();
+        const editField = document.getElementsByClassName("table-edit-row")[parentId];
+        editField.innerHTML = "";
+        editField.style.margin = "0px 25px 0px 0px";
         editSelectedRowWidget.style.backgroundColor = null;
         editSelectedRowWidget = null;
 
-        let parent = document.getElementsByClassName('table-database')[rowEditTableLastOpen].parentElement;
+        let parent =
+            document.getElementsByClassName("table-database")[rowEditTableLastOpen]
+            .parentElement;
         parent.style.padding = null;
 
         let tableField;
-            if (parentId == 0) {
-                tableField = document.getElementsByClassName('table-field')[1];                
-            }
-            if (parentId == 1) {
-                tableField = document.getElementsByClassName('table-field')[0];    
-            }
-            tableField.style = null;
+        if (parentId == 0) {
+            tableField = document.getElementsByClassName("table-field")[1];
+        }
+        if (parentId == 1) {
+            tableField = document.getElementsByClassName("table-field")[0];
+        }
+        tableField.style = null;
     }
 
     function saveFormTextField(x) {
-        const editFieldWrapper = document.getElementsByClassName('table-edit-field-wrapper')[0];
+        const editFieldWrapper = document.getElementsByClassName(
+            "table-edit-field-wrapper"
+        )[0];
         let valueToSubmit = [];
         for (let index = 0; index < editFieldWrapper.children.length; index++) {
-            valueToSubmit.push(editFieldWrapper.children[index].children[0].children[0].value);
-
+            valueToSubmit.push(
+                editFieldWrapper.children[index].children[0].children[0].value
+            );
         }
         discardFormTextField(x);
         console.log(valueToSubmit);
     }
 
-    function showPetugasFormAdd() {
-        loadThings('Onii-chan~ wa dare?', 2, <?= $petugas ?>);
-        const formAddData = document.getElementsByClassName('petugas-form-add-data')[0];
-        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+    function showFormWithTable() {
+        tableLoader();
+        const formAddData = document.getElementsByClassName("form-with-table")[0];
+        const formAddDataFilter = document.getElementsByClassName(
+            "form-add-data-filter"
+        )[0];
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
-        formAddDataFilter.style.pointerEvents = 'all';
+        formAddDataFilter.style.pointerEvents = "all";
         formAddDataFilter.onclick = function() {
-            closePetugasAddDataForm();
+            closeFormWithTable();
         };
-        formAddData.style.top = '50%';
+        formAddData.style.top = "50%";
     }
 
-    function closePetugasAddDataForm() {
-        const formAddData = document.getElementsByClassName('petugas-form-add-data')[0];
-        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+    function closeFormWithTable() {
+        const formAddData = document.getElementsByClassName("form-with-table")[0];
+        const formAddDataFilter = document.getElementsByClassName(
+            "form-add-data-filter"
+        )[0];
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
-        formAddDataFilter.style.pointerEvents = 'none';
+        formAddDataFilter.style.pointerEvents = "none";
         formAddDataFilter.onclick = null;
-        formAddData.style.top = '1500%';
-        const editField = document.getElementsByClassName('table-edit-row')[2];
-        editField.innerHTML = '';
-        editField.style.margin = '0px 10px 50px 1px';
+        formAddData.style.top = "1500%";
+        const editField =
+            document.getElementsByClassName("table-edit-row")[tableFormId];
+        editField.innerHTML = "";
+        editField.style.margin = "0px 10px 50px 1px";
         editSelectedRowWidget.style.backgroundColor = null;
         editSelectedRowWidget = null;
-        let parent = document.getElementsByClassName('table-database')[2].parentElement;
+        let parent =
+            document.getElementsByClassName("table-database")[tableFormId]
+            .parentElement;
         parent.style.padding = null;
     }
 
-    function addPetugasAddDataForm() {
+    function acceptFormWithTable() {
         const formAddData = editSelectedRowWidget;
         let valueToSubmit = [];
         for (let index = 0; index < formAddData.children.length; index++) {
             valueToSubmit.push(formAddData.children[index].innerHTML);
-
         }
-        document.getElementById('currentPetugas').innerText = valueToSubmit[2];
+        document.getElementById("currentPetugas").innerText = valueToSubmit[2];
         console.log(valueToSubmit);
-        closePetugasAddDataForm();
-        //TODO: Add data to database
-        console.log("UwU");
+        closeFormWithTable();
     }
 
-
-
-
-
-    // double click form
+    // scroll form
     function showAddDataForm() {
-        //TODO: Animate Later
-        //Malas pakai modal ehe
-        const formAddData = document.getElementsByClassName('form-add-data')[0];
-        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+        const formAddData = document.getElementsByClassName("form-add-data")[0];
+        const formAddDataFilter = document.getElementsByClassName(
+            "form-add-data-filter"
+        )[0];
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
-        formAddDataFilter.style.pointerEvents = 'all';
-        formAddData.style.top = '50%';
+        formAddDataFilter.style.pointerEvents = "all";
+        formAddData.style.top = "50%";
     }
 
     function closeAddDataForm() {
-        const formAddData = document.getElementsByClassName('form-add-data')[0];
-        const formAddDataFilter = document.getElementsByClassName('form-add-data-filter')[0];
+        const formAddData = document.getElementsByClassName("form-add-data")[0];
+        const formAddDataFilter = document.getElementsByClassName(
+            "form-add-data-filter"
+        )[0];
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
-        formAddDataFilter.style.pointerEvents = 'none';
-        formAddData.style.top = '1500%';
+        formAddDataFilter.style.pointerEvents = "none";
+        formAddData.style.top = "1500%";
     }
 
     function addAddDataForm() {
-        const formAddData = document.getElementsByClassName('form-add-data-fieldtext')[0];
+        const formAddData = document.getElementsByClassName(
+            "form-add-data-fieldtext"
+        )[0];
         let valueToSubmit = [];
         for (let index = 0; index < formAddData.children.length; index++) {
-            valueToSubmit.push(formAddData.children[index].children[0].children[0].value);
-
+            valueToSubmit.push(
+                formAddData.children[index].children[0].children[0].value
+            );
         }
         console.log(valueToSubmit);
         closeAddDataForm();
-        //TODO: BUAT GO FAR
         console.log("UwU");
     }
 </script>
