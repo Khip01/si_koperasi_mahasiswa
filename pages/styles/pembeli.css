@@ -69,7 +69,7 @@
   margin-top: 1px;
 }
 
-#nav-pov-mode a:first-child {
+#nav-pov-mode a:nth-child(2) {
   pointer-events: none;
 }
 
@@ -100,7 +100,7 @@
   color: #ffb118;
 }
 
-#nav-pov-mode a:first-child {
+#nav-pov-mode a:nth-child(2) {
   cursor: default;
   color: #ffef5a;
 }
@@ -210,7 +210,7 @@ th:last-child {
 }
 
 .table-field-wrapper .table-field:nth-child(1) {
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 /* table 125% */
