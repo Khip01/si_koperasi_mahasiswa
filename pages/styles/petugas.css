@@ -421,8 +421,8 @@ textarea:focus ~ .bar:before {
   padding: 30px 10px 30px 1px;
 }
 
-.form-with-table-dialog h1 {
-  min-width: 7rem;
+.form-with-table-dialog #form-with-table-dialog-title {
+  min-width: 17rem;
 }
 
 /* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */

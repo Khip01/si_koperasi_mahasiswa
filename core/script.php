@@ -23,8 +23,8 @@
         });
     }
 
-    function insertPesan(action, data) {
-        $.ajax({
+    async function insertPesan(action, data) {
+        return await $.ajax({
             type: 'post',
             url: '../core/functions.php',
             data: {
@@ -43,7 +43,6 @@
     }
 
     async function selectTable(query) {
-        var returnJson;
         return await $.ajax({
             type: 'post',
             url: '../core/functions.php',
@@ -53,7 +52,19 @@
             },
             dataType: 'json',
             success: function(response) {
-                returnJson = response;
+                return response;
+            }
+        });
+    }
+
+    async function pembeliMaxKd() {
+        return await $.ajax({
+            type: 'post',
+            url: '../core/functions.php',
+            data: {
+                action: 'pembeliMaxKd',
+            },
+            success: function(response) {
                 return response;
             }
         });
