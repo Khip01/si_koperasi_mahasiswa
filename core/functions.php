@@ -60,6 +60,9 @@ if (isset($_POST["action"])) {
     if ($_POST["action"] == "select") {
         echo json_encode(getDataFromQuery($_POST["query"]));
     }
+    if($_POST["action"] == "pembeliMaxKd"){
+        echo pembeliMaxKd();
+    }
 }
 
 function tambahPesanan(){
@@ -93,7 +96,7 @@ function pembeliMaxKd(){
     } else {
         $kd = "0005";
     }
-    echo htmlspecialchars('TP' . $kd);
+    return htmlspecialchars('TP' . $kd);
 }
 
 ?>
