@@ -131,7 +131,7 @@ body {
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: row;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   gap: 50px;
   align-items: center;
   justify-content: center;
@@ -157,6 +157,8 @@ body {
   border: 2px solid black;
   clip-path: margin-box;
   mask-clip: stroke-box;
+  max-height: 70vh;
+  overflow-x: auto;
 }
 
 .table-wrapper table {
@@ -209,7 +211,7 @@ th:last-child {
   align-items: start;
 }
 
-.table-field-wrapper .table-field:nth-child(1) {
+.table-field-wrapper .table-field:nth-child(1) table{
   pointer-events: none;
 }
 

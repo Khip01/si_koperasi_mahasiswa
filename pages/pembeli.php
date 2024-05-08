@@ -445,7 +445,7 @@ $pembeli = "SELECT * FROM pembeli";
             return;
         }
 
-        if (x != null || dialogPageAt < 0) {
+        if (x != null && dialogPageAt < 0) {
             let parentId = getParentId_tableEditRow(x.parentElement.parentElement.parentElement.parentElement.children[0].id);
             dialogPageAt = -1;
             const formAddData = document.getElementsByClassName("form-with-table")[0];
