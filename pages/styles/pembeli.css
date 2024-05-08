@@ -210,7 +210,7 @@ th:last-child {
 }
 
 .table-field-wrapper .table-field:nth-child(1) {
-  /* pointer-events: none; */
+  pointer-events: none;
 }
 
 /* table 125% */
@@ -421,8 +421,15 @@ textarea:focus ~ .bar:before {
   padding: 30px 10px 30px 1px;
 }
 
-.form-with-table-dialog h1 {
-  min-width: 7rem;
+.form-with-table-dialog #form-with-table-dialog-title {
+  min-width: 17rem;
+}
+
+.table-database-topsection{
+  display: flex;  
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: all;
 }
 
 /* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */
