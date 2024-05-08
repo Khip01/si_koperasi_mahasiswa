@@ -3,7 +3,7 @@
     function submitPesan(action) {
         $(document).ready(function() {
             var data = {
-                action: action,
+                action: 'insertPesan',
                 kode_transaksi_pembeli: $("#kd_transaksi").val(),
                 kode_barang: $("#kd_brg").val(),
                 qty_total: $("#qty").val(),
@@ -23,12 +23,12 @@
         });
     }
 
-    async function insertPesan(action, data) {
+    async function insertPesan(data) {
         return await $.ajax({
             type: 'post',
             url: '../core/functions.php',
             data: {
-                action: action,
+                action: 'insertPesan',
                 kode_transaksi_pembeli: data.get('kode_transaksi_pembeli'),
                 kode_barang: data.get('kode_barang'),
                 qty_total: data.get('qty'),
@@ -37,7 +37,7 @@
                 nim: data.get('nim'),
             },
             success: function(response) {
-                alert("Response: " + response);
+                console.log("Response: " + response);
             }
         });
     }
@@ -66,6 +66,71 @@
             },
             success: function(response) {
                 return response;
+            }
+        });
+    }
+
+    async function supplierMaxKd() {
+        return await $.ajax({
+            type: 'post',
+            url: '../core/functions.php',
+            data: {
+                action: 'supplierMaxKd',
+            },
+            success: function(response) {
+                return response;
+            }
+        });
+    }
+
+    async function insert(target, header, data) {
+        let data_arg = `INSERT INTO ${target} (`;
+        for (let index = 0; index < header.length; index++) {
+            data_arg += header[index];
+            if (index != header.length - 1) {
+                data_arg += `, `;
+            } else {
+                data_arg += `) VALUES (`;
+            }
+        }
+        for (let i = 0; i < data.size; i++) {
+            const value = data.get(Array.from(data.keys())[i]);
+            data_arg += `'${value}'`;
+            if (i != data.size - 1) {
+                data_arg += `, `;
+            } else {
+                data_arg += `);`;
+            }
+        }
+        console.log(`ARG: ${data_arg}`);
+
+        return await $.ajax({
+            type: 'post',
+            url: '../core/functions.php',
+            data: {
+                action: 'query',
+                data: data_arg
+            },
+            success: function(response) {
+                console.log("Response: " + response);
+            }
+        });
+    }
+
+    async function update(target, where, where_data, header, data) {
+        let data_arg = `UPDATE ${target} SET ${header} = '${data}' WHERE ${where} = '${where_data}';`;
+        
+        console.log(`ARG: ${data_arg}`);
+
+        return await $.ajax({
+            type: 'post',
+            url: '../core/functions.php',
+            data: {
+                action: 'query',
+                data: data_arg
+            },
+            success: function(response) {
+                console.log("Response: " + response);
             }
         });
     }

@@ -3,7 +3,8 @@ require '../core/functions.php';
 require '../core/script.php';
 
 $barang = "SELECT * FROM barang WHERE kode_transaksi_pembeli IS NOT NULL AND kode_transaksi_supplier IS NULL";
-$transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
+$transaksi_pembeli = "SELECT * FROM transaksi_pembeli WHERE kode_petugas IS NULL";
+$transaksi_supplier = "SELECT * FROM transaksi_supplier";
 $petugas = "SELECT * FROM petugas";
 ?>
 
@@ -98,7 +99,24 @@ $petugas = "SELECT * FROM petugas";
             </div>
             <div class="table-edit-row"> </div>
         </div>
+        <div class="table-field">
+            <div class="table-database" id="table-database-3">
+                <div class="table-database-topsection">
+                    <h1>Daftar Barang</h1>
+                    <div class="material-text-box table-database-search">
+                        <div class="group"> <input type="text" required="required" />
+                            <label>Search</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table></table>
+                </div>
+            </div>
+            <div class="table-edit-row"> </div>
+        </div>
     </div>
+
     <div class="form-add-data">
         <div class="top-bar-form-add-data">
             <h1>Boo Secret form(this is not doing anything)</h1>
@@ -159,20 +177,23 @@ $petugas = "SELECT * FROM petugas";
             <circle cx="12" cy="6" r="4" fill="currentColor" />
             <path fill="currentColor" d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5" opacity="0.5" />
         </svg>
-        <h1 id="currentPetugas">Pilih Onichan yang Bertugas</h1>
+        <h1 id="currentPetugas">Lakukan Transaksi</h1>
     </div>
 </footer>
 
 <script>
     const tables = [
-        ["Daftar Pesanan Pembeli", "<?= $barang ?>"],
         ["Daftar Transaksi Pembeli", "<?= $transaksi_pembeli ?>"],
+        ["Daftar Transaksi Supplier", "<?= $transaksi_supplier ?>"],
         ["Siapa yang Bertugas?", "<?= $petugas ?>"],
+        ["Daftar Pesanan Pembeli", "<?= $barang ?>"],
     ];
     const tableFormId = tables.length - 1;
     const formWithTableDialog =
         '<div class="form-with-table-dialog"> <h1 id="form-with-table-dialog-title">Anda adalah?</h1> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(this)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable()"> <h1>Untuk Nyata</h1> </div> </div> </div>';
-    const formWithTableDialog_HighlightIdx = 2;
+    var formWithTableDialog_HighlightIdx = 2;
+
+    var dialogStartAt = 2;
 
 
     var strTableHeader = [];
@@ -213,21 +234,21 @@ $petugas = "SELECT * FROM petugas";
         // console.log(tr);
 
         for (let index = 1; index < tr.length; index++) {
-            if(searchInput == "") {
+            if (searchInput == "") {
                 tr[index].style.display = null;
                 continue;
             }
             let td = tr[index].getElementsByTagName("td");
             let found = false;
             for (let index = 0; index < td.length; index++) {
-                if(td[index].innerHTML.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1) {
+                if (td[index].innerHTML.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1) {
                     found = true;
                     break;
                 };
             }
-            if(found) {
+            if (found) {
                 tr[index].style.display = '';
-            }else{
+            } else {
                 tr[index].style.display = 'none';
             }
         }
@@ -261,7 +282,12 @@ $petugas = "SELECT * FROM petugas";
             generateHeader += "</tr>";
             tabel.innerHTML = generateHeader;
             for (let i = 0; i < things.length; i++) {
-                let tableContent = "<tr onclick='editSelectedRow(this)'>";
+                let tableContent;
+                if (x < dialogStartAt) {
+                    tableContent = "<tr onclick='editSelectedRow(this)'>";
+                } else {
+                    tableContent = "<tr onclick='editSelectedRow_Dialog(this)'>";
+                }
                 for (let index = 0; index < strTableHeader[x].length; index++) {
                     const element = things[i][strTableHeader[x][index]];
                     // console.log(element);
@@ -297,11 +323,7 @@ $petugas = "SELECT * FROM petugas";
         rowEditTableLastOpen = x;
         let editField = document.getElementsByClassName("table-edit-row")[x];
         console.log(x);
-        if (x == tableFormId) {
-            editField =
-                document.getElementsByClassName("table-edit-row")[tables.length - 1];
-            editField.innerHTML = formWithTableDialog;
-        } else {
+        if (x < dialogStartAt) {
             editField.style.margin = `30px 20px 30px 25px`;
             editField.innerHTML = editFieldOrigin;
             const editFieldWrapper = document.getElementsByClassName(
@@ -313,6 +335,10 @@ $petugas = "SELECT * FROM petugas";
                     strTableHeader[x][index] +
                     "</label> </div> </div>";
             }
+        } else {
+            editField =
+                document.getElementsByClassName("table-edit-row")[x];
+            editField.innerHTML = formWithTableDialog;
         }
     }
 
@@ -406,29 +432,81 @@ $petugas = "SELECT * FROM petugas";
         console.log(valueToSubmit);
     }
 
+    let dialogPageAt = -1;
+    let headerValueToSubmit;
+    let dialogValueToSubmit;
+    let addtionalValues;
+
+    function editSelectedRow_Dialog(x) {
+        if (editSelectedRowWidget != null) {
+            editSelectedRowWidget.style.backgroundColor = null;
+        }
+        editSelectedRowWidget = x;
+        editSelectedRowWidget.style.backgroundColor = `rgba(194, 182, 182, 0.7)`;
+        let parentId = getParentId_tableEditRow(
+            x.parentNode.parentNode.parentNode.parentNode.id
+        );
+        generateFormTextField(parentId);
+
+        let parentTableField =
+            document.getElementsByClassName("table-database")[parentId].parentElement;
+        parentTableField.style.padding = `0px 3.25rem`;
+        const td = x.children;
+
+        const highLightSelVal = document.getElementsByClassName("form-with-table-dialog")[dialogPageAt].children[1];
+
+        const formDialog = document.getElementsByClassName("form-with-table-dialog")[dialogPageAt];
+        if (dialogPageAt == 0) {
+            formDialog.children[0].textContent = "Siapa yang bertugas?";
+            formWithTableDialog_HighlightIdx = 2;
+        }
+        if (dialogPageAt == 1) {
+            formDialog.children[0].textContent = "Acc?";
+            formWithTableDialog_HighlightIdx = 3;
+        }
+
+        highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
+    }
+    
     function showFormWithTable() {
-        tableLoader();
-        const formAddData = document.getElementsByClassName("form-with-table")[0];
-        const formAddDataFilter = document.getElementsByClassName(
-            "form-add-data-filter"
-        )[0];
-        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
-        formAddDataFilter.style.pointerEvents = "all";
-        formAddDataFilter.onclick = function() {
-            closeFormWithTable(null);
-        };
-        formAddData.style.top = "50%";
+        const formTable = document.getElementsByClassName("form-with-table")[0];
+        formTable.children[0].style.display = null;
+        formTable.children[1].style.display = null;
+        if (dialogPageAt < 0) {
+            addtionalValues = new Map();
+            headerValueToSubmit = [];
+            dialogValueToSubmit = new Map();
+            tableLoader();
+            const formAddData = document.getElementsByClassName("form-with-table")[0];
+            const formAddDataFilter = document.getElementsByClassName(
+                "form-add-data-filter"
+            )[0];
+            formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
+            formAddDataFilter.style.pointerEvents = "all";
+            formAddDataFilter.onclick = function() {
+                closeFormWithTable(null);
+            };
+            formAddData.style.top = "50%";
+            dialogPageAt = 0;
+        }
+
+        if (dialogPageAt == 0) {
+            formTable.children[1].style.display = "none";
+        }
+        if (dialogPageAt == 1) {
+            formTable.children[0].style.display = "none";
+        }
     }
 
     function closeFormWithTable(x) {
-        // dialogPageAt -= 1;
+        dialogPageAt -= 1;
         if (x == null) {
             let tableField = document.getElementsByClassName("table-field");
             for (let index = 1; index < tableField.length; index++) {
                 let parentId = getParentId_tableEditRow(tableField[index].children[0].id);
                 // console.log(tableField[index]);
                 // console.log(parentId);
-                // dialogPageAt = -1;
+                dialogPageAt = -1;
                 const formAddData = document.getElementsByClassName("form-with-table")[0];
                 const formAddDataFilter = document.getElementsByClassName(
                     "form-add-data-filter"
@@ -441,7 +519,7 @@ $petugas = "SELECT * FROM petugas";
                     document.getElementsByClassName("table-edit-row")[parentId];
                 // console.log(editField);
                 editField.innerHTML = "";
-                editField.style.margin = "0px 10px 50px 1px";
+                editField.style.margin = null;
                 if (editSelectedRowWidget != null) {
                     editSelectedRowWidget.style.backgroundColor = null;
                     editSelectedRowWidget = null;
@@ -456,7 +534,7 @@ $petugas = "SELECT * FROM petugas";
             return;
         }
 
-        if (x != null ) {
+        if (x != null) {
             let parentId = getParentId_tableEditRow(x.parentElement.parentElement.parentElement.parentElement.children[0].id);
             // dialogPageAt = -1;
             const formAddData = document.getElementsByClassName("form-with-table")[0];
@@ -471,7 +549,7 @@ $petugas = "SELECT * FROM petugas";
                 document.getElementsByClassName("table-edit-row")[parentId];
             console.log(editField);
             editField.innerHTML = "";
-            editField.style.margin = "0px 10px 50px 1px";
+            editField.style.margin = null;
             editSelectedRowWidget.style.backgroundColor = null;
             editSelectedRowWidget = null;
             let parent =
@@ -484,15 +562,91 @@ $petugas = "SELECT * FROM petugas";
         showFormWithTable();
     }
 
-    function acceptFormWithTable() {
+    const toSubmitHeaderMap = new Map([
+        ['kode_petugas', 'kode_petugas'],
+        ['kode_transaksi_supplier', 'kode_transaksi_supplier'],
+        ['kode_supplier', 'kode_supplier'],
+        ['qty', 'qty_total'],
+        ['harga_item', 'harga_total'],
+        ['tgl_transaksi'],
+    ]);
+
+
+    async function acceptFormWithTable(x) {
         const formAddData = editSelectedRowWidget;
         let valueToSubmit = [];
         for (let index = 0; index < formAddData.children.length; index++) {
             valueToSubmit.push(formAddData.children[index].innerHTML);
         }
-        document.getElementById("currentPetugas").innerText = valueToSubmit[2];
-        console.log(valueToSubmit);
-        closeFormWithTable();
+
+        if (dialogPageAt == 0) {
+            headerValueToSubmit.push(toSubmitHeaderMap.get(strTableHeader[2][0]));
+            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
+            dialogPageAt += 1;
+        } else if (dialogPageAt == 1) {
+            headerValueToSubmit.push(toSubmitHeaderMap.get(strTableHeader[3][2]));
+            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[3][2]), await supplierMaxKd());
+            for (let index = 0; index < strTableHeader[3].length; index++) {
+                if (index == 0 || index == 3) {
+                    addtionalValues.set(strTableHeader[3][index], valueToSubmit[index]);
+                    continue;
+                }
+                if (index == 2 || index == 4) {
+                    continue;
+                }
+                headerValueToSubmit.push(toSubmitHeaderMap.get(strTableHeader[3][index]));
+                dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[3][index]), valueToSubmit[index]);
+            }
+            dialogPageAt += 1;
+        }
+
+        if (dialogPageAt < 2) {
+            showFormWithTable();
+        } else {
+            completeDialog();
+            closeFormWithTable(null);
+        }
+    }
+
+    async function completeDialog() {
+        const now = new Date();
+
+        const formattedDate = now.toLocaleDateString("sv-SE", {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        });
+
+        const formattedTime = now.toLocaleTimeString("sv-SE", {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+
+        const formattedDateTime = `${formattedDate} ${formattedTime}`;
+
+        headerValueToSubmit.push('tgl_transaksi');
+        headerValueToSubmit = new Set(headerValueToSubmit);
+        headerValueToSubmit = Array.from(headerValueToSubmit);
+        dialogValueToSubmit.set('tgl_transaksi', formattedDateTime);
+        console.log(formattedDateTime);
+        console.log(dialogValueToSubmit);
+        // console.log(headerValueToSubmit);
+        await insert('transaksi_supplier', headerValueToSubmit, dialogValueToSubmit);
+        await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'));
+        await update('transaksi_pembeli', 'kode_transaksi_pembeli', addtionalValues.get('kode_transaksi_pembeli'), 'kode_petugas ', dialogValueToSubmit.get('kode_petugas'))
+        tableLoader();
+    }
+
+    // doksil: Gemini
+    function parseDate(str) {
+        // Replace your date format with the format used in $_POST["tgl_transaksi"]
+        const dateParts = str.split("-");
+        const year = parseInt(dateParts[0], 10);
+        const month = parseInt(dateParts[1], 10) - 1; // Months are zero-indexed in JavaScript
+        const day = parseInt(dateParts[2], 10);
+
+        return new Date(year, month, day);
     }
 
     // scroll form
