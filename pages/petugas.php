@@ -48,7 +48,14 @@ $petugas = "SELECT * FROM petugas";
     <div class="table-field-wrapper">
         <div class="table-field">
             <div class="table-database" id="table-database-0">
-                <h1>Daftar Barang</h1>
+                <div class="table-database-topsection">
+                    <h1>Daftar Barang</h1>
+                    <div class="material-text-box table-database-search">
+                        <div class="group"> <input type="text" required="required" />
+                            <label>Search</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="table-wrapper">
                     <table></table>
                 </div>
@@ -57,7 +64,14 @@ $petugas = "SELECT * FROM petugas";
         </div>
         <div class="table-field">
             <div class="table-database" id="table-database-1">
-                <h1>Daftar Barang</h1>
+                <div class="table-database-topsection">
+                    <h1>Daftar Barang</h1>
+                    <div class="material-text-box table-database-search">
+                        <div class="group"> <input type="text" required="required" />
+                            <label>Search</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="table-wrapper">
                     <table></table>
                 </div>
@@ -70,7 +84,14 @@ $petugas = "SELECT * FROM petugas";
     <div class="form-with-table">
         <div class="table-field">
             <div class="table-database" id="table-database-2">
-                <h1>Daftar Barang</h1>
+                <div class="table-database-topsection">
+                    <h1>Daftar Barang</h1>
+                    <div class="material-text-box table-database-search">
+                        <div class="group"> <input type="text" required="required" />
+                            <label>Search</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="table-wrapper">
                     <table></table>
                 </div>
@@ -163,17 +184,67 @@ $petugas = "SELECT * FROM petugas";
         return id;
     }
 
+    function searchAddListener() {
+        let searchWidget = document.getElementsByClassName("table-database-search");
+        for (let index = 0; index < searchWidget.length; index++) {
+            const element = searchWidget[index].children[0].children[0];
+            console.log(element);
+            element.addEventListener('input', function() {
+                search(searchWidget[index]);
+                // console.log(searchWidget[index].children[0].children[0].value);
+            });
+        }
+    }
+    searchAddListener();
+
+    function test(x) {
+        console.log(x);
+        console.log(x.children[0].children[0].value)
+    }
+
+    // doksil https://stackoverflow.com/a/40358801
+
+    function search(x) {
+        const searchInput = x.children[0].children[0].value;
+        const table = document.getElementsByClassName('table-wrapper')[getParentId_tableEditRow(x.parentElement.parentElement.id)].children[0];
+
+        const searchTerm = searchInput;
+        tr = table.getElementsByTagName("tr");
+        // console.log(tr);
+
+        for (let index = 1; index < tr.length; index++) {
+            if(searchInput == "") {
+                tr[index].style.display = null;
+                continue;
+            }
+            let td = tr[index].getElementsByTagName("td");
+            let found = false;
+            for (let index = 0; index < td.length; index++) {
+                if(td[index].innerHTML.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1) {
+                    found = true;
+                    break;
+                };
+            }
+            if(found) {
+                tr[index].style.display = '';
+            }else{
+                tr[index].style.display = 'none';
+            }
+        }
+    }
+
     function loadThings(strTitile, x, things) {
         const tabelthings = document.getElementsByClassName("table-database")[x];
         const tabel = tabelthings.children[1].children[0];
-        const title = tabelthings.children[0];
+        const title = tabelthings.children[0].children[0];
 
         console.log("things:");
         console.log(things);
         // console.log(Object.keys(things).length == 0);
         if (Object.keys(things).length == 0) {
             title.textContent = `${strTitile} kosong kak`;
-            // tabelthings.parentElement.style.flex = `4`;
+            tabelthings.children[0].children[1].style.display = "none";
+            tabel.innerHTML = '';
         } else {
             let arrHeader = [];
             for (let index = 0; index < Object.keys(things[0]).length; index++) {

@@ -425,6 +425,13 @@ textarea:focus ~ .bar:before {
   min-width: 17rem;
 }
 
+.table-database-topsection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: all;
+}
+
 /* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */
 
 .form-add-data {

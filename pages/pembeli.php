@@ -49,7 +49,15 @@ $pembeli = "SELECT * FROM pembeli";
     <div class="table-field-wrapper">
         <div class="table-field">
             <div class="table-database" id="table-database-0">
-                <h1>Daftar Barang</h1>
+                <div class="table-database-topsection">
+                    <h1>Daftar Barang</h1>
+                    <div class="material-text-box table-database-search" onclick="search(this)">
+                        <div class="group">
+                            <input type="text" required="required" />
+                            <label>Search</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="table-wrapper">
                     <table></table>
                 </div>
@@ -61,14 +69,16 @@ $pembeli = "SELECT * FROM pembeli";
 
     <div class="form-add-data-filter"> </div>
     <div class="form-with-table">
-        <!-- <div class="form-with-table-back-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="76.55" d="M328 112L184 256l144 144" />
-            </svg>
-        </div> -->
         <div class="table-field">
             <div class="table-database" id="table-database-1">
-                <h1>Daftar Barang</h1>
+                <div class="table-database-topsection">
+                    <h1>Daftar Barang</h1>
+                    <div class="material-text-box table-database-search">
+                        <div class="group"> <input type="text" required="required" />
+                            <label>Search</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="table-wrapper">
                     <table></table>
                 </div>
@@ -77,7 +87,14 @@ $pembeli = "SELECT * FROM pembeli";
         </div>
         <div class="table-field">
             <div class="table-database" id="table-database-2">
-                <h1>Daftar Barang</h1>
+                <div class="table-database-topsection">
+                    <h1>Daftar Barang</h1>
+                    <div class="material-text-box table-database-search">
+                        <div class="group"> <input type="text" required="required" />
+                            <label>Search</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="table-wrapper">
                     <table></table>
                 </div>
@@ -87,7 +104,7 @@ $pembeli = "SELECT * FROM pembeli";
     </div>
 </body>
 
-<footer class="nav-bottom" onclick="showFormWithTable()" onmousewheel="showAddDataForm()">
+<footer class="nav-bottom" onclick="showFormWithTable()">
     <div id="btn-add">
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
             <path fill="currentColor" d="M7 7V5a3 3 0 0 1 5-2.236A3 3 0 0 1 17 5v2h1.5A1.5 1.5 0 0 1 20 8.5V18a4 4 0 0 1-1.825 3.357l-.545-.096c-.775-.136-1.574-.563-2.175-1.172S14.5 18.743 14.5 18V7h1V5a1.5 1.5 0 0 0-2.656-.956c.101.3.156.622.156.956v13c0 1.229.582 2.326 1.387 3.142a5.8 5.8 0 0 0 1.08.858H8a4 4 0 0 1-4-4V8.5A1.5 1.5 0 0 1 5.5 7zm1.5-2v2h3V5a1.5 1.5 0 0 0-3 0" />
@@ -118,16 +135,66 @@ $pembeli = "SELECT * FROM pembeli";
         return id;
     }
 
+    function searchAddListener() {
+        let searchWidget = document.getElementsByClassName("table-database-search");
+        for (let index = 0; index < searchWidget.length; index++) {
+            const element = searchWidget[index].children[0].children[0];
+            console.log(element);
+            element.addEventListener('input', function() {
+                search(searchWidget[index]);
+                // console.log(searchWidget[index].children[0].children[0].value);
+            });
+        }
+    }
+    searchAddListener();
+
+    function test(x) {
+        console.log(x);
+        console.log(x.children[0].children[0].value)
+    }
+
+    // doksil https://stackoverflow.com/a/40358801
+
+    function search(x) {
+        const searchInput = x.children[0].children[0].value;
+        const table = document.getElementsByClassName('table-wrapper')[getParentId_tableEditRow(x.parentElement.parentElement.id)].children[0];
+
+        const searchTerm = searchInput;
+        tr = table.getElementsByTagName("tr");
+        // console.log(tr);
+
+        for (let index = 1; index < tr.length; index++) {
+            if(searchInput == "") {
+                tr[index].style.display = null;
+                continue;
+            }
+            let td = tr[index].getElementsByTagName("td");
+            let found = false;
+            for (let index = 0; index < td.length; index++) {
+                if(td[index].innerHTML.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1) {
+                    found = true;
+                    break;
+                };
+            }
+            if(found) {
+                tr[index].style.display = '';
+            }else{
+                tr[index].style.display = 'none';
+            }
+        }
+    }
+
     function loadThings(strTitile, x, things) {
         const tabelthings = document.getElementsByClassName("table-database")[x];
         const tabel = tabelthings.children[1].children[0];
-        const title = tabelthings.children[0];
+        const title = tabelthings.children[0].children[0];
 
         console.log("things:");
         console.log(things);
         // console.log(Object.keys(things).length == 0);
         if (Object.keys(things).length == 0) {
             title.textContent = `${strTitile} kosong kak`;
+            tabelthings.children[0].children[1].style.display = "none";
             tabel.innerHTML = '';
         } else {
             let arrHeader = [];

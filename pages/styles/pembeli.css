@@ -425,16 +425,12 @@ textarea:focus ~ .bar:before {
   min-width: 17rem;
 }
 
-/* .form-with-table-back-btn {
- position: absolute;
- z-index: 2;
+.table-database-topsection{
+  display: flex;  
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: all;
 }
-
-.form-with-table-back-btn svg{
-  color: black;
-  width: 40px ;
-  height: 40px;
-} */
 
 /* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */
 
