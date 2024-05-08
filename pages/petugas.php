@@ -101,7 +101,7 @@ $petugas = "SELECT * FROM petugas";
     </div>
     <div class="form-add-data">
         <div class="top-bar-form-add-data">
-            <h1>Form Tambah Transaksi</h1>
+            <h1>Boo Secret form(this is not doing anything)</h1>
         </div>
         <div class="form-add-data-fieldtext">
             <div class="material-text-box">
@@ -171,7 +171,7 @@ $petugas = "SELECT * FROM petugas";
     ];
     const tableFormId = tables.length - 1;
     const formWithTableDialog =
-        '<div class="form-with-table-dialog"> <h1 id="form-with-table-dialog-title">Anda adalah?</h1> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(1)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable()"> <h1>Untuk Nyata</h1> </div> </div> </div>';
+        '<div class="form-with-table-dialog"> <h1 id="form-with-table-dialog-title">Anda adalah?</h1> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(this)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable()"> <h1>Untuk Nyata</h1> </div> </div> </div>';
     const formWithTableDialog_HighlightIdx = 2;
 
 
@@ -415,30 +415,73 @@ $petugas = "SELECT * FROM petugas";
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
         formAddDataFilter.style.pointerEvents = "all";
         formAddDataFilter.onclick = function() {
-            closeFormWithTable();
+            closeFormWithTable(null);
         };
         formAddData.style.top = "50%";
     }
 
-    function closeFormWithTable() {
-        const formAddData = document.getElementsByClassName("form-with-table")[0];
-        const formAddDataFilter = document.getElementsByClassName(
-            "form-add-data-filter"
-        )[0];
-        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
-        formAddDataFilter.style.pointerEvents = "none";
-        formAddDataFilter.onclick = null;
-        formAddData.style.top = "1500%";
-        const editField =
-            document.getElementsByClassName("table-edit-row")[tableFormId];
-        editField.innerHTML = "";
-        editField.style.margin = "0px 10px 50px 1px";
-        editSelectedRowWidget.style.backgroundColor = null;
-        editSelectedRowWidget = null;
-        let parent =
-            document.getElementsByClassName("table-database")[tableFormId]
-            .parentElement;
-        parent.style.padding = null;
+    function closeFormWithTable(x) {
+        // dialogPageAt -= 1;
+        if (x == null) {
+            let tableField = document.getElementsByClassName("table-field");
+            for (let index = 1; index < tableField.length; index++) {
+                let parentId = getParentId_tableEditRow(tableField[index].children[0].id);
+                // console.log(tableField[index]);
+                // console.log(parentId);
+                // dialogPageAt = -1;
+                const formAddData = document.getElementsByClassName("form-with-table")[0];
+                const formAddDataFilter = document.getElementsByClassName(
+                    "form-add-data-filter"
+                )[0];
+                formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
+                formAddDataFilter.style.pointerEvents = "none";
+                formAddDataFilter.onclick = null;
+                formAddData.style.top = "1500%";
+                const editField =
+                    document.getElementsByClassName("table-edit-row")[parentId];
+                // console.log(editField);
+                editField.innerHTML = "";
+                editField.style.margin = "0px 10px 50px 1px";
+                if (editSelectedRowWidget != null) {
+                    editSelectedRowWidget.style.backgroundColor = null;
+                    editSelectedRowWidget = null;
+                }
+
+                let parent =
+                    document.getElementsByClassName("table-database")[parentId]
+                    .parentElement;
+                parent.style.padding = null;
+            }
+
+            return;
+        }
+
+        if (x != null ) {
+            let parentId = getParentId_tableEditRow(x.parentElement.parentElement.parentElement.parentElement.children[0].id);
+            // dialogPageAt = -1;
+            const formAddData = document.getElementsByClassName("form-with-table")[0];
+            const formAddDataFilter = document.getElementsByClassName(
+                "form-add-data-filter"
+            )[0];
+            formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
+            formAddDataFilter.style.pointerEvents = "none";
+            formAddDataFilter.onclick = null;
+            formAddData.style.top = "1500%";
+            const editField =
+                document.getElementsByClassName("table-edit-row")[parentId];
+            console.log(editField);
+            editField.innerHTML = "";
+            editField.style.margin = "0px 10px 50px 1px";
+            editSelectedRowWidget.style.backgroundColor = null;
+            editSelectedRowWidget = null;
+            let parent =
+                document.getElementsByClassName("table-database")[parentId]
+                .parentElement;
+            parent.style.padding = null;
+            return;
+        }
+
+        showFormWithTable();
     }
 
     function acceptFormWithTable() {
