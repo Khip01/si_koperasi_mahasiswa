@@ -1,25 +1,38 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">
-    function submitPesan(action) {
-        $(document).ready(function() {
-            var data = {
-                action: 'insertPesan',
-                kode_transaksi_pembeli: $("#kd_transaksi").val(),
-                kode_barang: $("#kd_brg").val(),
-                qty_total: $("#qty").val(),
-                harga_total: $("#total").val(),
-                tgl_transaksi: $("#tgl_transaksi").val(), // Fixed missing '#' for ID selector
-                nim: $("#nim").val(), // Fixed missing '#' for ID selector
-            };
+    $(document).ready(function(){
+        getDtBarang();
+    });
 
-            $.ajax({
-                type: 'post',
-                url: '../core/functions.php',
-                data: data,
-                success: function(response) {
-                    alert("Response: " + response);
-                }
-            });
+    function getDtBarang(){
+        $.ajax({
+            url: '../core/table.php',
+            type: 'GET',
+            success: function(data){
+                $('#live_data').html(data);
+            },
+            error: function(){
+                alert('Failed to fetch data.');
+            }
+        });
+    }
+    
+    async function insertBarang(data) {
+        return await $.ajax({
+            type: 'post',
+            url: '../core/functions.php',
+            data: {
+                action: 'insertBarang',
+                kode_barang: $('#kd_brg').val(),
+                kode_supplier: $('#kd_supplier').val(),
+                nama_barang: $('#nama_brg').val(),
+                qty: $('#qty').val(),
+                harga_item: $('#harga_item').val(),
+            },
+            success: function(response) {
+                console.log("Response: " + response);
+                getDtBarang();
+            }
         });
     }
 
@@ -82,6 +95,20 @@
             }
         });
     }
+    
+    async function barangMaxKd() {
+        return await $.ajax({
+            type: 'post',
+            url: '../core/functions.php',
+            data: {
+                action: 'barangMaxKd',
+            },
+            success: function(response) {
+                return response;
+            }
+        });
+    
+    }
 
     async function insert(target, data) {
         let data_arg = `INSERT INTO ${target} (`;
@@ -135,4 +162,24 @@
             }
         });
     }
+
+    async function hapus(target, where, where_data) {
+        let data_arg = `DELETE FROM ${target} WHERE ${where} = '${where_data}';`;
+        
+        console.log(`ARG: ${data_arg}`);
+
+        return await $.ajax({
+            type: 'post',
+            url: '../core/functions.php',
+            data: {
+                action: 'query',
+                data: data_arg
+            },
+            success: function(response) {
+                console.log("Response: " + response);
+            }
+        });
+    }
+
+    
 </script>
