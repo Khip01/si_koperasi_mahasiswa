@@ -54,7 +54,11 @@ function printData($query){
 }
 
 if (isset($_POST["action"])) {
-    if ($_POST["action"] == "insert") {
+    if ($_POST["action"] == "query") {
+        mysqli_query($conn, $_POST["data"]);
+        echo 'aman desu!';
+    }
+    if ($_POST["action"] == "insertPesan") {
         tambahPesanan();
     }elseif ($_POST["action"] == "barang") {
         tambahBarang();
@@ -64,6 +68,9 @@ if (isset($_POST["action"])) {
     }
     if($_POST["action"] == "pembeliMaxKd"){
         echo pembeliMaxKd();
+    }
+    if ($_POST["action"] == "supplierMaxKd") {
+        echo supplierMaxKd();
     }
 }
 
@@ -103,6 +110,18 @@ function pembeliMaxKd(){
         $kd = "0005";
     }
     return htmlspecialchars('TP' . $kd);
+}
+
+function supplierMaxKd(){
+    global $conn;
+    $result = mysqli_query($conn, "SELECT MAX(RIGHT(kode_transaksi_supplier, 4)) as kode FROM transaksi_supplier");
+    $q = mysqli_fetch_object($result);
+    if ($q && $q->kode) {
+        $kd = sprintf("%04s", ((int)$q->kode) + 1);
+    } else {
+        $kd = "0005";
+    }
+    return htmlspecialchars('TS' . $kd);
 }
 
 ?>
