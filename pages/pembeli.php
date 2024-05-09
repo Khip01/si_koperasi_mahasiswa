@@ -15,7 +15,7 @@ $pembeli = "SELECT * FROM pembeli";
     <link rel="stylesheet" href="styles/pembeli.css" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POV Pembeli</title>
+    <title>Pembeli Page</title>
     <!-- Font Lexend -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,11 +28,11 @@ $pembeli = "SELECT * FROM pembeli";
         <h2 id="what-table">Pembeli</h2>
     </div>
     <nav id="nav-pov-mode">
-        <a href="petugas.php">
-            <h1>Petugas</h1>
-        </a>
         <a>
             <h1>Pembeli</h1>
+        </a>
+        <a href="petugas.php">
+            <h1>Petugas</h1>
         </a>
         <a href="supplier.php">
             <h1>Supplier</h1>

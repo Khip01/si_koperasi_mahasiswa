@@ -15,7 +15,7 @@ $petugas = "SELECT * FROM petugas";
     <link rel="stylesheet" href="styles/petugas.css" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POV Petugas</title>
+    <title>Petugas Page</title>
     <!-- Font Lexend -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,11 +28,11 @@ $petugas = "SELECT * FROM petugas";
         <h2 id="what-table">Petugas</h2>
     </div>
     <nav id="nav-pov-mode">
-        <a>
-            <h1>Petugas</h1>
-        </a>
         <a href="pembeli.php">
             <h1>Pembeli</h1>
+        </a>
+        <a>
+            <h1>Petugas</h1>
         </a>
         <a href="supplier.php">
             <h1>Supplier</h1>
@@ -267,7 +267,7 @@ $petugas = "SELECT * FROM petugas";
         if (Object.keys(things).length == 0) {
             title.textContent = `${strTitile} kosong kak`;
             tabelthings.children[0].children[1].style.display = "none";
-            // tabelthings.style.width = '350px';
+            tabelthings.style.width = '350px';
             tabel.innerHTML = '';
         } else {
             // tabelthings.style = null;
