@@ -107,12 +107,13 @@
 
 body {
   color: white;
-  background-image: linear-gradient(
+  /* background-image: linear-gradient(
     to top right,
     #bf5481,
     #e3a84f 50%,
     #7d68b9 100%
-  );
+  ); */
+  background-image: url("../imgs/a-keep's-masterpiece.webp");
   background-repeat: no-repeat;
   background-attachment: fixed;
   display: flex;
@@ -462,6 +463,56 @@ textarea:focus ~ .bar:before {
   justify-content: space-between;
   align-items: center;
   pointer-events: all;
+}
+
+.dialog-yes-no {
+  display: none;
+  position: absolute;
+  top: 1500%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background-color: white;
+  border-radius: 25px;
+  padding: 20px 20px;
+  color: black;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.dialog-yes-no .btn-field-accept-cancle .btn-accept {
+  background-color: #e96e7a;
+}
+
+.dialog-yes-no .btn-field-accept-cancle .btn-accept:hover {
+  background-color: #ff0019;
+}
+
+.dialog-yes-no .dialog-yes-no-top-section {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  align-items: end;
+}
+
+.dialog-yes-no .dialog-yes-no-top-section h1 {
+  font-weight: 500;
+}
+
+.dialog-yes-no-top-section img {
+  height: 100px;
+  width: 100px;
+}
+
+.dialog-yes-no-content h1 {
+  font-weight: 400;
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+  margin: 0px;
 }
 
 /* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */

@@ -86,6 +86,24 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         </div>
     </div>
 
+    <div class="dialog-yes-no">
+        <div class="dialog-yes-no-top-section">
+            <img src="imgs/zete-gemoy.webp" />
+            <h1>Hold ON!~</h1>
+        </div>
+        <div class="dialog-yes-no-content">
+            <h1>Ambatu Loli</h1>
+        </div>
+        <div class="btn-field-accept-cancle">
+            <div class="btn-cancle" onclick="closeDialogYesNo()">
+                <h1>I'm change my mind</h1>
+            </div>
+            <div class="btn-accept" onclick="acceptDialogYesNo()">
+                <h1>I KNOW</h1>
+            </div>
+        </div>
+    </div>
+
     <div class="form-add-data">
         <div class="top-bar-form-add-data">
             <h1>Boo Secret form(this is not doing anything)</h1>
@@ -171,7 +189,7 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
     const editFieldOrigin =
         '<h1>Edit Data</h1> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
 
-    const editFieldOrigin_Delete = '<div class="table-edit-row-header"> <h1>Edit Data</h1> <div id="edit-row-btn-del"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" /> </svg> </div> </div> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
+    const editFieldOrigin_Delete = '<div class="table-edit-row-header"> <h1>Edit Data</h1> <div id="edit-row-btn-del" onclick="showDialogYesNo()"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" /> </svg> </div> </div> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
 
     function getParentId_tableEditRow(x) {
         let id = x[x.length - 1];
@@ -394,6 +412,10 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
             tableField = document.getElementsByClassName("table-field")[0];
         }
         tableField.style = null;
+    }
+
+    async function deleteFormTextField(x) {
+
     }
 
     async function saveFormTextField(x) {
@@ -622,15 +644,36 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         tableLoader();
     }
 
-    // doksil: Gemini
-    function parseDate(str) {
-        // Replace your date format with the format used in $_POST["tgl_transaksi"]
-        const dateParts = str.split("-");
-        const year = parseInt(dateParts[0], 10);
-        const month = parseInt(dateParts[1], 10) - 1; // Months are zero-indexed in JavaScript
-        const day = parseInt(dateParts[2], 10);
 
-        return new Date(year, month, day);
+    // Dialog-Yes-No
+    function showDialogYesNo() {
+        const formYesNo = document.getElementsByClassName("dialog-yes-no")[0];
+        const formAddDataFilter = document.getElementsByClassName(
+            "form-add-data-filter"
+        )[0];
+        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
+        formAddDataFilter.style.pointerEvents = "all";
+        formYesNo.style.top = "50%";
+
+        let question = `Hapus Data dengan Id: '${currentTd[0].innerHTML}' ?`;
+
+        formYesNo.children[1].children[0].textContent = question;
+    }
+
+    function closeDialogYesNo() {
+        const formYesNo = document.getElementsByClassName("dialog-yes-no")[0];
+        const formAddDataFilter = document.getElementsByClassName(
+            "form-add-data-filter"
+        )[0];
+        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
+        formAddDataFilter.style.pointerEvents = "none";
+        formYesNo.style = null;
+    }
+
+    async function acceptDialogYesNo() {
+        await deleteRow(tables_target[0], 'kode_barang', currentTd[0].innerHTML);
+        tableLoader();
+        closeDialogYesNo();
     }
 
     // scroll form

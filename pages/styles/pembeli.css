@@ -107,12 +107,13 @@
 
 body {
   color: white;
-  background-image: linear-gradient(
+  /* background-image: linear-gradient(
     to top right,
     #bf5481,
     #e3a84f 50%,
     #7d68b9 100%
-  );
+  ); */
+  background-image: url("../imgs/a-keep\'s-masterpiece.webp");
   background-repeat: no-repeat;
   background-attachment: fixed;
   display: flex;
