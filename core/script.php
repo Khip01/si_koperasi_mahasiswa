@@ -95,7 +95,7 @@
             }
         });
     }
-
+    
     async function barangMaxKd() {
         return await $.ajax({
             type: 'post',
@@ -110,8 +110,9 @@
     
     }
 
-    async function insert(target, header, data) {
+    async function insert(target, data) {
         let data_arg = `INSERT INTO ${target} (`;
+        let header = Array.from(data.keys());
         for (let index = 0; index < header.length; index++) {
             data_arg += header[index];
             if (index != header.length - 1) {
@@ -162,7 +163,7 @@
         });
     }
 
-    async function hapus(target, where, where_data) {
+    async function deleteRow(target, where, where_data) {
         let data_arg = `DELETE FROM ${target} WHERE ${where} = '${where_data}';`;
         
         console.log(`ARG: ${data_arg}`);

@@ -2,8 +2,8 @@
 require '../core/functions.php';
 require '../core/script.php';
 
-$barang = "SELECT * FROM barang WHERE kode_transaksi_pembeli IS NULL";
-$transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
+$barang = "SELECT * FROM barang WHERE qty > 0";
+$transaksi_pembeli = "SELECT * FROM transaksi_pembeli WHERE kode_petugas IS NULL";
 $pembeli = "SELECT * FROM pembeli";
 
 ?>
@@ -62,7 +62,8 @@ $pembeli = "SELECT * FROM pembeli";
                     <table></table>
                 </div>
             </div>
-            <div class="table-edit-row"> </div>
+            <div class="table-edit-row">
+            </div>
         </div>
         <!-- Add Table here     -->
     </div>
@@ -107,12 +108,13 @@ $pembeli = "SELECT * FROM pembeli";
 <footer class="nav-bottom" onclick="showFormWithTable()">
     <div id="btn-add">
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M7 7V5a3 3 0 0 1 5-2.236A3 3 0 0 1 17 5v2h1.5A1.5 1.5 0 0 1 20 8.5V18a4 4 0 0 1-1.825 3.357l-.545-.096c-.775-.136-1.574-.563-2.175-1.172S14.5 18.743 14.5 18V7h1V5a1.5 1.5 0 0 0-2.656-.956c.101.3.156.622.156.956v13c0 1.229.582 2.326 1.387 3.142a5.8 5.8 0 0 0 1.08.858H8a4 4 0 0 1-4-4V8.5A1.5 1.5 0 0 1 5.5 7zm1.5-2v2h3V5a1.5 1.5 0 0 0-3 0" />
+            <path  d="M7 7V5a3 3 0 0 1 5-2.236A3 3 0 0 1 17 5v2h1.5A1.5 1.5 0 0 1 20 8.5V18a4 4 0 0 1-1.825 3.357l-.545-.096c-.775-.136-1.574-.563-2.175-1.172S14.5 18.743 14.5 18V7h1V5a1.5 1.5 0 0 0-2.656-.956c.101.3.156.622.156.956v13c0 1.229.582 2.326 1.387 3.142a5.8 5.8 0 0 0 1.08.858H8a4 4 0 0 1-4-4V8.5A1.5 1.5 0 0 1 5.5 7zm1.5-2v2h3V5a1.5 1.5 0 0 0-3 0" />
         </svg>
         <h1 id="currentPetugas">Beli Barang</h1>
     </div>
 </footer>
 
+<script src="app.js"></script>
 <script>
     const tables = [
         ["Daftar Pesanan Pembeli", "<?= $transaksi_pembeli ?>"],
@@ -123,7 +125,7 @@ $pembeli = "SELECT * FROM pembeli";
 
     const tableFormId = 2;
     const formWithTableDialog =
-        '<div class="form-with-table-dialog"> <h1 id="form-with-table-dialog-title">Tambahkan?</h1> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(this)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable(this)"> <h1>Untuk Nyata</h1> </div> </div> </div>';
+        '<div class="form-with-table-dialog"> <h1 id="form-with-table-dialog-title">Tambahkan?</h1> <div id="form-with-table-edit-row-section"> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3>Total: </h3> <h3></h3> </div> </div> </div> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(this)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable(this)"> <h1>Untuk Nyata</h1> </div> </div> </div>';
     var formWithTableDialog_HighlightIdx = 0;
 
     var strTableHeader = [];
@@ -308,42 +310,6 @@ $pembeli = "SELECT * FROM pembeli";
         }
     }
 
-    function editSelectedRow_Dialog(x) {
-        if (editSelectedRowWidget != null) {
-            editSelectedRowWidget.style.backgroundColor = null;
-        }
-        editSelectedRowWidget = x;
-        editSelectedRowWidget.style.backgroundColor = `rgba(194, 182, 182, 0.7)`;
-        let parentId = getParentId_tableEditRow(
-            x.parentNode.parentNode.parentNode.parentNode.id
-        );
-        generateFormTextField(parentId);
-
-        let parentTableField =
-            document.getElementsByClassName("table-database")[parentId].parentElement;
-        parentTableField.style.padding = `0px 3.25rem`;
-        const td = x.children;
-        const highLightSelVal = document.getElementsByClassName("form-with-table-dialog")[dialogPageAt].children[1];
-
-        const formDialog = document.getElementsByClassName("form-with-table-dialog")[dialogPageAt];
-        if (dialogPageAt == 0) {
-            formDialog.children[0].textContent = "Anda?";
-            formWithTableDialog_HighlightIdx = 1;
-            // formTable.children[1].style.display = "none";
-        }
-        if (dialogPageAt == 1) {
-            formDialog.children[0].textContent = "Beli ini?";
-            formWithTableDialog_HighlightIdx = 4;
-            // formTable.children[0].style.display = "none";
-        }
-
-        if (formWithTableDialog_HighlightIdx == 4) {
-            highLightSelVal.textContent = `${td[formWithTableDialog_HighlightIdx].innerHTML} [${td[0].innerHTML}]`;
-        } else {
-            highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
-        }
-    }
-
     function discardFormTextField(x) {
         let parentId = getParentId_tableEditRow(
             x.parentNode.parentNode.parentNode.children[0].id
@@ -384,6 +350,83 @@ $pembeli = "SELECT * FROM pembeli";
         console.log(valueToSubmit);
     }
 
+    function maxQtyFunction(x) {
+        console.log(x.value);
+        if (x.value > x.max) {
+            x.value = x.max;
+        }
+    }
+
+    function maxQtyEventListerner(x, max, perItemValue) {
+        x.removeEventListener("input", function() {
+            if (Number(x.value) > Number(max)) {
+                x.value = max;
+            }
+            if (Number(x.value) < 0) {
+                x.value = 0
+            }
+        });
+        x.addEventListener("input", function() {
+            if (Number(x.value) > Number(max)) {
+                x.value = max;
+            }
+            if (Number(x.value) < 0) {
+                x.value = 0
+            }
+            x.parentElement.parentElement.children[1].children[1].textContent = idrFormatter.format(Number(x.value) * Number(perItemValue));
+        });
+    }
+
+    let qty_before = 0;
+
+    function editSelectedRow_Dialog(x) {
+        if (editSelectedRowWidget != null) {
+            editSelectedRowWidget.style.backgroundColor = null;
+        }
+        editSelectedRowWidget = x;
+        editSelectedRowWidget.style.backgroundColor = `rgba(194, 182, 182, 0.7)`;
+        let parentId = getParentId_tableEditRow(
+            x.parentNode.parentNode.parentNode.parentNode.id
+        );
+        generateFormTextField(parentId);
+
+        let parentTableField =
+            document.getElementsByClassName("table-database")[parentId].parentElement;
+        parentTableField.style.padding = `0px 3.25rem`;
+        const td = x.children;
+        const highLightSelVal = document.getElementsByClassName("form-with-table-dialog")[dialogPageAt].children[1].children[0];
+
+        const formDialog = document.getElementsByClassName("form-with-table-dialog")[dialogPageAt];
+        if (dialogPageAt == 0) {
+            formDialog.children[0].textContent = "Anda?";
+            formWithTableDialog_HighlightIdx = 1;
+            // formTable.children[1].style.display = "none";
+        }
+        if (dialogPageAt == 1) {
+            formDialog.children[0].textContent = "Beli ini?";
+            formWithTableDialog_HighlightIdx = 4;
+            // Material Text Form
+            let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
+            qtyTextBox.style.display = null;
+            qtyTextBox.style.display = 'block';
+            qtyTextBox.children[0].children[0].type = 'number';
+
+            qty_before = td[5].innerHTML;
+            qtyTextBox.children[0].children[0].value = qty_before;
+            maxQtyEventListerner(qtyTextBox.children[0].children[0], qty_before, td[6].innerHTML);
+
+            qtyTextBox.children[0].children[0].parentElement.parentElement.children[1].children[1].textContent = idrFormatter.format(Number(qtyTextBox.children[0].children[0].value) * Number(td[6].innerHTML));
+            qtyTextBox.children[0].children[1].textContent = 'QTY';
+            // formTable.children[0].style.display = "none";
+        }
+
+        if (formWithTableDialog_HighlightIdx == 4) {
+            highLightSelVal.textContent = `${td[formWithTableDialog_HighlightIdx].innerHTML} [${td[0].innerHTML}]`;
+        } else {
+            highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
+        }
+    }
+
     var dialogPageAt = -1;
     let dialogValueToSubmit;
 
@@ -416,6 +459,8 @@ $pembeli = "SELECT * FROM pembeli";
     }
 
     function closeFormWithTable(x) {
+        // let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
+        // qtyTextBox.style.display = null;
         dialogPageAt -= 1;
         if (x == null) {
             let tableField = document.getElementsByClassName("table-field");
@@ -479,6 +524,15 @@ $pembeli = "SELECT * FROM pembeli";
         showFormWithTable();
     }
 
+    const toSubmitHeaderMap = new Map([
+        ['nim', 'nim'],
+        ['kode_barang', 'kode_barang'],
+        ['kode_transaksi_pembeli', 'kode_transaksi_pembeli'],
+        ['qty', 'qty_total'],
+        ['harga_item', 'harga_total'],
+    ]);
+
+
     async function acceptFormWithTable(x) {
         const formAddData = editSelectedRowWidget;
         let valueToSubmit = [];
@@ -487,16 +541,28 @@ $pembeli = "SELECT * FROM pembeli";
         }
 
         if (dialogPageAt == 0) {
-            dialogValueToSubmit.set(strTableHeader[1][0], valueToSubmit[0]);
+            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[1][0]), valueToSubmit[0]);
             dialogPageAt += 1;
         } else if (dialogPageAt == 1) {
-            dialogValueToSubmit.set(strTableHeader[2][0], valueToSubmit[0]);
+            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
             for (let index = 3; index < strTableHeader[2].length; index++) {
                 if (index == 3) {
-                    dialogValueToSubmit.set(strTableHeader[2][index], await pembeliMaxKd());
+                    dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), await pembeliMaxKd());
                     continue;
                 }
-                dialogValueToSubmit.set(strTableHeader[2][index], valueToSubmit[index]);
+                if (index == 4) {
+                    continue;
+                }
+                if (index == 5) {
+                    let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
+                    dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), qtyTextBox.children[0].children[0].value);
+                    continue;
+                }
+                if (index == 6) {
+                    dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), Number(dialogValueToSubmit.get('qty_total')) * Number(valueToSubmit[index]));
+                    continue;
+                }
+                dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), valueToSubmit[index]);
             }
             dialogPageAt += 1;
         }
@@ -510,25 +576,10 @@ $pembeli = "SELECT * FROM pembeli";
     }
 
     async function completeDialog() {
-        const now = new Date();
-
-        const formattedDate = now.toLocaleDateString("en-US", {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            separator: '-'
-        });
-
-        const formattedTime = now.toLocaleTimeString("en-US", {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-
-        const formattedDateTime = `${formattedDate} ${formattedTime}`;
-        dialogValueToSubmit.set('tgl_transaksi', formattedDateTime);
+        dialogValueToSubmit.set('tgl_transaksi', formatDateAndTime(new Date()));
         console.log(dialogValueToSubmit);
-        await insertPesan(dialogValueToSubmit);
+        await insert('transaksi_pembeli', dialogValueToSubmit);
+        await update('barang', 'kode_barang', dialogValueToSubmit.get('kode_barang'), 'qty', Number(qty_before) - Number(dialogValueToSubmit.get('qty_total')));
         tableLoader();
     }
 </script>
