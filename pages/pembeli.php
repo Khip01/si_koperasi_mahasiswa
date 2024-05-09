@@ -164,21 +164,21 @@ $pembeli = "SELECT * FROM pembeli";
         // console.log(tr);
 
         for (let index = 1; index < tr.length; index++) {
-            if(searchInput == "") {
+            if (searchInput == "") {
                 tr[index].style.display = null;
                 continue;
             }
             let td = tr[index].getElementsByTagName("td");
             let found = false;
             for (let index = 0; index < td.length; index++) {
-                if(td[index].innerHTML.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1) {
+                if (td[index].innerHTML.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1) {
                     found = true;
                     break;
                 };
             }
-            if(found) {
+            if (found) {
                 tr[index].style.display = '';
-            }else{
+            } else {
                 tr[index].style.display = 'none';
             }
         }
@@ -196,7 +196,9 @@ $pembeli = "SELECT * FROM pembeli";
             title.textContent = `${strTitile} kosong kak`;
             tabelthings.children[0].children[1].style.display = "none";
             tabel.innerHTML = '';
+            tabelthings.style.width = '450px';
         } else {
+            tabelthings.style = null;
             let arrHeader = [];
             for (let index = 0; index < Object.keys(things[0]).length; index++) {
                 arrHeader.push(Object.keys(things[0])[index]);
@@ -335,7 +337,11 @@ $pembeli = "SELECT * FROM pembeli";
             // formTable.children[0].style.display = "none";
         }
 
-        highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
+        if (formWithTableDialog_HighlightIdx == 4) {
+            highLightSelVal.textContent = `${td[formWithTableDialog_HighlightIdx].innerHTML} [${td[0].innerHTML}]`;
+        } else {
+            highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
+        }
     }
 
     function discardFormTextField(x) {
@@ -445,7 +451,7 @@ $pembeli = "SELECT * FROM pembeli";
             return;
         }
 
-        if (x != null || dialogPageAt < 0) {
+        if (x != null && dialogPageAt < 0) {
             let parentId = getParentId_tableEditRow(x.parentElement.parentElement.parentElement.parentElement.children[0].id);
             dialogPageAt = -1;
             const formAddData = document.getElementsByClassName("form-with-table")[0];
@@ -522,7 +528,7 @@ $pembeli = "SELECT * FROM pembeli";
         const formattedDateTime = `${formattedDate} ${formattedTime}`;
         dialogValueToSubmit.set('tgl_transaksi', formattedDateTime);
         console.log(dialogValueToSubmit);
-        await insertPesan('insert', dialogValueToSubmit);
+        await insertPesan(dialogValueToSubmit);
         tableLoader();
     }
 </script>
