@@ -60,7 +60,8 @@ if (isset($_POST["action"])) {
     }
     if ($_POST["action"] == "insertPesan") {
         tambahPesanan();
-    }elseif ($_POST["action"] == "barang") {
+    }
+    if ($_POST["action"] == "insertBarang") {
         tambahBarang();
     }
     if ($_POST["action"] == "select") {
@@ -71,6 +72,9 @@ if (isset($_POST["action"])) {
     }
     if ($_POST["action"] == "supplierMaxKd") {
         echo supplierMaxKd();
+    }
+    if ($_POST["action"] == "barangMaxKd") {
+        echo barangMaxKd();
     }
 }
 
@@ -90,8 +94,15 @@ function tambahPesanan(){
 }
 
 function tambahBarang(){
-    global $coon;
-    
+    global $conn;
+    $kd_brg = $_POST["kode_barang"];
+    $kd_supp = $_POST["kode_supplier"];
+    $nama_brg = $_POST["nama_barang"];
+    $qty = $_POST["qty"];
+    $harga_item = $_POST["harga_item"];
+    $query = "INSERT INTO barang (kode_barang, kode_supplier,nama_barang, qty, harga_item) VALUES ('$kd_brg', '$kd_supp', '$nama_brg', '$qty', '$harga_item')";
+    mysqli_query($conn, $query);
+    echo "UwU";
 }
 // function update($query){
 //     global $conn;
@@ -107,7 +118,7 @@ function pembeliMaxKd(){
     if ($q && $q->kode) {
         $kd = sprintf("%04s", ((int)$q->kode) + 1);
     } else {
-        $kd = "0005";
+        $kd = "0001";
     }
     return htmlspecialchars('TP' . $kd);
 }
@@ -119,9 +130,20 @@ function supplierMaxKd(){
     if ($q && $q->kode) {
         $kd = sprintf("%04s", ((int)$q->kode) + 1);
     } else {
-        $kd = "0005";
+        $kd = "0001";
     }
     return htmlspecialchars('TS' . $kd);
 }
 
+function barangMaxKd(){
+    global $conn;
+    $result = mysqli_query($conn, "SELECT MAX(RIGHT(kode_barang, 3)) as kode FROM barang");
+    $q = mysqli_fetch_object($result);
+    if ($q && $q->kode) {
+        $kd = sprintf("%03s", ((int)$q->kode) + 1);
+    } else {
+        $kd = "001";
+    }
+    return htmlspecialchars('B' . $kd);
+}
 ?>

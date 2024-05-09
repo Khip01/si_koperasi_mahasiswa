@@ -15,6 +15,7 @@
             <th>Nama Barang</th>
             <th>Qty</th>
             <th>Harga Item</th>
+            <th>Aksi</th>
         </tr>
     </thead>        
     <tbody>
@@ -31,6 +32,7 @@
                 <td><?= htmlspecialchars($data['nama_barang']); ?></td>
                 <td><?= htmlspecialchars($data['qty']); ?></td>
                 <td><?= htmlspecialchars($data['harga_item']); ?></td>
+                <td><a href="update-test.php?kode_barang=<?= htmlspecialchars($data['kode_barang']); ?>">edit min</a></td>
             </tr>
             <?php $i++; ?>
             <?php endforeach; 
