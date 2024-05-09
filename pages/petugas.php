@@ -538,9 +538,9 @@ $petugas = "SELECT * FROM petugas";
             return;
         }
 
-        if (x != null) {
+        if (x != null && dialogPageAt < 0) {
             let parentId = getParentId_tableEditRow(x.parentElement.parentElement.parentElement.parentElement.children[0].id);
-            // dialogPageAt = -1;
+            dialogPageAt = -1;
             const formAddData = document.getElementsByClassName("form-with-table")[0];
             const formAddDataFilter = document.getElementsByClassName(
                 "form-add-data-filter"
