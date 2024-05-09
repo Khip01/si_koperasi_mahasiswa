@@ -279,6 +279,9 @@ textarea:focus ~ .bar:before {
 }
 .material-text-box .group {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .material-text-box label {
   color: #c6c6c6;

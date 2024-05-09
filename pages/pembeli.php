@@ -406,7 +406,7 @@ $pembeli = "SELECT * FROM pembeli";
             formDialog.children[0].textContent = "Beli ini?";
             formWithTableDialog_HighlightIdx = 4;
             // Material Text Form
-            let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[dialogPageAt].children[1].children[1];
+            let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
             qtyTextBox.style.display = 'block';
             qtyTextBox.children[0].children[0].type = 'number';
 
@@ -458,7 +458,7 @@ $pembeli = "SELECT * FROM pembeli";
     }
 
     function closeFormWithTable(x) {
-        let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[dialogPageAt - 1].children[1].children[1];
+        let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
         qtyTextBox.style.display = null;
         dialogPageAt -= 1;
         if (x == null) {
@@ -553,7 +553,7 @@ $pembeli = "SELECT * FROM pembeli";
                     continue;
                 }
                 if (index == 5) {
-                    let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[dialogPageAt].children[1].children[1];
+                    let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
                     dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), qtyTextBox.children[0].children[0].value);
                     continue;
                 }
