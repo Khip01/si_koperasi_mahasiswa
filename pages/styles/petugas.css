@@ -211,8 +211,11 @@ th:last-child {
   align-items: start;
 }
 
-.table-field-wrapper .table-field:nth-child(1) table,
-.table-field:nth-child(2) table {
+.table-field-wrapper .table-field:nth-child(1) table {
+  pointer-events: none;
+}
+
+.table-field-wrapper .table-field:nth-child(2) table {
   pointer-events: none;
 }
 

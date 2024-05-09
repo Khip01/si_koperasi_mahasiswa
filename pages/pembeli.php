@@ -196,7 +196,9 @@ $pembeli = "SELECT * FROM pembeli";
             title.textContent = `${strTitile} kosong kak`;
             tabelthings.children[0].children[1].style.display = "none";
             tabel.innerHTML = '';
+            tabelthings.style.width = '450px';
         } else {
+            tabelthings.style = null;
             let arrHeader = [];
             for (let index = 0; index < Object.keys(things[0]).length; index++) {
                 arrHeader.push(Object.keys(things[0])[index]);

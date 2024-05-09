@@ -265,8 +265,10 @@ $petugas = "SELECT * FROM petugas";
         if (Object.keys(things).length == 0) {
             title.textContent = `${strTitile} kosong kak`;
             tabelthings.children[0].children[1].style.display = "none";
+            // tabelthings.style.width = '350px';
             tabel.innerHTML = '';
         } else {
+            // tabelthings.style = null;
             let arrHeader = [];
             for (let index = 0; index < Object.keys(things[0]).length; index++) {
                 arrHeader.push(Object.keys(things[0])[index]);
