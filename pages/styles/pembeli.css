@@ -69,7 +69,7 @@
   margin-top: 1px;
 }
 
-#nav-pov-mode a:nth-child(2) {
+#nav-pov-mode a:nth-child(1) {
   pointer-events: none;
 }
 
@@ -100,7 +100,7 @@
   color: #ffb118;
 }
 
-#nav-pov-mode a:nth-child(2) {
+#nav-pov-mode a:nth-child(1) {
   cursor: default;
   color: #ffef5a;
 }
