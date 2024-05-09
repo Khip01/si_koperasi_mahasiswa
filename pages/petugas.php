@@ -173,9 +173,11 @@ $petugas = "SELECT * FROM petugas";
 
 <footer class=" nav-bottom" onclick="showFormWithTable()" onmousewheel="showAddDataForm()">
     <div id="btn-add">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-            <circle cx="12" cy="6" r="4" fill="currentColor" />
-            <path fill="currentColor" d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5" opacity="0.5" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+                <path d="M39 6H9a3 3 0 0 0-3 3v30a3 3 0 0 0 3 3h30a3 3 0 0 0 3-3V9a3 3 0 0 0-3-3" />
+                <path d="m21 31l5 4l8-10M14 15h20m-20 8h8" />
+            </g>
         </svg>
         <h1 id="currentPetugas">Lakukan Transaksi</h1>
     </div>
@@ -469,7 +471,7 @@ $petugas = "SELECT * FROM petugas";
 
         highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
     }
-    
+
     function showFormWithTable() {
         const formTable = document.getElementsByClassName("form-with-table")[0];
         formTable.children[0].style.display = null;
