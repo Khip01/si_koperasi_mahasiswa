@@ -55,8 +55,12 @@ function printData($query){
 
 if (isset($_POST["action"])) {
     if ($_POST["action"] == "query") {
-        mysqli_query($conn, $_POST["data"]);
-        echo 'aman desu!';
+        $result = mysqli_query($conn, $_POST["data"]);
+        if($result != false){
+            echo 'aman desu!';
+        } else {
+            echo $result;
+        }
     }
     if ($_POST["action"] == "insertPesan") {
         tambahPesanan();
