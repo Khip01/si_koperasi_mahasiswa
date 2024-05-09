@@ -82,6 +82,7 @@ body {
   flex-wrap: nowrap;
   height: 100vh;
   margin: 0px;
+  overflow: hidden;
 }
 
 .invisible-waifu {
@@ -116,10 +117,6 @@ body {
   margin-top: 95px;
   height: 250px;
   width: 100%;
-  /* background-image: url(imgs/go_far_ehe.webp);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center; */
 }
 
 .home-cover h1 {
@@ -182,6 +179,22 @@ body {
   font-weight: 400;
   font-size: 30px;
   cursor: pointer;
+}
+
+.list-anggota nav a::after {
+  content: "";
+  width: 0%;
+  height: 2px;
+  background: white;
+  display: block;
+  margin: auto;
+  transition: 0.35s;
+}
+
+.list-anggota nav a:hover,
+a::after {
+  color: #e3a84f;
+  width: 100%;
 }
 
 .card-crud-launcher {
@@ -268,7 +281,12 @@ input[type="radio"] {
 
 #btn-do-crud {
   background-color: #b78740;
-  background: linear-gradient(to top right, #c69143, rgba(0,0,0,0) 50%, #b78740 100%);
+  background: linear-gradient(
+    to top right,
+    #c69143,
+    rgba(0, 0, 0, 0) 50%,
+    #b78740 100%
+  );
   padding: 10px 50px;
   display: flex;
   border-radius: 20px;
@@ -304,9 +322,87 @@ input[type="radio"] {
   gap: 10px;
   position: relative;
   bottom: 0%;
+  align-items: center;
+  justify-content: center;
 }
 
 .connection-status-field h1 {
   font-weight: 500;
   font-size: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.connection-status-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.connection-status-wrapper svg {
+  cursor: pointer;
+  fill: white;
+}
+
+.connection-status-wrapper svg:hover {
+  fill: gray;
+}
+
+/* 125% */
+
+@media (-webkit-min-device-pixel-ratio: 1.25) {
+  .home-cover {
+    margin-top: 10px;
+  }
+
+  .crud-launcher-text {
+    margin-bottom: 0px;
+  }
+
+  .crud-launcher-text h1 {
+    font-size: 27px;
+  }
+
+  .crud-launcher-text h2 {
+    font-size: 40px;
+  }
+
+  .crud-launcher-text h3 {
+    font-size: 35px;
+  }
+
+  .list-anggota nav a {
+    font-size: 25px;
+  }
+
+  #btn-do-crud h1 {
+    font-size: 16px;
+  }
+}
+
+/* 150% */
+@media (-webkit-min-device-pixel-ratio: 1.5) {
+  .svg-decoration {
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .crud-launcher-text {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: end;
+    justify-content: space-around;
+  }
+
+  .crud-launcher-text h1 {
+    font-size: 17px;
+  }
+
+  .crud-launcher-text h2 {
+    font-size: 17px;
+  }
+
+  .crud-launcher-text h3 {
+    font-size: 17px;
+  }
 }

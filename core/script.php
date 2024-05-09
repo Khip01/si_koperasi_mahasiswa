@@ -1,7 +1,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">
     function submitPesan(action) {
-        $(document).ready(function(){
+        $(document).ready(function() {
             var data = {
                 action: action,
                 kode_transaksi_pembeli: $("#kd_transaksi").val(),
@@ -23,41 +23,50 @@
         });
     }
 
-    $(document).ready(function(){
-        getDtBarang();
-    });
-
-    function getDtBarang(){
-        $.ajax({
-            url: '../core/table.php',
-            type: 'GET',
-            success: function(data){
-                $('#live_data').html(data);
+    async function insertPesan(action, data) {
+        return await $.ajax({
+            type: 'post',
+            url: '../core/functions.php',
+            data: {
+                action: action,
+                kode_transaksi_pembeli: data.get('kode_transaksi_pembeli'),
+                kode_barang: data.get('kode_barang'),
+                qty_total: data.get('qty'),
+                harga_total: data.get('harga_item'),
+                tgl_transaksi: data.get('tgl_transaksi'),
+                nim: data.get('nim'),
             },
-            error: function(){
-                alert('Failed to fetch data.');
+            success: function(response) {
+                alert("Response: " + response);
             }
         });
     }
 
-    function insertBarang(){
-        var dataBrg = {
-                action: action,
-                kode_barang: $("#kd_brg").val(),
-                kode_supplier: $("#kd_supplier").val(),
-                nama_brg: $("#namaBrg").val(),
-                qty_total: $("#qty").val(),
-                harga_total: $("#total").val(),
-                tgl_transaksi: $("#tgl_transaksi").val(), 
-            };
+    async function selectTable(query) {
+        return await $.ajax({
+            type: 'post',
+            url: '../core/functions.php',
+            data: {
+                action: 'select',
+                query: query,
+            },
+            dataType: 'json',
+            success: function(response) {
+                return response;
+            }
+        });
+    }
 
-            $.ajax({
-                type: 'post',
-                url: '../core/functions.php',
-                data: dataBrg,
-                success: function(response) {
-                    alert("Response: " + response);
-                }
-            });
+    async function pembeliMaxKd() {
+        return await $.ajax({
+            type: 'post',
+            url: '../core/functions.php',
+            data: {
+                action: 'pembeliMaxKd',
+            },
+            success: function(response) {
+                return response;
+            }
+        });
     }
 </script>

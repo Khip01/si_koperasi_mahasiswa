@@ -53,7 +53,7 @@ if ($getResult != null) {
         </div>
         <div class="that-two-card">
             <div class="card-list-anggota">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <svg class="svg-decoration" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                     <path d="M8.75 5.25a2.25 2.25 0 1 1-4.5 0a2.25 2.25 0 0 1 4.5 0M4 8a1 1 0 0 0-1 1v4.5a3.5 3.5 0 1 0 7 0V9a1 1 0 0 0-1-1zm5.75-2.75c0 .65-.19 1.255-.52 1.763c.413.048.787.22 1.084.48q.091.006.186.007a2.25 2.25 0 1 0-1.312-4.078c.354.521.562 1.15.562 1.828M9.5 16.855A4.5 4.5 0 0 0 11 13.5V9c0-.364-.098-.706-.268-1H13a1 1 0 0 1 1 1v4.5a3.5 3.5 0 0 1-4.5 3.355M13.75 5.25c0 .65-.19 1.255-.52 1.763c.413.048.787.22 1.084.48q.091.006.186.007a2.25 2.25 0 1 0-1.312-4.078c.354.521.562 1.15.562 1.828m-.25 11.605A4.5 4.5 0 0 0 15 13.5V9c0-.364-.098-.706-.268-1H17a1 1 0 0 1 1 1v4.5a3.5 3.5 0 0 1-4.5 3.355" />
                 </svg>
                 <div class="list-anggota">
@@ -68,17 +68,16 @@ if ($getResult != null) {
             </div>
 
             <div class="card-crud-launcher">
-                <svg id="card-crud-launcher-decoration" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1024 1024">
+                <svg id="card-crud-launcher-decoration" class="svg-decoration" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1024 1024">
                     <path d="M832 64H192c-17.7 0-32 14.3-32 32v224h704V96c0-17.7-14.3-32-32-32M288 232c-22.1 0-40-17.9-40-40s17.9-40 40-40s40 17.9 40 40s-17.9 40-40 40M160 928c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V704H160zm128-136c22.1 0 40 17.9 40 40s-17.9 40-40 40s-40-17.9-40-40s17.9-40 40-40M160 640h704V384H160zm128-168c22.1 0 40 17.9 40 40s-17.9 40-40 40s-40-17.9-40-40s17.9-40 40-40" />
                 </svg>
-                <nav class="crud-launcher-text">
+                <div class="crud-launcher-text">
                     <h1>WEB</h1>
                     <h2>CRUD</h2>
                     <h3>KOPERASI ORGANISASI</h3>
-                </nav>
+                </div>
                 <div class="pov-args">
                     <h1>POV</h1>
-                    <!-- <form method="post" action="process.php"> -->
                     <form id="pov-radio">
                         <input type="radio" id="petugas" name="pov" value="petugas" checked="checked">
                         <label for="petugas">Petugas</label><br>
@@ -99,38 +98,35 @@ if ($getResult != null) {
                             </g>
                         </svg></a>
                 </div>
-                <div class="connection-status-field">
-                    <h1>Connection: </h1>
-                    <h1 id="connection-status-what">OWO</h1>
+                <div class="connection-status-wrapper">
+                    <div class="connection-status-field">
+                        <h1>Connection: </h1>
+                        <h1 id="connection-status-what">OWO</h1>
+                    </div>
+                    <div class="connection-status-field" onclick="checkConnection()">
+                        <div id="connection-info">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256">
+                                <path d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88m16-40a8 8 0 0 1-8 8a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16a16 16 0 0 1 16 16v40a8 8 0 0 1 8 8m-32-92a12 12 0 1 1 12 12a12 12 0 0 1-12-12" />
+                            </svg>
+                        </div>
+                        <div id="connection-rfs" onclick="checkConnection()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <path d="M17.65 6.35a7.95 7.95 0 0 0-6.48-2.31c-3.67.37-6.69 3.35-7.1 7.02C3.52 15.91 7.27 20 12 20a7.98 7.98 0 0 0 7.21-4.56c.32-.67-.16-1.44-.9-1.44c-.37 0-.72.2-.88.53a5.994 5.994 0 0 1-6.8 3.31c-2.22-.49-4.01-2.3-4.48-4.52A6.002 6.002 0 0 1 12 6c1.66 0 3.14.69 4.22 1.78l-1.51 1.51c-.63.63-.19 1.71.7 1.71H19c.55 0 1-.45 1-1V6.41c0-.89-1.08-1.34-1.71-.71z" />
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Material TextField, Don't delete save for later - Raruu -->
-    <!-- Sauce: https://stackoverflow.com/a/58968110 -->
-
-    <!-- <h1>Halo, menu:</h1>
-    <br>
-    <ul>
-        <li>
-            <a href="pages/pembeli.php">POV Pembeli</a>
-        </li>
-        <li>
-            <a href="pages/petugas.php">POV Petugas</a>
-        </li>
-        <li>
-            <a href="pages/supplier.php">POV Supplier</a>
-        </li>
-    </ul> -->
 </body>
 
 <script>
     function redirectToPOV() {
         const povRadio = document.getElementById('pov-radio').elements['pov'];
         for (var i = 0; i < povRadio.length; i++) {
-            if (povRadio[i].checked) {          
-                window.open(`pages/${povRadio[i].value}.php`,"_self")
+            if (povRadio[i].checked) {
+                window.open(`pages/${povRadio[i].value}.php`, "_self")
                 break;
             }
         }

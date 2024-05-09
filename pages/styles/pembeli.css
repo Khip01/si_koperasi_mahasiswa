@@ -69,7 +69,7 @@
   margin-top: 1px;
 }
 
-#nav-pov-mode a:first-child {
+#nav-pov-mode a:nth-child(2) {
   pointer-events: none;
 }
 
@@ -100,7 +100,7 @@
   color: #ffb118;
 }
 
-#nav-pov-mode a:first-child {
+#nav-pov-mode a:nth-child(2) {
   cursor: default;
   color: #ffef5a;
 }
@@ -425,8 +425,8 @@ textarea:focus ~ .bar:before {
   min-width: 17rem;
 }
 
-.table-database-topsection {
-  display: flex;
+.table-database-topsection{
+  display: flex;  
   justify-content: space-between;
   align-items: center;
   pointer-events: all;
