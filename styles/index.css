@@ -191,9 +191,12 @@ body {
   transition: 0.35s;
 }
 
-.list-anggota nav a:hover,
-a::after {
+.list-anggota nav a:hover {
   color: #e3a84f;
+}
+
+.list-anggota nav a:hover::after {
+  background: #e3a84f;
   width: 100%;
 }
 
