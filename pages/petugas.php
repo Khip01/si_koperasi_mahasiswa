@@ -467,7 +467,7 @@ $petugas = "SELECT * FROM petugas";
         }
         if (dialogPageAt == 1) {
             formDialog.children[0].textContent = "Acc?";
-            formWithTableDialog_HighlightIdx = 3;
+            formWithTableDialog_HighlightIdx = 0;
         }
 
         highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
