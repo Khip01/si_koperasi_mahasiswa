@@ -190,7 +190,7 @@ $petugas = "SELECT * FROM petugas";
         ["Daftar Transaksi Pembeli", "<?= $transaksi_pembeli ?>"],
         ["Daftar Transaksi Supplier", "<?= $transaksi_supplier ?>"],
         ["Siapa yang Bertugas?", "<?= $petugas ?>"],
-        ["Daftar Pesanan Pembeli", "<?= $barang ?>"],
+        ["Daftar Pesanan Pembeli", "<?= $transaksi_pembeli ?>"],
     ];
     const tableFormId = tables.length - 1;
     const formWithTableDialog =
@@ -587,16 +587,15 @@ $petugas = "SELECT * FROM petugas";
             dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
             dialogPageAt += 1;
         } else if (dialogPageAt == 1) {
-            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[3][2]), await supplierMaxKd());
-            for (let index = 0; index < strTableHeader[3].length; index++) {
-                if (index == 0 || index == 3) {
+            for (let index = 0; index < strTableHeader[3].length - 2; index++) {
+                if (index == 0) {
                     addtionalValues.set(strTableHeader[3][index], valueToSubmit[index]);
                     continue;
                 }
-                if (index == 2 || index == 4) {
+                if (index == 1) {
                     continue;
                 }
-                dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[3][index]), valueToSubmit[index]);
+                dialogValueToSubmit.set(strTableHeader[3][index], valueToSubmit[index]);
             }
             dialogPageAt += 1;
         }
@@ -613,7 +612,7 @@ $petugas = "SELECT * FROM petugas";
         dialogValueToSubmit.set('tgl_transaksi', formatDateAndTime(new Date()));
         console.log(dialogValueToSubmit);
         await insert('transaksi_supplier',  dialogValueToSubmit);
-        await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'));
+        // await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'));
         await update('transaksi_pembeli', 'kode_transaksi_pembeli', addtionalValues.get('kode_transaksi_pembeli'), 'kode_petugas ', dialogValueToSubmit.get('kode_petugas'))
         tableLoader();
     }

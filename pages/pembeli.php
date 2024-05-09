@@ -3,7 +3,7 @@ require '../core/functions.php';
 require '../core/script.php';
 
 $barang = "SELECT * FROM barang WHERE qty > 0";
-$transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
+$transaksi_pembeli = "SELECT * FROM transaksi_pembeli WHERE kode_petugas IS NULL";
 $pembeli = "SELECT * FROM pembeli";
 
 ?>
