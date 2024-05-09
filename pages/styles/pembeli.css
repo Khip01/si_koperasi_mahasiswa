@@ -427,6 +427,21 @@ textarea:focus ~ .bar:before {
   min-width: 17rem;
 }
 
+.form-with-table-dialog #form-with-table-edit-row-section .material-text-box{
+  display: none;
+}
+
+.form-with-table-dialog #form-with-table-edit-row-section .material-text-box #form-with-table-bottom-text-section{
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  gap: 30px;
+  /* padding-right: 10px; */
+  margin-bottom: -35px;
+}
+
+
 .table-database-topsection{
   display: flex;  
   justify-content: space-between;

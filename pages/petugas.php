@@ -2,6 +2,7 @@
 require '../core/functions.php';
 require '../core/script.php';
 
+// [barang] plan to change
 $barang = "SELECT * FROM barang WHERE kode_transaksi_pembeli IS NOT NULL AND kode_transaksi_supplier IS NULL";
 $transaksi_pembeli = "SELECT * FROM transaksi_pembeli WHERE kode_petugas IS NULL";
 $transaksi_supplier = "SELECT * FROM transaksi_supplier";
@@ -183,6 +184,7 @@ $petugas = "SELECT * FROM petugas";
     </div>
 </footer>
 
+<script src="app.js"></script>
 <script>
     const tables = [
         ["Daftar Transaksi Pembeli", "<?= $transaksi_pembeli ?>"],
@@ -437,7 +439,6 @@ $petugas = "SELECT * FROM petugas";
     }
 
     let dialogPageAt = -1;
-    let headerValueToSubmit;
     let dialogValueToSubmit;
     let addtionalValues;
 
@@ -478,7 +479,6 @@ $petugas = "SELECT * FROM petugas";
         formTable.children[1].style.display = null;
         if (dialogPageAt < 0) {
             addtionalValues = new Map();
-            headerValueToSubmit = [];
             dialogValueToSubmit = new Map();
             tableLoader();
             const formAddData = document.getElementsByClassName("form-with-table")[0];
@@ -584,11 +584,9 @@ $petugas = "SELECT * FROM petugas";
         }
 
         if (dialogPageAt == 0) {
-            headerValueToSubmit.push(toSubmitHeaderMap.get(strTableHeader[2][0]));
             dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
             dialogPageAt += 1;
         } else if (dialogPageAt == 1) {
-            headerValueToSubmit.push(toSubmitHeaderMap.get(strTableHeader[3][2]));
             dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[3][2]), await supplierMaxKd());
             for (let index = 0; index < strTableHeader[3].length; index++) {
                 if (index == 0 || index == 3) {
@@ -598,7 +596,6 @@ $petugas = "SELECT * FROM petugas";
                 if (index == 2 || index == 4) {
                     continue;
                 }
-                headerValueToSubmit.push(toSubmitHeaderMap.get(strTableHeader[3][index]));
                 dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[3][index]), valueToSubmit[index]);
             }
             dialogPageAt += 1;
@@ -612,45 +609,13 @@ $petugas = "SELECT * FROM petugas";
         }
     }
 
-    async function completeDialog() {
-        const now = new Date();
-
-        const formattedDate = now.toLocaleDateString("sv-SE", {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        });
-
-        const formattedTime = now.toLocaleTimeString("sv-SE", {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-
-        const formattedDateTime = `${formattedDate} ${formattedTime}`;
-
-        headerValueToSubmit.push('tgl_transaksi');
-        headerValueToSubmit = new Set(headerValueToSubmit);
-        headerValueToSubmit = Array.from(headerValueToSubmit);
-        dialogValueToSubmit.set('tgl_transaksi', formattedDateTime);
-        console.log(formattedDateTime);
+    async function completeDialog() {      
+        dialogValueToSubmit.set('tgl_transaksi', formatDateAndTime(new Date()));
         console.log(dialogValueToSubmit);
-        // console.log(headerValueToSubmit);
-        await insert('transaksi_supplier', headerValueToSubmit, dialogValueToSubmit);
+        await insert('transaksi_supplier',  dialogValueToSubmit);
         await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'));
         await update('transaksi_pembeli', 'kode_transaksi_pembeli', addtionalValues.get('kode_transaksi_pembeli'), 'kode_petugas ', dialogValueToSubmit.get('kode_petugas'))
         tableLoader();
-    }
-
-    // doksil: Gemini
-    function parseDate(str) {
-        // Replace your date format with the format used in $_POST["tgl_transaksi"]
-        const dateParts = str.split("-");
-        const year = parseInt(dateParts[0], 10);
-        const month = parseInt(dateParts[1], 10) - 1; // Months are zero-indexed in JavaScript
-        const day = parseInt(dateParts[2], 10);
-
-        return new Date(year, month, day);
     }
 
     // scroll form
