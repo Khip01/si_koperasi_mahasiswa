@@ -56,6 +56,8 @@ function printData($query){
 if (isset($_POST["action"])) {
     if ($_POST["action"] == "insert") {
         tambahPesanan();
+    }elseif ($_POST["action"] == "barang") {
+        tambahBarang();
     }
 }
 
@@ -74,6 +76,10 @@ function tambahPesanan(){
     echo "Insert Succsess";
 }
 
+function tambahBarang(){
+    global $coon;
+    
+}
 // function update($query){
 //     global $conn;
 

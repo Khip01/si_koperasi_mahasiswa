@@ -22,4 +22,42 @@
             });
         });
     }
+
+    $(document).ready(function(){
+        getDtBarang();
+    });
+
+    function getDtBarang(){
+        $.ajax({
+            url: '../core/table.php',
+            type: 'GET',
+            success: function(data){
+                $('#live_data').html(data);
+            },
+            error: function(){
+                alert('Failed to fetch data.');
+            }
+        });
+    }
+
+    function insertBarang(){
+        var dataBrg = {
+                action: action,
+                kode_barang: $("#kd_brg").val(),
+                kode_supplier: $("#kd_supplier").val(),
+                nama_brg: $("#namaBrg").val(),
+                qty_total: $("#qty").val(),
+                harga_total: $("#total").val(),
+                tgl_transaksi: $("#tgl_transaksi").val(), 
+            };
+
+            $.ajax({
+                type: 'post',
+                url: '../core/functions.php',
+                data: dataBrg,
+                success: function(response) {
+                    alert("Response: " + response);
+                }
+            });
+    }
 </script>
