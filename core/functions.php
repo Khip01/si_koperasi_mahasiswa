@@ -60,6 +60,8 @@ if (isset($_POST["action"])) {
     }
     if ($_POST["action"] == "insertPesan") {
         tambahPesanan();
+    }elseif ($_POST["action"] == "barang") {
+        tambahBarang();
     }
     if ($_POST["action"] == "select") {
         echo json_encode(getDataFromQuery($_POST["query"]));
@@ -87,6 +89,10 @@ function tambahPesanan(){
     echo "Insert Succsess";
 }
 
+function tambahBarang(){
+    global $coon;
+    
+}
 // function update($query){
 //     global $conn;
 

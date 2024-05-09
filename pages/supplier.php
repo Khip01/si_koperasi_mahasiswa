@@ -6,6 +6,7 @@ $barang = "SELECT * FROM barang";
 $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -654,5 +655,6 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         console.log("UwU");
     }
 </script>
+
 
 </html>
