@@ -610,6 +610,7 @@ $petugas = "SELECT * FROM petugas";
 
     async function completeDialog() {      
         dialogValueToSubmit.set('tgl_transaksi', formatDateAndTime(new Date()));
+        dialogValueToSubmit.set('kode_transaksi_supplier', await supplierMaxKd());
         console.log(dialogValueToSubmit);
         await insert('transaksi_supplier',  dialogValueToSubmit);
         // await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'));
