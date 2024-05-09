@@ -61,7 +61,7 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
                 </div>
             </div>
             <div class="table-edit-row">
-                
+
             </div>
         </div>
     </div>
@@ -153,6 +153,8 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
 </footer>
 
 <script>
+    const tables_target = ["barang", "transaksi_pembeli"];
+
     const tables = [
         ["Daftar Barang", "<?= $barang ?>"],
         ["Daftar Transaksi Pembeli", "<?= $transaksi_pembeli ?>"],
@@ -169,7 +171,7 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
     const editFieldOrigin =
         '<h1>Edit Data</h1> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
 
-        const editFieldOrigin_Delete = '<div class="table-edit-row-header"> <h1>Edit Data</h1> <div id="edit-row-btn-del"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" /> </svg> </div> </div> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
+    const editFieldOrigin_Delete = '<div class="table-edit-row-header"> <h1>Edit Data</h1> <div id="edit-row-btn-del"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" /> </svg> </div> </div> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
 
     function getParentId_tableEditRow(x) {
         let id = x[x.length - 1];
@@ -317,6 +319,8 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
 
     var editSelectedRowWidget = null;
 
+    let currentTd;
+
     function editSelectedRow(x) {
         if (editSelectedRowWidget != null) {
             editSelectedRowWidget.style.backgroundColor = null;
@@ -333,6 +337,7 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
             document.getElementsByClassName("table-database")[parentId].parentElement;
         parentTableField.style.padding = `0px 3.25rem`;
         const td = x.children;
+        currentTd = td;
         console.log(parentId + tableFormId);
         if (parentId == tableFormId) {
             const highLightSelVal = document.getElementById("form-with-table-highlight-sel-val");
@@ -391,18 +396,27 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         tableField.style = null;
     }
 
-    function saveFormTextField(x) {
-        const editFieldWrapper = document.getElementsByClassName(
-            "table-edit-field-wrapper"
-        )[0];
-        let valueToSubmit = [];
+    async function saveFormTextField(x) {
+        let parentID = getParentId_tableEditRow(x.parentElement.parentElement.parentElement.children[0].id);
+        const editFieldWrapper = document.getElementsByClassName("table-edit-field-wrapper")[parentID];
+
+        let valueToSubmit = new Map();
+        let where_data = currentTd[0].innerHTML;
+        // let valueFromTableRow = [];
         for (let index = 0; index < editFieldWrapper.children.length; index++) {
-            valueToSubmit.push(
-                editFieldWrapper.children[index].children[0].children[0].value
-            );
+            let value = editFieldWrapper.children[index].children[0].children[0].value
+            if (value == '') {
+                value = null;
+            }
+            valueToSubmit.set(strTableHeader[parentID][index], value);
+            // valueFromTableRow.push(value);
         }
-        discardFormTextField(x);
+        for (let [key, value] of valueToSubmit) {
+            await update(tables_target[parentID], 'kode_barang', where_data, key, valueToSubmit.get(key));
+            where_data = valueToSubmit.get('kode_barang');
+        }
         console.log(valueToSubmit);
+        discardFormTextField(x);
     }
 
     let dialogPageAt = -1;

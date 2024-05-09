@@ -163,7 +163,7 @@
         });
     }
 
-    async function hapus(target, where, where_data) {
+    async function deleteRow(target, where, where_data) {
         let data_arg = `DELETE FROM ${target} WHERE ${where} = '${where_data}';`;
         
         console.log(`ARG: ${data_arg}`);

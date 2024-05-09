@@ -407,6 +407,7 @@ $pembeli = "SELECT * FROM pembeli";
             formWithTableDialog_HighlightIdx = 4;
             // Material Text Form
             let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
+            qtyTextBox.style.display = null;
             qtyTextBox.style.display = 'block';
             qtyTextBox.children[0].children[0].type = 'number';
 
@@ -458,8 +459,8 @@ $pembeli = "SELECT * FROM pembeli";
     }
 
     function closeFormWithTable(x) {
-        let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
-        qtyTextBox.style.display = null;
+        // let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
+        // qtyTextBox.style.display = null;
         dialogPageAt -= 1;
         if (x == null) {
             let tableField = document.getElementsByClassName("table-field");
