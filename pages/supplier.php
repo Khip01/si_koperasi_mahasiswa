@@ -379,6 +379,12 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                 "table-edit-field-wrapper"
             )[0];
             for (let index = 0; index < td.length; index++) {
+                if (index == 2 || index == 3) {
+                    // editFieldWrapper.children[index].children[0].children[0].value =
+                    // td[index].innerHTML.split(';');
+                    console.log(td[index].innerHTML.split(';'));
+                    continue;
+                }
                 editFieldWrapper.children[index].children[0].children[0].value =
                     td[index].innerHTML;
             }
@@ -544,18 +550,19 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         dialogPageAt -= 1;
         if (x == null) {
             let tableField = document.getElementsByClassName("table-field");
+            const formAddDataFilter = document.getElementsByClassName(
+                "form-add-data-filter"
+            )[0];
+            formAddDataFilter.style = null;
+            formAddDataFilter.onclick = null;
+            formAddData.style = null;
             for (let index = 1; index < tableField.length; index++) {
                 let parentId = getParentId_tableEditRow(tableField[index].children[0].id);
                 // console.log(tableField[index]);
                 // console.log(parentId);
                 dialogPageAt = -1;
                 const formAddData = document.getElementsByClassName("form-with-table")[0];
-                const formAddDataFilter = document.getElementsByClassName(
-                    "form-add-data-filter"
-                )[0];
-                formAddDataFilter.style = null;
-                formAddDataFilter.onclick = null;
-                formAddData.style = null;
+
                 const editField =
                     document.getElementsByClassName("table-edit-row")[parentId];
                 // console.log(editField);

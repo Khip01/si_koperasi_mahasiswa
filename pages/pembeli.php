@@ -465,18 +465,19 @@ $pembeli = "SELECT * FROM pembeli";
         dialogPageAt -= 1;
         if (x == null) {
             let tableField = document.getElementsByClassName("table-field");
+            const formAddDataFilter = document.getElementsByClassName(
+                "form-add-data-filter"
+            )[0];
+            formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
+            formAddDataFilter.style.pointerEvents = "none";
+            formAddDataFilter.onclick = null;
             for (let index = 1; index < tableField.length; index++) {
                 let parentId = getParentId_tableEditRow(tableField[index].children[0].id);
                 // console.log(tableField[index]);
                 // console.log(parentId);
                 dialogPageAt = -1;
                 const formAddData = document.getElementsByClassName("form-with-table")[0];
-                const formAddDataFilter = document.getElementsByClassName(
-                    "form-add-data-filter"
-                )[0];
-                formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
-                formAddDataFilter.style.pointerEvents = "none";
-                formAddDataFilter.onclick = null;
+
                 formAddData.style.top = "1500%";
                 const editField =
                     document.getElementsByClassName("table-edit-row")[parentId];
