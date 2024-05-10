@@ -320,8 +320,8 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         rowEditTableOpen = false;
     }
 
-    function generateFormTextField(x) {
-        if (rowEditTableOpen == true && x != tableFormId) {
+    function generateFormTextField(x, closeLastopen = true) {
+        if (rowEditTableOpen == true && x != tableFormId && closeLastopen) {
             closeLastRowEdit();
         }
         rowEditTableOpen = true;
@@ -446,7 +446,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         let parentId = getParentId_tableEditRow(
             x.parentNode.parentNode.parentNode.parentNode.id
         );
-        generateFormTextField(parentId);
+        generateFormTextField(parentId, false);
 
         let parentTableField =
             document.getElementsByClassName("table-database")[parentId].parentElement;
