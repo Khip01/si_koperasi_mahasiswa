@@ -551,12 +551,13 @@ textarea:focus ~ .bar:before {
   position: absolute;
   max-width: 90%;
   max-height: 90vh;
-  top: 1500%;
+  top: 250%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: row;
   overflow-y: auto;
+  transition: 0.5s;
 }
 
 .form-with-table .table-field {
@@ -684,6 +685,7 @@ textarea:focus ~ .bar:before {
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0);
   pointer-events: none;
+  transition: 0.5s;
 }
 
 .top-bar-form-add-data {

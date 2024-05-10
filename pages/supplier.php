@@ -765,6 +765,10 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
 
         let valueEditorWrapper = document.getElementsByClassName('value-editor-wrapper')[0];
         valueEditorWrapper.innerHTML = '';
+        valueEditorWrapper.style = null;
+        if(editRow_Kd[kdId].length < 12) {
+            valueEditorWrapper.style.overflow = 'unset';
+        }
         valueEditorWrapper.id = `${(kdId == 0) ? 'kode_transaksi_supplier' : 'kode_transaksi_pembeli'}-${currentKdBarang}`;
 
         for (let index = 0; index < editRow_Kd[kdId].length; index++) {
