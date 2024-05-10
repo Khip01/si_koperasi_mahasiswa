@@ -47,6 +47,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
 </header>
 
 <body>
+    <div class="parallax-background-image"></div>
     <div class="table-field-wrapper">
         <div class="table-field">
             <div class="table-database" id="table-database-0">
@@ -740,6 +741,20 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         }
         console.log(valueToSubmit);
     }
+</script>
+<script>
+    function clamp(number, min, max) {
+        return Math.max(min, Math.min(number, max));
+    }
+
+    function parallax_background(event) {
+        const position = document.getElementsByClassName("parallax-background-image")[0];
+        const x = clamp((event.pageX - (window.innerWidth / 2)) / 90, -4, 4);
+        const y = clamp((event.pageY - (window.innerHeight / 2)) / 90, -4, 4);
+
+        position.style.transform = `translateX(-${50+x}%) translateY(-${50+y}%)`;
+    }
+    document.addEventListener("mousemove", parallax_background);
 </script>
 
 
