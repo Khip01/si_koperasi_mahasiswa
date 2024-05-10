@@ -300,7 +300,6 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                 tabel.innerHTML += tableContent;
             }
         }
-        // dialogId += 1;
     }
 
     // For Update values
@@ -314,14 +313,16 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
     var rowEditTableOpen = false;
     var rowEditTableLastOpen = null;
 
+    function closeLastRowEdit() {
+        let editField = document.getElementsByClassName("table-edit-row")[rowEditTableLastOpen];
+        editField.innerHTML = "";
+        editField.style.margin = null;
+        rowEditTableOpen = false;
+    }
+
     function generateFormTextField(x) {
         if (rowEditTableOpen == true && x != tableFormId) {
-            let editField;
-            editField =
-                document.getElementsByClassName("table-edit-row")[rowEditTableLastOpen];
-            editField.innerHTML = "";
-            editField.style.margin = null;
-            rowEditTableOpen = false;
+            closeLastRowEdit();
         }
         rowEditTableOpen = true;
         rowEditTableLastOpen = x;
@@ -407,10 +408,6 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             tableField = document.getElementsByClassName("table-field")[0];
         }
         tableField.style = null;
-    }
-
-    async function deleteFormTextField(x) {
-
     }
 
     async function saveFormTextField(x) {
@@ -684,6 +681,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
 
     async function acceptDialogYesNo() {
         await deleteRow(tables_target[0], 'kode_barang', currentTd[0].innerHTML);
+        closeLastRowEdit();
         tableLoader();
         closeDialogYesNo();
     }
