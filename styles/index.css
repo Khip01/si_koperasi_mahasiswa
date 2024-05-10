@@ -315,10 +315,6 @@ input[type="radio"] {
   cursor: pointer;
 }
 
-#btn-advance-launch svg:hover {
-  stroke: grey;
-}
-
 .connection-status-field {
   display: flex;
   flex-direction: row;

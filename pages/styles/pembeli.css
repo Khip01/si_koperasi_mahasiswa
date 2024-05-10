@@ -24,6 +24,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0px 5%;
+  z-index: 5;
 }
 
 .tabel-title-field {
@@ -113,13 +114,27 @@ body {
     #e3a84f 50%,
     #7d68b9 100%
   ); */
-  background-image: url("../imgs/a-keep\'s-masterpiece.webp");
+  /* background-image: url("../imgs/a-keep\'s-masterpiece.webp");
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed; */
   display: flex;
   flex-wrap: nowrap;
   height: 100vh;
   margin: 0px;
+}
+
+.parallax-background-image{
+  width: 110vw;
+  height: 110vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-image: url("../imgs/a-keep\'s-masterpiece.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center; 
+  z-index: 0;
 }
 
 .table-field-wrapper {
@@ -136,6 +151,7 @@ body {
   gap: 50px;
   align-items: center;
   justify-content: center;
+  z-index: 3;
 }
 
 .table-field {
@@ -374,6 +390,7 @@ textarea:focus ~ .bar:before {
   padding: 10px 14px;
   transition: 0.35s;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 5;
 }
 
 .nav-bottom:hover {
@@ -421,7 +438,7 @@ textarea:focus ~ .bar:before {
   z-index: 10;
   position: absolute;
   max-width: 90%;
-  max-height: 80%;
+  max-height: 90vh;
   top: 1500%;
   left: 50%;
   transform: translate(-50%, -50%);
