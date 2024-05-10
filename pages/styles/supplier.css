@@ -24,6 +24,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0px 5%;
+  z-index: 5;
 }
 
 .tabel-title-field {
@@ -113,13 +114,27 @@ body {
     #e3a84f 50%,
     #7d68b9 100%
   ); */
-  background-image: url("../imgs/a-keep's-masterpiece.webp");
+  /* background-image: url("../imgs/a-keep's-masterpiece.webp");
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed; */
   display: flex;
   flex-wrap: nowrap;
   height: 100vh;
   margin: 0px;
+}
+
+.parallax-background-image{
+  width: 110vw;
+  height: 110vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-image: url("../imgs/a-keep\'s-masterpiece.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center; 
+  z-index: 0;
 }
 
 .table-field-wrapper {
@@ -136,6 +151,7 @@ body {
   gap: 50px;
   align-items: center;
   justify-content: center;
+  z-index: 3;
 }
 
 .table-field {
@@ -395,26 +411,28 @@ textarea:focus ~ .bar:before {
   max-height: 60px;
   display: flex;
   flex-direction: row;
+  gap: 20px;
   justify-content: space-between;
   align-items: center;
   padding: 10px 14px;
   transition: 0.35s;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 5;
 }
 
 .nav-bottom:hover {
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-.nav-bottom #btn-add {
+.nav-bottom .footer-btn {
   fill: black;
 }
 
-.nav-bottom #btn-add h1 {
+.nav-bottom .footer-btn h1 {
   color: black;
 }
 
-#btn-add {
+.footer-btn {
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -424,20 +442,26 @@ textarea:focus ~ .bar:before {
   transition: 0.35s;
 }
 
-#btn-add svg {
+.footer-items-separator {
+  align-self: stretch;
+  content: "";
+  border: 1px solid #000;
+}
+
+.footer-btn svg {
   width: 20px;
   height: 20px;
   padding: 4px 0px;
 }
 
-#btn-add h1 {
+.footer-btn h1 {
   font-weight: 300;
   font-size: 0px;
   margin-left: -10px;
   user-select: none;
 }
 
-#btn-add:hover h1 {
+.footer-btn:hover h1 {
   font-size: 12px;
   margin-left: 0px;
 }
@@ -447,13 +471,17 @@ textarea:focus ~ .bar:before {
   z-index: 10;
   position: absolute;
   max-width: 90%;
-  max-height: 80%;
+  max-height: 90vh;
   top: 1500%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: row;
   overflow-y: auto;
+}
+
+.form-with-table .table-field {
+  display: none;
 }
 
 .form-with-table-dialog {
@@ -465,6 +493,33 @@ textarea:focus ~ .bar:before {
 
 .form-with-table-dialog #form-with-table-dialog-title {
   min-width: 17rem;
+}
+
+.form-with-table-dialog #form-with-table-edit-row-section{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-with-table-dialog #form-with-table-edit-row-section #form-with-table-highlight-sel-val{
+  margin: 0px 0px;
+}
+
+.form-with-table-dialog #form-with-table-edit-row-section .material-text-box {
+  display: none;
+}
+
+.form-with-table-dialog
+  #form-with-table-edit-row-section
+  .material-text-box
+  #form-with-table-bottom-text-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  gap: 30px;
+  /* padding-right: 10px; */
+  margin-bottom: -35px;
 }
 
 .table-database-topsection {

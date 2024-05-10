@@ -24,6 +24,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0px 5%;
+  z-index: 5;
 }
 
 .tabel-title-field {
@@ -113,13 +114,27 @@ body {
     #e3a84f 50%,
     #7d68b9 100%
   ); */
-  background-image: url("../imgs/a-keep's-masterpiece.webp");
+  /* background-image: url("../imgs/a-keep's-masterpiece.webp");
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed; */
   display: flex;
   flex-wrap: nowrap;
   height: 100vh;
   margin: 0px;
+}
+
+.parallax-background-image{
+  width: 110vw;
+  height: 110vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-image: url("../imgs/a-keep\'s-masterpiece.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center; 
+  z-index: 0;
 }
 
 .table-field-wrapper {
@@ -136,6 +151,7 @@ body {
   gap: 50px;
   align-items: center;
   justify-content: center;
+  z-index: 3;
 }
 
 .table-field {
@@ -288,6 +304,7 @@ textarea:focus ~ .bar:before {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 20px;
 }
 .material-text-box label {
   color: #c6c6c6;
@@ -300,6 +317,46 @@ textarea:focus ~ .bar:before {
   transition: 300ms ease all;
   background-color: #fff;
   padding: 0 2px;
+}
+
+.material-text-box .group .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.material-text-box .group .dropdown .dropdown-content {
+  display: block;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 10px 12px;
+  z-index: 1;
+  margin-top: -45px;
+  margin-left: -170px;
+  border-radius: 10px;
+}
+
+.material-text-box .group .dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.material-text-box
+  .group
+  .dropdown
+  .dropdown-content
+  .dropdown-content-wrapper {
+  padding: 2px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.material-text-box
+  .group
+  .dropdown
+  .dropdown-content
+  .dropdown-content-wrapper:hover {
+  background-color: #c6c6c6;
 }
 
 .table-edit-field-wrapper {
@@ -378,6 +435,7 @@ textarea:focus ~ .bar:before {
   padding: 10px 14px;
   transition: 0.35s;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 5;
 }
 
 .nav-bottom:hover {
@@ -425,7 +483,7 @@ textarea:focus ~ .bar:before {
   z-index: 10;
   position: absolute;
   max-width: 90%;
-  max-height: 80%;
+  max-height: 90vh;
   top: 1500%;
   left: 50%;
   transform: translate(-50%, -50%);

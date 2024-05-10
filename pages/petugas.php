@@ -47,6 +47,7 @@ $petugas = "SELECT * FROM petugas";
 </header>
 
 <body>
+    <div class="parallax-background-image"></div>
     <div class="table-field-wrapper">
         <div class="table-field">
             <div class="table-database" id="table-database-0">
@@ -127,6 +128,20 @@ $petugas = "SELECT * FROM petugas";
                 <div class="group">
                     <input type="text" required="required" />
                     <label>Kode Transaksi Supplier</label>
+                    <div class="dropdown">
+                        <h1>A</h1>
+                        <div class="dropdown-content">
+                            <div class="dropdown-content-wrapper">
+                                Laaaasdasdsadasdsadaaa
+                            </div>
+                            <div class="dropdown-content-wrapper">
+                                Laaaaa
+                            </div>
+                            <div class="dropdown-content-wrapper">
+                                Laaaaa
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="material-text-box">
@@ -175,7 +190,7 @@ $petugas = "SELECT * FROM petugas";
 <footer class=" nav-bottom" onclick="showFormWithTable()" onmousewheel="showAddDataForm()">
     <div id="btn-add">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-            <g  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+            <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
                 <path d="M39 6H9a3 3 0 0 0-3 3v30a3 3 0 0 0 3 3h30a3 3 0 0 0 3-3V9a3 3 0 0 0-3-3" />
                 <path d="m21 31l5 4l8-10M14 15h20m-20 8h8" />
             </g>
@@ -608,11 +623,11 @@ $petugas = "SELECT * FROM petugas";
         }
     }
 
-    async function completeDialog() {      
+    async function completeDialog() {
         dialogValueToSubmit.set('tgl_transaksi', formatDateAndTime(new Date()));
         dialogValueToSubmit.set('kode_transaksi_supplier', await supplierMaxKd());
         console.log(dialogValueToSubmit);
-        await insert('transaksi_supplier',  dialogValueToSubmit);
+        await insert('transaksi_supplier', dialogValueToSubmit);
         // await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'));
         await update('transaksi_pembeli', 'kode_transaksi_pembeli', addtionalValues.get('kode_transaksi_pembeli'), 'kode_petugas ', dialogValueToSubmit.get('kode_petugas'))
         tableLoader();
@@ -653,6 +668,20 @@ $petugas = "SELECT * FROM petugas";
         closeAddDataForm();
         console.log("UwU");
     }
+</script>
+<script>
+    function clamp(number, min, max) {
+        return Math.max(min, Math.min(number, max));
+    }
+
+    function parallax_background(event) {
+        const position = document.getElementsByClassName("parallax-background-image")[0];
+        const x = clamp((event.pageX - (window.innerWidth / 2)) / 90, -4, 4);
+        const y = clamp((event.pageY - (window.innerHeight / 2)) / 90, -4, 4);
+
+        position.style.transform = `translateX(-${50+x}%) translateY(-${50+y}%)`;
+    }
+    document.addEventListener("mousemove", parallax_background);
 </script>
 
 </html>

@@ -46,6 +46,7 @@ $pembeli = "SELECT * FROM pembeli";
 </header>
 
 <body>
+    <div class="parallax-background-image"></div>
     <div class="table-field-wrapper">
         <div class="table-field">
             <div class="table-database" id="table-database-0">
@@ -108,7 +109,7 @@ $pembeli = "SELECT * FROM pembeli";
 <footer class="nav-bottom" onclick="showFormWithTable()">
     <div id="btn-add">
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-            <path  d="M7 7V5a3 3 0 0 1 5-2.236A3 3 0 0 1 17 5v2h1.5A1.5 1.5 0 0 1 20 8.5V18a4 4 0 0 1-1.825 3.357l-.545-.096c-.775-.136-1.574-.563-2.175-1.172S14.5 18.743 14.5 18V7h1V5a1.5 1.5 0 0 0-2.656-.956c.101.3.156.622.156.956v13c0 1.229.582 2.326 1.387 3.142a5.8 5.8 0 0 0 1.08.858H8a4 4 0 0 1-4-4V8.5A1.5 1.5 0 0 1 5.5 7zm1.5-2v2h3V5a1.5 1.5 0 0 0-3 0" />
+            <path d="M7 7V5a3 3 0 0 1 5-2.236A3 3 0 0 1 17 5v2h1.5A1.5 1.5 0 0 1 20 8.5V18a4 4 0 0 1-1.825 3.357l-.545-.096c-.775-.136-1.574-.563-2.175-1.172S14.5 18.743 14.5 18V7h1V5a1.5 1.5 0 0 0-2.656-.956c.101.3.156.622.156.956v13c0 1.229.582 2.326 1.387 3.142a5.8 5.8 0 0 0 1.08.858H8a4 4 0 0 1-4-4V8.5A1.5 1.5 0 0 1 5.5 7zm1.5-2v2h3V5a1.5 1.5 0 0 0-3 0" />
         </svg>
         <h1 id="currentPetugas">Beli Barang</h1>
     </div>
@@ -141,7 +142,7 @@ $pembeli = "SELECT * FROM pembeli";
         let searchWidget = document.getElementsByClassName("table-database-search");
         for (let index = 0; index < searchWidget.length; index++) {
             const element = searchWidget[index].children[0].children[0];
-            console.log(element);
+            // console.log(element);
             element.addEventListener('input', function() {
                 search(searchWidget[index]);
                 // console.log(searchWidget[index].children[0].children[0].value);
@@ -582,6 +583,22 @@ $pembeli = "SELECT * FROM pembeli";
         await update('barang', 'kode_barang', dialogValueToSubmit.get('kode_barang'), 'qty', Number(qty_before) - Number(dialogValueToSubmit.get('qty_total')));
         tableLoader();
     }
+</script>
+<script>
+    function clamp(number, min, max) {
+        return Math.max(min, Math.min(number, max));
+    }
+
+    function parallax_background(event) {
+        const position = document.getElementsByClassName("parallax-background-image")[0];
+        const x = clamp((event.pageX - (window.innerWidth / 2)) / 90, -4, 4);
+        const y = clamp((event.pageY - (window.innerHeight / 2)) / 90, -4, 4);
+
+        position.style.transform = `translateX(-${50+x}%) translateY(-${50+y}%)`;
+        // console.log();
+        // console.log((event.pageY));
+    }
+    document.addEventListener("mousemove", parallax_background);
 </script>
 
 </html>
