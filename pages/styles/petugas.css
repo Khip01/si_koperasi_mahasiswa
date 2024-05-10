@@ -288,6 +288,7 @@ textarea:focus ~ .bar:before {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 20px;
 }
 .material-text-box label {
   color: #c6c6c6;
@@ -300,6 +301,46 @@ textarea:focus ~ .bar:before {
   transition: 300ms ease all;
   background-color: #fff;
   padding: 0 2px;
+}
+
+.material-text-box .group .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.material-text-box .group .dropdown .dropdown-content {
+  display: block;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 10px 12px;
+  z-index: 1;
+  margin-top: -45px;
+  margin-left: -170px;
+  border-radius: 10px;
+}
+
+.material-text-box .group .dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.material-text-box
+  .group
+  .dropdown
+  .dropdown-content
+  .dropdown-content-wrapper {
+  padding: 2px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.material-text-box
+  .group
+  .dropdown
+  .dropdown-content
+  .dropdown-content-wrapper:hover {
+  background-color: #c6c6c6;
 }
 
 .table-edit-field-wrapper {

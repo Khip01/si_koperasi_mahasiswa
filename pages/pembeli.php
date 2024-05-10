@@ -141,7 +141,7 @@ $pembeli = "SELECT * FROM pembeli";
         let searchWidget = document.getElementsByClassName("table-database-search");
         for (let index = 0; index < searchWidget.length; index++) {
             const element = searchWidget[index].children[0].children[0];
-            console.log(element);
+            // console.log(element);
             element.addEventListener('input', function() {
                 search(searchWidget[index]);
                 // console.log(searchWidget[index].children[0].children[0].value);

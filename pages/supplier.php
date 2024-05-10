@@ -3,7 +3,9 @@ require '../core/functions.php';
 require '../core/script.php';
 
 $barang = "SELECT * FROM barang";
-$transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
+$supplier = "SELECT * FROM supplier";
+$supplier = "SELECT * FROM supplier";
+$transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS NULL";
 ?>
 
 
@@ -84,6 +86,38 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
             </div>
             <div class="table-edit-row"> </div>
         </div>
+        <div class="table-field">
+            <div class="table-database" id="table-database-2">
+                <div class="table-database-topsection">
+                    <h1>Daftar Barang</h1>
+                    <div class="material-text-box table-database-search">
+                        <div class="group"> <input type="text" required="required" />
+                            <label>Search</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table></table>
+                </div>
+            </div>
+            <div class="table-edit-row"> </div>
+        </div>
+        <div class="table-field">
+            <div class="table-database" id="table-database-3">
+                <div class="table-database-topsection">
+                    <h1>Daftar Barang</h1>
+                    <div class="material-text-box table-database-search">
+                        <div class="group"> <input type="text" required="required" />
+                            <label>Search</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table></table>
+                </div>
+            </div>
+            <div class="table-edit-row"> </div>
+        </div>
     </div>
 
     <div class="dialog-yes-no">
@@ -106,46 +140,10 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
 
     <div class="form-add-data">
         <div class="top-bar-form-add-data">
-            <h1>Boo Secret form(this is not doing anything)</h1>
+            <h1>Tambah Barang</h1>
         </div>
         <div class="form-add-data-fieldtext">
-            <div class="material-text-box">
-                <div class="group">
-                    <input type="text" required="required" />
-                    <label>Kode Transaksi Supplier</label>
-                </div>
-            </div>
-            <div class="material-text-box">
-                <div class="group">
-                    <input type="text" required="required" />
-                    <label>Harga Total</label>
-                </div>
-            </div>
-            <div class="material-text-box">
-                <div class="group">
-                    <input type="text" required="required" />
-                    <label>Quantity</label>
-                </div>
-            </div>
-            <div class="material-text-box">
-                <div class="group">
-                    <input type="text" required="required" />
-                    <label>Kode Petugas</label>
-                </div>
-            </div>
-            <div class="material-text-box">
-                <div class="group">
-                    <input type="text" required="required" />
-                    <label>Kode Supplier</label>
-                </div>
-            </div>
-            <!-- TODO: Add Date Selector -->
-            <div class="material-text-box">
-                <div class="group">
-                    <input type="text" required="required" />
-                    <label>Tanggal Transaksi</label>
-                </div>
-            </div>
+
         </div>
         <div class="btn-field-accept-cancle">
             <div class="btn-cancle" onclick="closeAddDataForm()">
@@ -158,10 +156,17 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
     </div>
 </body>
 
-<footer class=" nav-bottom" onclick="showFormWithTable()" onmousewheel="showAddDataForm()">
-    <div id="btn-add">
+<footer class="nav-bottom">
+    <div class="footer-btn" onclick="showFormWithTable(0)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
+            <path d="M18 5.5a4.5 4.5 0 1 1-9 0a4.5 4.5 0 0 1 9 0m-4-2a.5.5 0 0 0-1 0V5h-1.5a.5.5 0 0 0 0 1H13v1.5a.5.5 0 0 0 1 0V6h1.5a.5.5 0 0 0 0-1H14zM6 4h2.207a5.5 5.5 0 0 0-.185 1H6a2 2 0 0 0-2 2h4.207q.149.524.393 1H4v3h3.5a.5.5 0 0 1 .5.5a2 2 0 1 0 4 0a.5.5 0 0 1 .5-.5H16v-.6a5.5 5.5 0 0 0 1-.657V15a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3" />
+        </svg>
+        <h1 id="currentPetugas">Tambah Barang</h1>
+    </div>
+    <div class="footer-items-separator"> </div>
+    <div class="footer-btn" onclick="showFormWithTable(1)">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-            <g  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+            <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
                 <path d="M39 6H9a3 3 0 0 0-3 3v30a3 3 0 0 0 3 3h30a3 3 0 0 0 3-3V9a3 3 0 0 0-3-3" />
                 <path d="m21 31l5 4l8-10M14 15h20m-20 8h8" />
             </g>
@@ -171,15 +176,17 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
 </footer>
 
 <script>
-    const tables_target = ["barang", "transaksi_pembeli"];
+    const tables_target = ["barang", "supplier", "supplier", "transaksi_supplier"];
 
     const tables = [
-        ["Daftar Barang", "<?= $barang ?>"],
-        ["Daftar Transaksi Pembeli", "<?= $transaksi_pembeli ?>"],
+        ["Daftar Barang", "<?= $barang ?>", null],
+        ["Daftar Supplier", "<?= $supplier ?>", 0],
+        ["Daftar Supplier", "<?= $supplier ?>", 1],
+        ["Daftar Transaksi Supplier", "<?= $transaksi_supplier ?>", 1],
     ];
     const tableFormId = tables.length - 1;
     const formWithTableDialog =
-        '<div class="form-with-table-dialog"> <h1 id="form-with-table-dialog-title">Anda adalah?</h1> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(this)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable()"> <h1>Untuk Nyata</h1> </div> </div> </div>';
+        '<div class="form-with-table-dialog"> <h1 id="form-with-table-dialog-title">Tambahkan?</h1> <div id="form-with-table-edit-row-section"> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> </div> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(this)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable(this)"> <h1>Untuk Nyata</h1> </div> </div> </div>';
     var formWithTableDialog_HighlightIdx = 2;
 
     var dialogStartAt = 1;
@@ -200,7 +207,7 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         let searchWidget = document.getElementsByClassName("table-database-search");
         for (let index = 0; index < searchWidget.length; index++) {
             const element = searchWidget[index].children[0].children[0];
-            console.log(element);
+            // console.log(element);
             element.addEventListener('input', function() {
                 search(searchWidget[index]);
                 // console.log(searchWidget[index].children[0].children[0].value);
@@ -245,7 +252,8 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         }
     }
 
-    function loadThings(strTitile, x, things) {
+    function loadThings(strTitile, x, things, dialogId) {
+        // console.log(`DialogID: ${dialogId}`);
         const tabelthings = document.getElementsByClassName("table-database")[x];
         const tabel = tabelthings.children[1].children[0];
         const title = tabelthings.children[0].children[0];
@@ -274,12 +282,13 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
             }
             generateHeader += "</tr>";
             tabel.innerHTML = generateHeader;
+
             for (let i = 0; i < things.length; i++) {
                 let tableContent;
                 if (x < dialogStartAt) {
                     tableContent = "<tr onclick='editSelectedRow(this)'>";
                 } else {
-                    tableContent = "<tr onclick='editSelectedRow_Dialog(this)'>";
+                    tableContent = `<tr onclick='editSelectedRow_Dialog(this, ${dialogId})'>`;
                 }
                 for (let index = 0; index < strTableHeader[x].length; index++) {
                     const element = things[i][strTableHeader[x][index]];
@@ -290,12 +299,13 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
                 tabel.innerHTML += tableContent;
             }
         }
+        // dialogId += 1;
     }
 
     // For Update values
     async function tableLoader() {
         for (let index = 0; index < tables.length; index++) {
-            loadThings(tables[index][0], index, await selectTable(tables[index][1]));
+            loadThings(tables[index][0], index, await selectTable(tables[index][1]), tables[index][2]);
         }
     }
     tableLoader(tables);
@@ -315,7 +325,7 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         rowEditTableOpen = true;
         rowEditTableLastOpen = x;
         let editField = document.getElementsByClassName("table-edit-row")[x];
-        console.log(x);
+        // console.log(x);
         if (x < dialogStartAt) {
             editField.style.margin = `30px 20px 30px 25px`;
             editField.innerHTML = editFieldOrigin_Delete;
@@ -362,22 +372,6 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
             highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
             return;
         } else {
-            if (tables.length > 2) {
-                let tableField;
-                if (parentId == 0) {
-                    tableField = document.getElementsByClassName("table-field")[1];
-                }
-                if (parentId == 1) {
-                    tableField = document.getElementsByClassName("table-field")[0];
-                }
-                tableField.style.position = "absolute";
-                tableField.style.top = "50%";
-                tableField.style.left = "-1250%";
-                // tableField.style.visibility = 'hidden';
-                tableField.style.transform = "translate(-50%, -50%)";
-                tableField.style.zIndex = `-1`;
-            }
-
             const editFieldWrapper = document.getElementsByClassName(
                 "table-edit-field-wrapper"
             )[0];
@@ -442,11 +436,10 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
     }
 
     let dialogPageAt = -1;
-    let headerValueToSubmit;
     let dialogValueToSubmit;
     let addtionalValues;
 
-    function editSelectedRow_Dialog(x) {
+    async function editSelectedRow_Dialog(x, dialogId) {
         if (editSelectedRowWidget != null) {
             editSelectedRowWidget.style.backgroundColor = null;
         }
@@ -461,29 +454,62 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
             document.getElementsByClassName("table-database")[parentId].parentElement;
         parentTableField.style.padding = `0px 3.25rem`;
         const td = x.children;
+        // console.log(parentTableField);
 
-        const highLightSelVal = document.getElementsByClassName("form-with-table-dialog")[dialogPageAt].children[1];
+        // console.log(dialogPageAt);
+        const formDialog = parentTableField.getElementsByClassName("form-with-table-dialog")[0];
+        const highLightSelVal = formDialog.children[1].children[0];
 
-        const formDialog = document.getElementsByClassName("form-with-table-dialog")[dialogPageAt];
-        if (dialogPageAt == 0) {
-            formDialog.children[0].textContent = "Siapa yang bertugas?";
-            formWithTableDialog_HighlightIdx = 2;
+        console.log(dialogId);
+        if (dialogId == 0) {
+            formDialog.children[0].textContent = "Isi ini dulu kak";
+            formWithTableDialog_HighlightIdx = 0;
+            highLightSelVal.display = 'none';
+            let qtyTextBoxes = formDialog.children[1];
+            for (let index = 1; index < qtyTextBoxes.children.length; index++) {
+                let qtyTextBox = formDialog.children[1].children[index];
+                qtyTextBox.style.display = null;
+                qtyTextBox.style.display = 'block';
+                if (index == 1) {
+                    qtyTextBox.children[0].children[0].value = await barangMaxKd();
+                    qtyTextBox.children[0].children[1].innerHTML = strTableHeader[0][index - 1];
+                    continue;
+                }
+                qtyTextBox.children[0].children[1].innerHTML = strTableHeader[0][index + 2];
+                if (index > 2) {
+                    qtyTextBox.children[0].children[0].type = 'number';
+                    qtyTextBox.children[0].children[0].min = '0';
+                }
+            }
+            // let qtyTextBox = formDialog.children[1].children[1];
+            // qtyTextBox.style.display = null;
+            // qtyTextBox.style.display = 'block';
         }
-        if (dialogPageAt == 1) {
-            formDialog.children[0].textContent = "Acc?";
-            formWithTableDialog_HighlightIdx = 3;
-        }
 
-        highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
+        if (dialogId == 1) {
+            if (dialogPageAt == 0) {
+                formDialog.children[0].textContent = "Siapa Supplier?";
+                formWithTableDialog_HighlightIdx = 0;
+            }
+            if (dialogPageAt == 1) {
+                formDialog.children[0].textContent = "Acc?";
+                formWithTableDialog_HighlightIdx = 0;
+            }
+            highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
+        }
     }
 
-    function showFormWithTable() {
+    let showingDialogId = 0;
+
+    function showFormWithTable(dialogId) {
+        showingDialogId = dialogId;
         const formTable = document.getElementsByClassName("form-with-table")[0];
-        formTable.children[0].style.display = null;
-        // formTable.children[1].style.display = null;
+        for (let index = 0; index < formTable.children.length; index++) {
+            formTable.children[index].style.display = null;
+        }
+
         if (dialogPageAt < 0) {
             addtionalValues = new Map();
-            headerValueToSubmit = [];
             dialogValueToSubmit = new Map();
             tableLoader();
             const formAddData = document.getElementsByClassName("form-with-table")[0];
@@ -499,9 +525,20 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
             dialogPageAt = 0;
         }
 
-        // if (dialogPageAt == 0) {
-        //     formTable.children[1].style.display = "none";
-        // }
+        if (dialogId == 0) {
+            formTable.children[dialogId].style.display = 'flex';
+            return;
+        }
+
+        if (dialogId == 1 && dialogPageAt == 0) {
+            formTable.children[dialogId].style.display = 'flex';
+            return;
+        }
+
+        if (dialogId == 1 && dialogPageAt == 1) {
+            formTable.children[dialogId + 1].style.display = 'flex';
+            return;
+        }
     }
 
     function closeFormWithTable(x) {
@@ -517,20 +554,18 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
                 const formAddDataFilter = document.getElementsByClassName(
                     "form-add-data-filter"
                 )[0];
-                formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
-                formAddDataFilter.style.pointerEvents = "none";
+                formAddDataFilter.style = null;
                 formAddDataFilter.onclick = null;
-                formAddData.style.top = "1500%";
+                formAddData.style = null;
                 const editField =
                     document.getElementsByClassName("table-edit-row")[parentId];
                 // console.log(editField);
                 editField.innerHTML = "";
-                editField.style.margin = null;
+                editField.style = null;
                 if (editSelectedRowWidget != null) {
                     editSelectedRowWidget.style.backgroundColor = null;
                     editSelectedRowWidget = null;
                 }
-
                 let parent =
                     document.getElementsByClassName("table-database")[parentId]
                     .parentElement;
@@ -540,107 +575,80 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
             return;
         }
 
-        if (x != null) {
+        if (x != null && dialogPageAt < 0) {
             let parentId = getParentId_tableEditRow(x.parentElement.parentElement.parentElement.parentElement.children[0].id);
-            // dialogPageAt = -1;
+            dialogPageAt = -1;
             const formAddData = document.getElementsByClassName("form-with-table")[0];
             const formAddDataFilter = document.getElementsByClassName(
                 "form-add-data-filter"
             )[0];
-            formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
-            formAddDataFilter.style.pointerEvents = "none";
+            // formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
+            formAddDataFilter.style = null;
             formAddDataFilter.onclick = null;
-            formAddData.style.top = "1500%";
+            formAddData.style = null;
             const editField =
                 document.getElementsByClassName("table-edit-row")[parentId];
-            console.log(editField);
+            // console.log(editField);
             editField.innerHTML = "";
-            editField.style.margin = null;
-            editSelectedRowWidget.style.backgroundColor = null;
-            editSelectedRowWidget = null;
+            editField.style = null;
+            if (editSelectedRowWidget != null) {
+                editSelectedRowWidget.style.backgroundColor = null;
+                editSelectedRowWidget = null;
+            }
             let parent =
                 document.getElementsByClassName("table-database")[parentId]
                 .parentElement;
             parent.style.padding = null;
             return;
         }
-
-        showFormWithTable();
+        showFormWithTable(showingDialogId);
     }
-
-    const toSubmitHeaderMap = new Map([
-        ['kode_petugas', 'kode_petugas'],
-        ['kode_transaksi_supplier', 'kode_transaksi_supplier'],
-        ['kode_supplier', 'kode_supplier'],
-        ['qty', 'qty_total'],
-        ['harga_item', 'harga_total'],
-        ['tgl_transaksi'],
-    ]);
-
 
     async function acceptFormWithTable(x) {
         const formAddData = editSelectedRowWidget;
-        let valueToSubmit = [];
+        let valueFromTable = [];
         for (let index = 0; index < formAddData.children.length; index++) {
-            valueToSubmit.push(formAddData.children[index].innerHTML);
+            valueFromTable.push(formAddData.children[index].innerHTML);
         }
+        if (showingDialogId == 0) {
+            dialogValueToSubmit.set('kode_supplier', valueFromTable[0]);
+            textBoxesField = x.parentElement.parentElement.parentElement.children[0].children[1];
+            for (let index = 1; index < textBoxesField.children.length; index++) {
+                dialogValueToSubmit.set(textBoxesField.children[index].children[0].children[1].innerHTML, textBoxesField.children[index].children[0].children[0].value);
 
-        if (dialogPageAt == 0) {
-            headerValueToSubmit.push(toSubmitHeaderMap.get(strTableHeader[2][0]));
-            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
-            dialogPageAt += 1;
-        } else if (dialogPageAt == 1) {
-            headerValueToSubmit.push(toSubmitHeaderMap.get(strTableHeader[3][2]));
-            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[3][2]), await supplierMaxKd());
-            for (let index = 0; index < strTableHeader[3].length; index++) {
-                if (index == 0 || index == 3) {
-                    addtionalValues.set(strTableHeader[3][index], valueToSubmit[index]);
-                    continue;
-                }
-                if (index == 2 || index == 4) {
-                    continue;
-                }
-                headerValueToSubmit.push(toSubmitHeaderMap.get(strTableHeader[3][index]));
-                dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[3][index]), valueToSubmit[index]);
             }
-            dialogPageAt += 1;
+            completeDialog(0);
+            closeFormWithTable(null);
         }
 
-        if (dialogPageAt < 2) {
-            showFormWithTable();
-        } else {
-            // completeDialog();
-            closeFormWithTable(null);
+        if (showingDialogId == 1) {
+            if (dialogPageAt == 0) {
+                dialogValueToSubmit.set(strTableHeader[2][0], valueFromTable[0]);
+            }
+            if (dialogPageAt == 1) {
+                dialogValueToSubmit.set(strTableHeader[3][0], valueFromTable[0]);
+            }
+
+            dialogPageAt += 1;
+            // console.log(dialogPageAt);
+            if (dialogPageAt < 2) {
+                showFormWithTable(showingDialogId);
+            } else {
+                completeDialog(1);
+                closeFormWithTable(null);
+            }
         }
     }
 
-    async function completeDialog() {
-        const now = new Date();
-
-        const formattedDate = now.toLocaleDateString("sv-SE", {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        });
-
-        const formattedTime = now.toLocaleTimeString("sv-SE", {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-
-        const formattedDateTime = `${formattedDate} ${formattedTime}`;
-
-        headerValueToSubmit.push('tgl_transaksi');
-        headerValueToSubmit = new Set(headerValueToSubmit);
-        headerValueToSubmit = Array.from(headerValueToSubmit);
-        dialogValueToSubmit.set('tgl_transaksi', formattedDateTime);
-        console.log(formattedDateTime);
+    async function completeDialog(dialogId) {
         console.log(dialogValueToSubmit);
-        // console.log(headerValueToSubmit);
-        await insert('transaksi_supplier', headerValueToSubmit, dialogValueToSubmit);
-        await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'));
-        await update('transaksi_pembeli', 'kode_transaksi_pembeli', addtionalValues.get('kode_transaksi_pembeli'), 'kode_petugas ', dialogValueToSubmit.get('kode_petugas'))
+        if (dialogId == 0) {
+            await insert('barang', dialogValueToSubmit);
+        }
+        if (dialogId == 1) {
+            await update('transaksi_supplier', 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'),
+                'kode_supplier', dialogValueToSubmit.get('kode_supplier'));
+        }
         tableLoader();
     }
 
@@ -653,6 +661,9 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         )[0];
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
         formAddDataFilter.style.pointerEvents = "all";
+        formAddDataFilter.onclick = function() {
+            closeDialogYesNo(null);
+        };
         formYesNo.style.top = "50%";
 
         let question = `Hapus Data dengan Id: '${currentTd[0].innerHTML}' ?`;
@@ -665,8 +676,8 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         const formAddDataFilter = document.getElementsByClassName(
             "form-add-data-filter"
         )[0];
-        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
-        formAddDataFilter.style.pointerEvents = "none";
+        formAddDataFilter.style = null;
+        formAddDataFilter.onclick = null;
         formYesNo.style = null;
     }
 
@@ -676,8 +687,8 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         closeDialogYesNo();
     }
 
-    // scroll form
-    function showAddDataForm() {
+    // Add Barang Form
+    async function showAddDataForm() {
         const formAddData = document.getElementsByClassName("form-add-data")[0];
         const formAddDataFilter = document.getElementsByClassName(
             "form-add-data-filter"
@@ -685,6 +696,29 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
         formAddDataFilter.style.pointerEvents = "all";
         formAddData.style.top = "50%";
+
+        // Generate FormText
+        const formAddDataTextField = formAddData.children[1];
+        formAddDataTextField.innerHTML = null;
+        for (let index = 0; index < strTableHeader[0].length; index++) {
+            if (index == 0) {
+                formAddDataTextField.innerHTML += `<div class="material-text-box"> <div class="group"> <input type="text" required="required" value="${await barangMaxKd()}"/> <label>` +
+                    strTableHeader[0][index] + '</label> </div> </div>';
+                continue;
+            }
+            if (index == 2 || index == 3) {
+                continue;
+            }
+            if (index == 5 || index == 6) {
+                formAddDataTextField.innerHTML += '<div class="material-text-box"> <div class="group"> <input required="required" type="number" /> <label>' +
+                    strTableHeader[0][index] + '</label> </div> </div>';
+                continue;
+            }
+
+            formAddDataTextField.innerHTML += '<div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>' +
+                strTableHeader[0][index] + '</label> </div> </div>';
+
+        }
     }
 
     function closeAddDataForm() {
@@ -692,24 +726,19 @@ $transaksi_pembeli = "SELECT * FROM transaksi_pembeli";
         const formAddDataFilter = document.getElementsByClassName(
             "form-add-data-filter"
         )[0];
-        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
-        formAddDataFilter.style.pointerEvents = "none";
-        formAddData.style.top = "1500%";
+        formAddDataFilter.style = null;
+        formAddDataFilter.onclick = null;
+        formAddData.style = null;
     }
 
     function addAddDataForm() {
-        const formAddData = document.getElementsByClassName(
-            "form-add-data-fieldtext"
-        )[0];
-        let valueToSubmit = [];
-        for (let index = 0; index < formAddData.children.length; index++) {
-            valueToSubmit.push(
-                formAddData.children[index].children[0].children[0].value
-            );
+        const formAddData = document.getElementsByClassName("form-add-data")[0];
+        const formAddDataTextField = formAddData.children[1];
+        let valueToSubmit = new Map();
+        for (let index = 0; index < strTableHeader[0].length; index++) {
+            valueToSubmit.set(strTableHeader[0][index], formAddDataTextField.children[index].children[0].children[0].value);
         }
         console.log(valueToSubmit);
-        closeAddDataForm();
-        console.log("UwU");
     }
 </script>
 
