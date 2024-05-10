@@ -290,6 +290,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         const tabelthings = document.getElementsByClassName("table-database")[x];
         const tabel = tabelthings.children[1].children[0];
         const title = tabelthings.children[0].children[0];
+        tabelthings.style = null;
 
         console.log("things:");
         console.log(things);
