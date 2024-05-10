@@ -141,17 +141,49 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
 
     <div class="form-add-data">
         <div class="top-bar-form-add-data">
-            <h1>Tambah Barang</h1>
+            <h1>Edit Data</h1>
         </div>
         <div class="form-add-data-fieldtext">
+            <div class="value-editor-wrapper">
+                <!-- <div class="value-editor">
+                    <div class="material-text-box">
+                        <div class="group original-value">
+                            <input type="text" required="required" />
+                            <label>Original</label>
+                        </div>
+                    </div>
+                    <div class="arrow-to-edited">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15">
+                            <path d="M8.293 2.293a1 1 0 0 1 1.414 0l4.5 4.5a1 1 0 0 1 0 1.414l-4.5 4.5a1 1 0 0 1-1.414-1.414L11 8.5H1.5a1 1 0 0 1 0-2H11L8.293 3.707a1 1 0 0 1 0-1.414" />
+                        </svg>
+                    </div>
+                    <div class="material-text-box">
+                        <div class="group edited-value">
+                            <input type="text" required="required" />
+                            <label>Edited Value</label>
+                            <div class="dropdown">
+                                <div class="dropdown-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path d="M16.88 2.88a1.25 1.25 0 0 0-1.77 0L6.7 11.29a.996.996 0 0 0 0 1.41l8.41 8.41c.49.49 1.28.49 1.77 0s.49-1.28 0-1.77L9.54 12l7.35-7.35c.48-.49.48-1.28-.01-1.77" />
+                                    </svg>
+                                </div>
+                                <div class="dropdown-content">
+                                    <!-- <div class="dropdown-content-wrapper">
+                                    </div> -
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
 
+            </div>
         </div>
         <div class="btn-field-accept-cancle">
             <div class="btn-cancle" onclick="closeAddDataForm()">
                 <h1>Discard</h1>
             </div>
-            <div class="btn-accept" onclick="addAddDataForm()">
-                <h1>Add</h1>
+            <div class="btn-accept" onclick="saveAddDataForm()">
+                <h1>Save</h1>
             </div>
         </div>
     </div>
@@ -292,9 +324,8 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                     tableContent = `<tr onclick='editSelectedRow_Dialog(this, ${dialogId})'>`;
                 }
                 for (let index = 0; index < strTableHeader[x].length; index++) {
-                    const element = things[i][strTableHeader[x][index]];
-                    // console.log(element);
-                    tableContent += "<td>" + element + "</td>";
+                    let element = things[i][strTableHeader[x][index]];
+                    tableContent += "<td style='max-width: 300px; overflow:hidden;'>" + element + "</td>";
                 }
                 tableContent += "</tr>";
                 tabel.innerHTML += tableContent;
@@ -349,8 +380,8 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
     }
 
     var editSelectedRowWidget = null;
-
     let currentTd;
+    let editRow_Kd;
 
     function editSelectedRow(x) {
         if (editSelectedRowWidget != null) {
@@ -369,7 +400,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         parentTableField.style.padding = `0px 3.25rem`;
         const td = x.children;
         currentTd = td;
-        console.log(parentId + tableFormId);
+        // console.log(parentId + tableFormId);
         if (parentId == tableFormId) {
             const highLightSelVal = document.getElementById("form-with-table-highlight-sel-val");
             highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
@@ -378,15 +409,29 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             const editFieldWrapper = document.getElementsByClassName(
                 "table-edit-field-wrapper"
             )[0];
+            editRow_Kd = [];
+            let kdId = 0;
             for (let index = 0; index < td.length; index++) {
+                let value = td[index].innerHTML;
+                // console.log(value.length);
                 if (index == 2 || index == 3) {
-                    // editFieldWrapper.children[index].children[0].children[0].value =
-                    // td[index].innerHTML.split(';');
-                    console.log(td[index].innerHTML.split(';'));
+                    if (value.length < 1 || value == 'null') {
+                        editFieldWrapper.children[index].style.pointerEvents = 'none';           
+                        editFieldWrapper.children[index].children[0].children[1].textContent = 'No Editing For this >w<';             
+                    } else {
+                        editFieldWrapper.children[index].children[0].style.pointerEvents = 'none';           
+                        editFieldWrapper.children[index].children[0].children[1].textContent = 'Click Me To Edit OwO';             
+                    }
+                    editRow_Kd.push(value.split(';').filter(function(e){return e}));
+                    let currentKdId = kdId;
+                    let currentKdBarang = td[0].innerHTML;
+                    editFieldWrapper.children[index].onclick = function() {
+                        showAddDataForm(currentKdId, currentKdBarang);
+                    };
+                    kdId += 1;
                     continue;
                 }
-                editFieldWrapper.children[index].children[0].children[0].value =
-                    td[index].innerHTML;
+                editFieldWrapper.children[index].children[0].children[0].value = value;
             }
         }
     }
@@ -553,6 +598,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             const formAddDataFilter = document.getElementsByClassName(
                 "form-add-data-filter"
             )[0];
+            const formAddData = document.getElementsByClassName("form-with-table")[0];
             formAddDataFilter.style = null;
             formAddDataFilter.onclick = null;
             formAddData.style = null;
@@ -561,7 +607,6 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                 // console.log(tableField[index]);
                 // console.log(parentId);
                 dialogPageAt = -1;
-                const formAddData = document.getElementsByClassName("form-with-table")[0];
 
                 const editField =
                     document.getElementsByClassName("table-edit-row")[parentId];
@@ -694,37 +739,48 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         closeDialogYesNo();
     }
 
-    // Add Barang Form
-    async function showAddDataForm() {
+    // FormEdit Kd
+    let valueEditorWrapperWidget = '<div class="value-editor"> <div class="material-text-box"> <div class="group original-value"> <input type="text" required="required" /> <label>Original</label> </div> </div> <div class="arrow-to-edited"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15"> <path d="M8.293 2.293a1 1 0 0 1 1.414 0l4.5 4.5a1 1 0 0 1 0 1.414l-4.5 4.5a1 1 0 0 1-1.414-1.414L11 8.5H1.5a1 1 0 0 1 0-2H11L8.293 3.707a1 1 0 0 1 0-1.414" /> </svg> </div> <div class="material-text-box"> <div class="group edited-value"> <input type="text" required="required" /> <label>Edited Value</label> <div class="dropdown"> <div class="dropdown-btn"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M16.88 2.88a1.25 1.25 0 0 0-1.77 0L6.7 11.29a.996.996 0 0 0 0 1.41l8.41 8.41c.49.49 1.28.49 1.77 0s.49-1.28 0-1.77L9.54 12l7.35-7.35c.48-.49.48-1.28-.01-1.77" /> </svg> </div> <div class="dropdown-content"> <!-- <div class="dropdown-content-wrapper"> </div> --> </div> </div> </div> </div> </div>';
+
+    function selectDropDownValue(x) {
+        let inputComponent = x.parentElement.parentElement.parentElement.children[0];
+        inputComponent.value = x.textContent;
+    }
+
+    async function showAddDataForm(kdId, currentKdBarang) {
+        console.log('editRow_Kd');
+        console.log(kdId);
         const formAddData = document.getElementsByClassName("form-add-data")[0];
         const formAddDataFilter = document.getElementsByClassName(
             "form-add-data-filter"
         )[0];
         formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
         formAddDataFilter.style.pointerEvents = "all";
+        formAddDataFilter.onclick = function() {
+            closeAddDataForm();
+        };
         formAddData.style.top = "50%";
 
-        // Generate FormText
-        const formAddDataTextField = formAddData.children[1];
-        formAddDataTextField.innerHTML = null;
-        for (let index = 0; index < strTableHeader[0].length; index++) {
-            if (index == 0) {
-                formAddDataTextField.innerHTML += `<div class="material-text-box"> <div class="group"> <input type="text" required="required" value="${await barangMaxKd()}"/> <label>` +
-                    strTableHeader[0][index] + '</label> </div> </div>';
-                continue;
-            }
-            if (index == 2 || index == 3) {
-                continue;
-            }
-            if (index == 5 || index == 6) {
-                formAddDataTextField.innerHTML += '<div class="material-text-box"> <div class="group"> <input required="required" type="number" /> <label>' +
-                    strTableHeader[0][index] + '</label> </div> </div>';
-                continue;
-            }
 
-            formAddDataTextField.innerHTML += '<div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>' +
-                strTableHeader[0][index] + '</label> </div> </div>';
+        let valueEditorWrapper = document.getElementsByClassName('value-editor-wrapper')[0];
+        valueEditorWrapper.innerHTML = '';
+        valueEditorWrapper.id = `${(kdId == 0) ? 'kode_transaksi_supplier' : 'kode_transaksi_pembeli'}-${currentKdBarang}`;
 
+        for (let index = 0; index < editRow_Kd[kdId].length; index++) {
+            valueEditorWrapper.innerHTML += valueEditorWrapperWidget;
+        }
+        let dropDownContent = Array.from(new Set(editRow_Kd[kdId]));
+        for (let index = 0; index < editRow_Kd[kdId].length; index++) {
+            let valueEditor = valueEditorWrapper.getElementsByClassName('value-editor')[index];
+            let originalValue = valueEditor.getElementsByClassName('original-value')[0];
+            originalValue.children[0].value = editRow_Kd[kdId][index];
+            originalValue.children[0].style.pointerEvents = "none";
+            valueEditor.getElementsByClassName('edited-value')[0].children[0].value = editRow_Kd[kdId][index];
+
+            for (let index = 0; index < dropDownContent.length; index++) {
+                valueEditor.getElementsByClassName('dropdown-content')[0].innerHTML += `<div class="dropdown-content-wrapper" onclick="selectDropDownValue(this)">${dropDownContent[index]}</div>`;
+
+            }
         }
     }
 
@@ -738,14 +794,20 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         formAddData.style = null;
     }
 
-    function addAddDataForm() {
-        const formAddData = document.getElementsByClassName("form-add-data")[0];
-        const formAddDataTextField = formAddData.children[1];
-        let valueToSubmit = new Map();
-        for (let index = 0; index < strTableHeader[0].length; index++) {
-            valueToSubmit.set(strTableHeader[0][index], formAddDataTextField.children[index].children[0].children[0].value);
+    async function saveAddDataForm() {
+        const valueEditorWrapper = document.getElementsByClassName('value-editor-wrapper')[0];
+        let valueEditor = valueEditorWrapper.getElementsByClassName('value-editor');
+        let arrValueFromEditor = [];
+        for (let index = 0; index < valueEditor.length; index++) {
+            arrValueFromEditor.push(valueEditor[index].getElementsByClassName('edited-value')[0].children[0].value);
         }
-        console.log(valueToSubmit);
+        arrValueFromEditor = Array.from(new Set(arrValueFromEditor));
+        let strToSubmit = arrValueFromEditor.join(';');
+        let keys = valueEditorWrapper.id.split('-');
+        await update(tables_target[0], 'kode_barang', keys[1], keys[0], strToSubmit);
+        closeAddDataForm();
+        closeLastRowEdit();
+        tableLoader();
     }
 </script>
 <script>
