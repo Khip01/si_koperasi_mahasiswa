@@ -318,6 +318,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         editField.innerHTML = "";
         editField.style.margin = null;
         rowEditTableOpen = false;
+        document.getElementsByClassName('table-field-wrapper')[0].children[0].style = null;
     }
 
     function generateFormTextField(x, closeLastopen = true) {

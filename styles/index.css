@@ -405,3 +405,133 @@ input[type="radio"] {
     font-size: 17px;
   }
 }
+
+.form-add-data-filter {
+  z-index: 5;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0);
+  pointer-events: none;
+}
+
+.dialog-yes-no {
+  display: none;
+  position: absolute;
+  top: 1500%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background-color: white;
+  border-radius: 25px;
+  padding: 20px 20px;
+  color: black;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.btn-field-accept-cancle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.btn-field-accept-cancle h1 {
+  font-weight: 300;
+  font-size: 12px;
+  padding: 5px 20px;
+}
+
+.btn-cancle {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn-cancle h1 {
+  padding: 5px 20px 4px 20px;
+}
+
+.btn-cancle h1::after {
+  content: "";
+  width: 0%;
+  height: 2px;
+  background: black;
+  display: block;
+  margin: auto;
+  transition: 0.35s;
+}
+
+.btn-cancle:hover h1::after {
+  width: 100%;
+}
+
+.btn-accept {
+  background-color: #bf5481;
+  border-radius: 10px;
+  transition: 0.35s;
+  cursor: pointer;
+}
+
+.btn-accept:hover {
+  background-color: #7d68b9;
+}
+.btn-accept h1 {
+  color: white;
+}
+
+.btn-field-accept-cancle h1{
+  font-size: 20px;
+}
+
+.dialog-yes-no .btn-field-accept-cancle .btn-accept {
+  background-color: #e96e7a;
+}
+
+.dialog-yes-no .btn-field-accept-cancle .btn-accept:hover {
+  background-color: #ff0019;
+}
+
+.dialog-yes-no .btn-field-accept-cancle .btn-accept {
+  display: none;
+}
+
+.dialog-yes-no .dialog-yes-no-top-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog-yes-no .dialog-yes-no-top-section h1 {
+  font-weight: 500;
+}
+
+.dialog-yes-no-top-section img {
+  height: 100px;
+  width: 100px;
+}
+
+.dialog-yes-no-content{
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+}
+
+.dialog-yes-no-content h1 {
+  font-weight: 400;
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+  margin: 0px;
+}

@@ -417,7 +417,7 @@ textarea:focus ~ .bar:before {
   padding: 10px 14px;
   transition: 0.35s;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  z-index: 5;
+  z-index: 4;
 }
 
 .nav-bottom:hover {
@@ -598,8 +598,8 @@ textarea:focus ~ .bar:before {
 .form-add-data-filter {
   z-index: 5;
   position: absolute;
-  width: 100vw;
-  height: 100vh;
+  width: 150vw;
+  height: 150vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
