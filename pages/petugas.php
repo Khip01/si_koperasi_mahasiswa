@@ -222,7 +222,7 @@ $petugas = "SELECT * FROM petugas";
     ];
     const tableFormId = tables.length - 1;
     const formWithTableDialog =
-        '<div class="form-with-table-dialog"> <h1 id="form-with-table-dialog-title">Anda adalah?</h1> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(this)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable()"> <h1>Untuk Nyata</h1> </div> </div> </div>';
+        '<div class="form-with-table-dialog"> <h1 id="form-with-table-dialog-title">Anda adalah?</h1> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(this)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable(this)"> <h1>Untuk Nyata</h1> </div> </div> </div>';
     var formWithTableDialog_HighlightIdx = 2;
 
     var dialogStartAt = 2;
@@ -615,6 +615,8 @@ $petugas = "SELECT * FROM petugas";
 
         if (dialogPageAt == 0) {
             dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
+            x.parentElement.parentElement.parentElement.parentElement.style = null;
+            x.parentElement.parentElement.innerHTML = "";
             dialogPageAt += 1;
         } else if (dialogPageAt == 1) {
             for (let index = 0; index < strTableHeader[3].length - 2; index++) {

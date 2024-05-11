@@ -386,7 +386,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             const editFieldWrapper = document.getElementsByClassName(
                 "table-edit-field-wrapper"
             )[0];
-            for (let index = 0; index < strTableHeader[x].length; index++) {
+            for (let index = 1; index < strTableHeader[x].length; index++) {
                 editFieldWrapper.innerHTML +=
                     '<div class="material-text-box"> <div class="group"> <input type="text" required="required"/> <label>' +
                     strTableHeader[x][index] +
@@ -431,29 +431,29 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             )[0];
             editRow_Kd = [];
             let kdId = 0;
-            for (let index = 0; index < td.length; index++) {
+            for (let index = 1; index < td.length; index++) {
                 let value = td[index].innerHTML;
                 // console.log(value.length);
                 if (index == 2 || index == 3) {
                     if (value.length < 1 || value == 'null') {
-                        editFieldWrapper.children[index].style.pointerEvents = 'none';
-                        editFieldWrapper.children[index].children[0].children[1].textContent = 'No Editing For this >w<';
+                        editFieldWrapper.children[index - 1].style.pointerEvents = 'none';
+                        editFieldWrapper.children[index - 1].children[0].children[1].textContent = 'No Editing For this >w<';
                     } else {
-                        editFieldWrapper.children[index].children[0].style.pointerEvents = 'none';
-                        editFieldWrapper.children[index].children[0].children[1].textContent = `${strTableHeader[0][index]}`;
+                        editFieldWrapper.children[index - 1].children[0].style.pointerEvents = 'none';
+                        editFieldWrapper.children[index - 1].children[0].children[1].textContent = `${strTableHeader[0][index]}`;
                     }
                     editRow_Kd.push(value.split(';').filter(function(e) {
                         return e
                     }));
                     let currentKdId = kdId;
                     let currentKdBarang = td[0].innerHTML;
-                    editFieldWrapper.children[index].onclick = function() {
+                    editFieldWrapper.children[index - 1].onclick = function() {
                         showAddDataForm(currentKdId, currentKdBarang);
                     };
                     kdId += 1;
                     continue;
                 }
-                editFieldWrapper.children[index].children[0].children[0].value = value;
+                editFieldWrapper.children[index - 1].children[0].children[0].value = value;
             }
         }
     }
@@ -490,18 +490,20 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
 
         let valueToSubmit = new Map();
         let where_data = currentTd[0].innerHTML;
+        valueToSubmit.set('kode_barang', where_data);
         // let valueFromTableRow = [];
         for (let index = 0; index < editFieldWrapper.children.length; index++) {
-            if (index == 2 || index == 3) {
+            if (index == 1 || index == 2) {
                 continue;
             }
             let value = editFieldWrapper.children[index].children[0].children[0].value
             if (value == '') {
                 value = null;
             }
-            valueToSubmit.set(strTableHeader[parentID][index], value);
+            valueToSubmit.set(strTableHeader[parentID][index+1], value);
             // valueFromTableRow.push(value);
         }
+        console.log(valueToSubmit);
         for (let [key, value] of valueToSubmit) {
             await update(tables_target[parentID], 'kode_barang', where_data, key, valueToSubmit.get(key));
             where_data = valueToSubmit.get('kode_barang');
@@ -710,6 +712,8 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
 
         if (showingDialogId == 1) {
             if (dialogPageAt == 0) {
+                x.parentElement.parentElement.parentElement.parentElement.style = null;
+                x.parentElement.parentElement.innerHTML = "";
                 dialogValueToSubmit.set(strTableHeader[2][0], valueFromTable[0]);
             }
             if (dialogPageAt == 1) {
@@ -841,11 +845,11 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                     console.log(selectKdTransaksiSup);
                     selectKdTransaksiSup = selectKdTransaksiSup.join(';');
                     await update('barang', 'kode_barang', selectKd[index]['kode_barang'], 'kode_transaksi_supplier', selectKdTransaksiSup);
-              
+
                     // WARNING
                     index = selectKd.length + 1;
                 }
-                
+
                 // selectKdTransaksiPem = selectKd[index]['kode_transaksi_pembeli'];
                 // selectKdTransaksiPem = selectKdTransaksiPem.split(';');
                 // deleteKey = `TP${deleteKey.substring(2, deleteKey.length)}`;
@@ -854,12 +858,13 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                 //     console.log(selectKdTransaksiPem);
                 //     selectKdTransaksiPem = selectKdTransaksiPem.join(';');
                 //     await update('barang', 'kode_barang', selectKd[index]['kode_barang'], 'kode_transaksi_pembeli', selectKdTransaksiPem);
-                   
+
                 // }
             }
-            
+
 
             closeDialogYesNo(1);
+            closeLastRowEdit();
             tableLoader();
         }
     }
