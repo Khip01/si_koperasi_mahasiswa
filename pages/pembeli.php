@@ -2,7 +2,7 @@
 require '../core/functions.php';
 require '../core/script.php';
 
-$barang = "SELECT * FROM barang WHERE qty > 0";
+$barang = "SELECT kode_barang, kode_supplier, nama_barang, qty, harga_item FROM barang WHERE qty > 0";
 $transaksi_pembeli = "SELECT * FROM transaksi_pembeli WHERE kode_petugas IS NULL";
 $pembeli = "SELECT * FROM pembeli";
 
@@ -406,23 +406,23 @@ $pembeli = "SELECT * FROM pembeli";
         }
         if (dialogPageAt == 1) {
             formDialog.children[0].textContent = "Beli ini?";
-            formWithTableDialog_HighlightIdx = 4;
+            formWithTableDialog_HighlightIdx = 2;
             // Material Text Form
             let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
             qtyTextBox.style.display = null;
             qtyTextBox.style.display = 'block';
             qtyTextBox.children[0].children[0].type = 'number';
 
-            qty_before = td[5].innerHTML;
+            qty_before = td[3].innerHTML;
             qtyTextBox.children[0].children[0].value = qty_before;
-            maxQtyEventListerner(qtyTextBox.children[0].children[0], qty_before, td[6].innerHTML);
+            maxQtyEventListerner(qtyTextBox.children[0].children[0], qty_before, td[4].innerHTML);
 
-            qtyTextBox.children[0].children[0].parentElement.parentElement.children[1].children[1].textContent = idrFormatter.format(Number(qtyTextBox.children[0].children[0].value) * Number(td[6].innerHTML));
+            qtyTextBox.children[0].children[0].parentElement.parentElement.children[1].children[1].textContent = idrFormatter.format(Number(qtyTextBox.children[0].children[0].value) * Number(td[4].innerHTML));
             qtyTextBox.children[0].children[1].textContent = 'QTY';
             // formTable.children[0].style.display = "none";
         }
 
-        if (formWithTableDialog_HighlightIdx == 4) {
+        if (formWithTableDialog_HighlightIdx == 2) {
             let namaBarang = td[formWithTableDialog_HighlightIdx].innerHTML;
             if(namaBarang.length > 40) {
                 namaBarang = namaBarang.substring(0, 27) + '...';
@@ -552,14 +552,8 @@ $pembeli = "SELECT * FROM pembeli";
             dialogPageAt += 1;
         } else if (dialogPageAt == 1) {
             dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
+            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][3]), await pembeliMaxKd());
             for (let index = 3; index < strTableHeader[2].length; index++) {
-                if (index == 3) {
-                    dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), await pembeliMaxKd());
-                    continue;
-                }
-                if (index == 4) {
-                    continue;
-                }
                 if (index == 5) {
                     let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
                     dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), qtyTextBox.children[0].children[0].value);
