@@ -118,7 +118,6 @@ if ($getResult != null) {
 
     <div class="dialog-yes-no">
         <div class="dialog-yes-no-top-section">
-
             <h1>Connection?~ </h1>
         </div>
         <div class="dialog-yes-no-content">

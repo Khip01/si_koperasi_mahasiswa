@@ -124,32 +124,45 @@ $petugas = "SELECT * FROM petugas";
             <h1>Boo Secret form(this is not doing anything)</h1>
         </div>
         <div class="form-add-data-fieldtext">
-            <div class="material-text-box">
-                <div class="group">
-                    <input type="text" required="required" />
-                    <label>Kode Transaksi Supplier</label>
-                    <div class="dropdown">
-                        <h1>A</h1>
-                        <div class="dropdown-content">
-                            <div class="dropdown-content-wrapper">
-                                Laaaasdasdsadasdsadaaa
+            <div class="value-editor">
+                <div class="material-text-box">
+                    <div class="group">
+                        <input type="text" required="required" />
+                        <label>Harga Total</label>
+                    </div>
+                </div>
+                <div class="arrow-to-edited">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15">
+                        <path d="M8.293 2.293a1 1 0 0 1 1.414 0l4.5 4.5a1 1 0 0 1 0 1.414l-4.5 4.5a1 1 0 0 1-1.414-1.414L11 8.5H1.5a1 1 0 0 1 0-2H11L8.293 3.707a1 1 0 0 1 0-1.414" />
+                    </svg>
+                </div>
+                <div class="material-text-box">
+                    <div class="group">
+                        <input type="text" required="required" />
+                        <label>Kode Transaksi Supplier</label>
+                        <div class="dropdown">
+                            <div class="dropdown-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M16.88 2.88a1.25 1.25 0 0 0-1.77 0L6.7 11.29a.996.996 0 0 0 0 1.41l8.41 8.41c.49.49 1.28.49 1.77 0s.49-1.28 0-1.77L9.54 12l7.35-7.35c.48-.49.48-1.28-.01-1.77" />
+                                </svg>
                             </div>
-                            <div class="dropdown-content-wrapper">
-                                Laaaaa
-                            </div>
-                            <div class="dropdown-content-wrapper">
-                                Laaaaa
+                            <div class="dropdown-content">
+                                <div class="dropdown-content-wrapper">
+                                    Laaaa
+                                </div>
+                                <div class="dropdown-content-wrapper">
+                                    Laaaaa
+                                </div>
+                                <div class="dropdown-content-wrapper">
+                                    Laaaaa
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="material-text-box">
-                <div class="group">
-                    <input type="text" required="required" />
-                    <label>Harga Total</label>
-                </div>
-            </div>
+
+
             <div class="material-text-box">
                 <div class="group">
                     <input type="text" required="required" />
@@ -277,6 +290,7 @@ $petugas = "SELECT * FROM petugas";
         const tabelthings = document.getElementsByClassName("table-database")[x];
         const tabel = tabelthings.children[1].children[0];
         const title = tabelthings.children[0].children[0];
+        tabelthings.style = null;
 
         console.log("things:");
         console.log(things);
@@ -312,7 +326,7 @@ $petugas = "SELECT * FROM petugas";
                 for (let index = 0; index < strTableHeader[x].length; index++) {
                     const element = things[i][strTableHeader[x][index]];
                     // console.log(element);
-                    tableContent += "<td>" + element + "</td>";
+                    tableContent += "<td style='max-width: 250px; overflow:hidden;'>" + element + "</td>";
                 }
                 tableContent += "</tr>";
                 tabel.innerHTML += tableContent;
@@ -521,18 +535,19 @@ $petugas = "SELECT * FROM petugas";
         dialogPageAt -= 1;
         if (x == null) {
             let tableField = document.getElementsByClassName("table-field");
+            const formAddDataFilter = document.getElementsByClassName(
+                "form-add-data-filter"
+            )[0];
+            formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
+            formAddDataFilter.style.pointerEvents = "none";
+            formAddDataFilter.onclick = null;
             for (let index = 1; index < tableField.length; index++) {
                 let parentId = getParentId_tableEditRow(tableField[index].children[0].id);
                 // console.log(tableField[index]);
                 // console.log(parentId);
                 dialogPageAt = -1;
                 const formAddData = document.getElementsByClassName("form-with-table")[0];
-                const formAddDataFilter = document.getElementsByClassName(
-                    "form-add-data-filter"
-                )[0];
-                formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
-                formAddDataFilter.style.pointerEvents = "none";
-                formAddDataFilter.onclick = null;
+
                 formAddData.style.top = "1500%";
                 const editField =
                     document.getElementsByClassName("table-edit-row")[parentId];
@@ -606,10 +621,7 @@ $petugas = "SELECT * FROM petugas";
                 if (index == 0) {
                     addtionalValues.set(strTableHeader[3][index], valueToSubmit[index]);
                     continue;
-                }
-                if (index == 1) {
-                    continue;
-                }
+                }      
                 dialogValueToSubmit.set(strTableHeader[3][index], valueToSubmit[index]);
             }
             dialogPageAt += 1;
@@ -626,9 +638,36 @@ $petugas = "SELECT * FROM petugas";
     async function completeDialog() {
         dialogValueToSubmit.set('tgl_transaksi', formatDateAndTime(new Date()));
         dialogValueToSubmit.set('kode_transaksi_supplier', await supplierMaxKd());
+
+        let selectKd = await selectTable('SELECT kode_barang, kode_transaksi_supplier, kode_transaksi_pembeli FROM barang;');
+        console.log(selectKd);
+        for (let index = 0; index < selectKd.length; index++) {
+            let selectKdTransaksiPem = selectKd[index]['kode_transaksi_pembeli'];
+            if (selectKdTransaksiPem == null) {
+                continue;
+            }
+            selectKdTransaksiPem = selectKdTransaksiPem.split(';');
+            let selectKdTransaksiSup = selectKd[index]['kode_transaksi_supplier'];
+            if (selectKdTransaksiSup == null) {
+                selectKdTransaksiSup = [];
+            } else {
+                selectKdTransaksiSup = selectKdTransaksiSup.split(';');
+            }
+
+            if (selectKdTransaksiPem.includes(addtionalValues.get('kode_transaksi_pembeli')) && !selectKdTransaksiSup.includes(dialogValueToSubmit.get('kode_transaksi_supplier'))) {
+                selectKdTransaksiSup.push(dialogValueToSubmit.get('kode_transaksi_supplier'));
+                selectKdTransaksiSup = selectKdTransaksiSup.join(';');
+                console.log(selectKdTransaksiSup);
+                await update('barang', 'kode_barang', selectKd[index]['kode_barang'], 'kode_transaksi_supplier', selectKdTransaksiSup);
+                break;
+            }
+
+        }
+        
         console.log(dialogValueToSubmit);
+        console.log(addtionalValues);
         await insert('transaksi_supplier', dialogValueToSubmit);
-        // await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'));
+
         await update('transaksi_pembeli', 'kode_transaksi_pembeli', addtionalValues.get('kode_transaksi_pembeli'), 'kode_petugas ', dialogValueToSubmit.get('kode_petugas'))
         tableLoader();
     }
