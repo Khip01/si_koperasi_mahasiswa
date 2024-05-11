@@ -227,7 +227,7 @@ $pembeli = "SELECT * FROM pembeli";
                 for (let index = 0; index < strTableHeader[x].length; index++) {
                     const element = things[i][strTableHeader[x][index]];
                     // console.log(element);
-                    tableContent += "<td>" + element + "</td>";
+                    tableContent += "<td style='max-width: 200px; overflow:hidden;'>" + element + "</td>";
                 }
                 tableContent += "</tr>";
                 tabel.innerHTML += tableContent;
@@ -423,7 +423,11 @@ $pembeli = "SELECT * FROM pembeli";
         }
 
         if (formWithTableDialog_HighlightIdx == 4) {
-            highLightSelVal.textContent = `${td[formWithTableDialog_HighlightIdx].innerHTML} [${td[0].innerHTML}]`;
+            let namaBarang = td[formWithTableDialog_HighlightIdx].innerHTML;
+            if(namaBarang.length > 40) {
+                namaBarang = namaBarang.substring(0, 27) + '...';
+            }
+            highLightSelVal.textContent = `${namaBarang} [${td[0].innerHTML}]`;
         } else {
             highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
         }

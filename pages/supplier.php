@@ -326,7 +326,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                 }
                 for (let index = 0; index < strTableHeader[x].length; index++) {
                     let element = things[i][strTableHeader[x][index]];
-                    tableContent += "<td style='max-width: 300px; overflow:hidden;'>" + element + "</td>";
+                    tableContent += "<td style='max-width: 250px; overflow:hidden;'>" + element + "</td>";
                 }
                 tableContent += "</tr>";
                 tabel.innerHTML += tableContent;
@@ -417,13 +417,15 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                 // console.log(value.length);
                 if (index == 2 || index == 3) {
                     if (value.length < 1 || value == 'null') {
-                        editFieldWrapper.children[index].style.pointerEvents = 'none';           
-                        editFieldWrapper.children[index].children[0].children[1].textContent = 'No Editing For this >w<';             
+                        editFieldWrapper.children[index].style.pointerEvents = 'none';
+                        editFieldWrapper.children[index].children[0].children[1].textContent = 'No Editing For this >w<';
                     } else {
-                        editFieldWrapper.children[index].children[0].style.pointerEvents = 'none';           
-                        editFieldWrapper.children[index].children[0].children[1].textContent = 'Click Me To Edit OwO';             
+                        editFieldWrapper.children[index].children[0].style.pointerEvents = 'none';
+                        editFieldWrapper.children[index].children[0].children[1].textContent = 'Click Me To Edit OwO';
                     }
-                    editRow_Kd.push(value.split(';').filter(function(e){return e}));
+                    editRow_Kd.push(value.split(';').filter(function(e) {
+                        return e
+                    }));
                     let currentKdId = kdId;
                     let currentKdBarang = td[0].innerHTML;
                     editFieldWrapper.children[index].onclick = function() {
@@ -471,6 +473,9 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         let where_data = currentTd[0].innerHTML;
         // let valueFromTableRow = [];
         for (let index = 0; index < editFieldWrapper.children.length; index++) {
+            if (index == 2 || index == 3) {
+                continue;
+            }
             let value = editFieldWrapper.children[index].children[0].children[0].value
             if (value == '') {
                 value = null;
@@ -766,7 +771,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         let valueEditorWrapper = document.getElementsByClassName('value-editor-wrapper')[0];
         valueEditorWrapper.innerHTML = '';
         valueEditorWrapper.style = null;
-        if(editRow_Kd[kdId].length < 12) {
+        if (editRow_Kd[kdId].length < 12) {
             valueEditorWrapper.style.overflow = 'unset';
         }
         valueEditorWrapper.id = `${(kdId == 0) ? 'kode_transaksi_supplier' : 'kode_transaksi_pembeli'}-${currentKdBarang}`;

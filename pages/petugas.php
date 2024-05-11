@@ -326,7 +326,7 @@ $petugas = "SELECT * FROM petugas";
                 for (let index = 0; index < strTableHeader[x].length; index++) {
                     const element = things[i][strTableHeader[x][index]];
                     // console.log(element);
-                    tableContent += "<td>" + element + "</td>";
+                    tableContent += "<td style='max-width: 250px; overflow:hidden;'>" + element + "</td>";
                 }
                 tableContent += "</tr>";
                 tabel.innerHTML += tableContent;
