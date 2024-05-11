@@ -424,7 +424,7 @@ $pembeli = "SELECT * FROM pembeli";
 
         if (formWithTableDialog_HighlightIdx == 2) {
             let namaBarang = td[formWithTableDialog_HighlightIdx].innerHTML;
-            if(namaBarang.length > 40) {
+            if (namaBarang.length > 40) {
                 namaBarang = namaBarang.substring(0, 27) + '...';
             }
             highLightSelVal.textContent = `${namaBarang} [${td[0].innerHTML}]`;
@@ -555,18 +555,11 @@ $pembeli = "SELECT * FROM pembeli";
         } else if (dialogPageAt == 1) {
             addtionalValues.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
             dialogValueToSubmit.set('kode_transaksi_pembeli', await pembeliMaxKd());
-            for (let index = 3; index < strTableHeader[2].length; index++) {
-                if (index == 5) {
-                    let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
-                    dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), qtyTextBox.children[0].children[0].value);
-                    continue;
-                }
-                if (index == 6) {
-                    dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), Number(dialogValueToSubmit.get('qty_total')) * Number(valueToSubmit[index]));
-                    continue;
-                }
-                dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), valueToSubmit[index]);
-            }
+
+            let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
+            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][3]), qtyTextBox.children[0].children[0].value);
+            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][4]), Number(dialogValueToSubmit.get('qty_total')) * Number(valueToSubmit[4]));
+
             dialogPageAt += 1;
         }
 
@@ -580,7 +573,7 @@ $pembeli = "SELECT * FROM pembeli";
 
     async function completeDialog() {
         dialogValueToSubmit.set('tgl_transaksi', formatDateAndTime(new Date()));
-        
+
         let selectKdPembeli = await selectTable(`SELECT kode_transaksi_pembeli FROM barang WHERE kode_barang = '${addtionalValues.get('kode_barang')}'`);
         console.log(selectKdPembeli);
         if (selectKdPembeli[0]['kode_transaksi_pembeli'] != null) {
@@ -594,7 +587,7 @@ $pembeli = "SELECT * FROM pembeli";
         selectKdPembeli = selectKdPembeli.join(';');
         await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_pembeli', selectKdPembeli);
 
-        
+
         console.log(dialogValueToSubmit);
         console.log(addtionalValues);
 

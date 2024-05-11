@@ -684,6 +684,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             }
             if (dialogPageAt == 1) {
                 dialogValueToSubmit.set(strTableHeader[3][0], valueFromTable[0]);
+                dialogValueToSubmit.set(strTableHeader[3][1], valueFromTable[1]);
             }
 
             dialogPageAt += 1;
@@ -705,6 +706,19 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         if (dialogId == 1) {
             await update('transaksi_supplier', 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'),
                 'kode_supplier', dialogValueToSubmit.get('kode_supplier'));
+
+            let selectKd = await selectTable('SELECT  kode_barang, kode_transaksi_supplier, qty FROM barang;');
+            
+            for (let index = 0; index < selectKd.length; index++) {
+                let selectKdTransaksiSup = selectKd[index]['kode_transaksi_supplier'];
+                if(selectKdTransaksiSup == null) {
+                    continue;
+                }
+                selectKdTransaksiSup = selectKdTransaksiSup.split(';');
+                if (selectKdTransaksiSup.includes(dialogValueToSubmit.get('kode_transaksi_supplier'))) {
+                    await update('barang', 'kode_barang', selectKd[index]['kode_barang'], 'qty', Number(selectKd[index]['qty']) - Number(dialogValueToSubmit.get('qty_total')));
+                }
+            }
         }
         tableLoader();
     }

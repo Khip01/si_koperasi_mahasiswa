@@ -618,13 +618,10 @@ $petugas = "SELECT * FROM petugas";
             dialogPageAt += 1;
         } else if (dialogPageAt == 1) {
             for (let index = 0; index < strTableHeader[3].length - 2; index++) {
-                if (index == 0 || index == 1) {
+                if (index == 0) {
                     addtionalValues.set(strTableHeader[3][index], valueToSubmit[index]);
                     continue;
-                }
-                if (index == 1) {
-                    continue;
-                }
+                }      
                 dialogValueToSubmit.set(strTableHeader[3][index], valueToSubmit[index]);
             }
             dialogPageAt += 1;
