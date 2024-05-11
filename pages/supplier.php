@@ -440,7 +440,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                         editFieldWrapper.children[index].children[0].children[1].textContent = 'No Editing For this >w<';
                     } else {
                         editFieldWrapper.children[index].children[0].style.pointerEvents = 'none';
-                        editFieldWrapper.children[index].children[0].children[1].textContent = 'Click Me To Edit OwO';
+                        editFieldWrapper.children[index].children[0].children[1].textContent = `${strTableHeader[0][index]}`;
                     }
                     editRow_Kd.push(value.split(';').filter(function(e) {
                         return e
