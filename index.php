@@ -41,6 +41,7 @@ if ($getResult != null) {
 </header>
 
 <body>
+    <div class="form-add-data-filter"> </div>
     <div class="body-content">
         <div class="home-cover">
             <div id="go-far-ehe"></div>
@@ -98,8 +99,8 @@ if ($getResult != null) {
                         <h1>Connection: </h1>
                         <h1 id="connection-status-what">OWO</h1>
                     </div>
-                    <div class="connection-status-field" onclick="checkConnection()">
-                        <div id="connection-info">
+                    <div class="connection-status-field">
+                        <div id="connection-info" onclick="showAboutConnection()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256">
                                 <path d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88m16-40a8 8 0 0 1-8 8a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16a16 16 0 0 1 16 16v40a8 8 0 0 1 8 8m-32-92a12 12 0 1 1 12 12a12 12 0 0 1-12-12" />
                             </svg>
@@ -111,6 +112,24 @@ if ($getResult != null) {
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dialog-yes-no">
+        <div class="dialog-yes-no-top-section">
+            <h1>Connection?~ </h1>
+        </div>
+        <div class="dialog-yes-no-content">
+            <h1></h1>
+            <img src="" />
+        </div>
+        <div class="btn-field-accept-cancle">
+            <div class="btn-cancle" onclick="closeDialogYesNo()">
+                <h1>Okaii</h1>
+            </div>
+            <div class="btn-accept" onclick="location.reload()">
+                <h1>Refresh</h1>
             </div>
         </div>
     </div>
@@ -127,19 +146,56 @@ if ($getResult != null) {
         }
     }
 
+    var boolConnectionStatus;
+
     function checkConnection() {
         var connectionStatus = "<?= $getResult ?>";
         const statusTextElement = document.getElementById('connection-status-what');
         if (connectionStatus != '') {
             statusTextElement.textContent = 'YABAI';
             statusTextElement.style.color = 'red';
+            boolConnectionStatus = false;
         } else {
             statusTextElement.textContent = 'OK!';
             statusTextElement.style.color = 'green';
+            boolConnectionStatus = true;
         }
     }
-
     checkConnection();
+
+    function showAboutConnection() {
+        const formYesNo = document.getElementsByClassName("dialog-yes-no")[0];
+        const formAddDataFilter = document.getElementsByClassName(
+            "form-add-data-filter"
+        )[0];
+        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
+        formAddDataFilter.style.pointerEvents = "all";
+        formAddDataFilter.onclick = function() {
+            closeDialogYesNo(null);
+        };
+        formYesNo.style.top = "50%";
+
+        let content = document.getElementsByClassName('dialog-yes-no-content');
+        let btnWrapper = document.getElementsByClassName('btn-field-accept-cancle')[0];
+        if (boolConnectionStatus) {
+            content[0].children[1].src = 'styles/imgs/kita-ikuyo-kita.webp';
+            btnWrapper.children[1].style = null;
+        } else {
+            content[0].children[1].src = 'styles/imgs/OWO.webp';
+            btnWrapper.children[1].style.display = 'block';
+        }
+
+    }
+
+    function closeDialogYesNo() {
+        const formYesNo = document.getElementsByClassName("dialog-yes-no")[0];
+        const formAddDataFilter = document.getElementsByClassName(
+            "form-add-data-filter"
+        )[0];
+        formAddDataFilter.style = null;
+        formAddDataFilter.onclick = null;
+        formYesNo.style = null;
+    }
 </script>
 
 </html>

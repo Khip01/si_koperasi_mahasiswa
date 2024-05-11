@@ -123,17 +123,17 @@ body {
   margin: 0px;
 }
 
-.parallax-background-image{
+.parallax-background-image {
   width: 110vw;
   height: 110vh;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-image: url("../imgs/a-keep\'s-masterpiece.webp");
+  background-image: url("../imgs/a-keep's-masterpiece.webp");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center center; 
+  background-position: center center;
   z-index: 0;
 }
 
@@ -238,7 +238,7 @@ th:last-child {
   min-width: 250px;
 }
 
-#edit-row-btn-del {
+.edit-row-btn-del {
   display: flex;
   background-color: #e96e7a;
   border-radius: 10px;
@@ -248,11 +248,11 @@ th:last-child {
   justify-content: center;
 }
 
-#edit-row-btn-del:hover {
+.edit-row-btn-del:hover {
   background-color: #ff0019;
 }
 
-#edit-row-btn-del svg {
+.edit-row-btn-del svg {
   width: 16px;
   height: 16px;
   padding: 10px;
@@ -326,6 +326,7 @@ textarea:focus ~ .bar:before {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 20px;
 }
 .material-text-box label {
   color: #c6c6c6;
@@ -338,6 +339,84 @@ textarea:focus ~ .bar:before {
   transition: 300ms ease all;
   background-color: #fff;
   padding: 0 2px;
+}
+
+.material-text-box .group .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.material-text-box .group .dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 10px 12px;
+  z-index: 1;
+  margin-top: -10px;
+  margin-left: -160px;
+  border-radius: 10px;
+}
+
+.material-text-box .group .dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.material-text-box .group .dropdown .dropdown-btn {
+  fill: black;
+  height: 20px;
+  width: 20px;
+  transform: rotate(270deg);
+}
+
+.material-text-box .group .dropdown:hover .dropdown-btn {
+  fill: #c6c6c6;
+}
+
+.material-text-box
+  .group
+  .dropdown
+  .dropdown-content
+  .dropdown-content-wrapper {
+  padding: 2px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.material-text-box
+  .group
+  .dropdown
+  .dropdown-content
+  .dropdown-content-wrapper:hover {
+  background-color: #c6c6c6;
+}
+
+.value-editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: start;
+  padding: 10px 0px;
+  max-height: 70vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.value-editor {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow-to-edited svg {
+  color: black;
+  fill: black;
+  height: 20px;
+  width: 20px;
 }
 
 .table-edit-field-wrapper {
@@ -417,7 +496,7 @@ textarea:focus ~ .bar:before {
   padding: 10px 14px;
   transition: 0.35s;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  z-index: 5;
+  z-index: 4;
 }
 
 .nav-bottom:hover {
@@ -472,12 +551,17 @@ textarea:focus ~ .bar:before {
   position: absolute;
   max-width: 90%;
   max-height: 90vh;
-  top: 1500%;
+  top: 250%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: row;
   overflow-y: auto;
+  transition: 0.5s;
+}
+
+.form-with-table .table-edit-row-header .edit-row-btn-del{
+  display: none;
 }
 
 .form-with-table .table-field {
@@ -491,17 +575,19 @@ textarea:focus ~ .bar:before {
   padding: 30px 10px 30px 1px;
 }
 
-.form-with-table-dialog #form-with-table-dialog-title {
+/* .form-with-table-dialog .table-edit-row-header #form-with-table-dialog-title {
   min-width: 17rem;
-}
+} */
 
-.form-with-table-dialog #form-with-table-edit-row-section{
+.form-with-table-dialog #form-with-table-edit-row-section {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.form-with-table-dialog #form-with-table-edit-row-section #form-with-table-highlight-sel-val{
+.form-with-table-dialog
+  #form-with-table-edit-row-section
+  #form-with-table-highlight-sel-val {
   margin: 0px 0px;
 }
 
@@ -584,7 +670,7 @@ textarea:focus ~ .bar:before {
 .form-add-data {
   z-index: 10;
   position: absolute;
-  width: 30%;
+  max-width: 70vw;
   top: 1500%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -598,13 +684,14 @@ textarea:focus ~ .bar:before {
 .form-add-data-filter {
   z-index: 5;
   position: absolute;
-  width: 100vw;
-  height: 100vh;
+  width: 150vw;
+  height: 150vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0);
   pointer-events: none;
+  transition: 0.5s;
 }
 
 .top-bar-form-add-data {
@@ -641,4 +728,76 @@ textarea:focus ~ .bar:before {
 textarea {
   display: flex;
   flex: 1;
+}
+
+.dialog-ga-cukup {
+  position: absolute;
+  top: 250%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background-color: white;
+  border-radius: 25px;
+  padding: 20px 20px;
+  color: black;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 25px;
+}
+
+.dialog-ga-cukup .btn-field-accept-cancle {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+}
+
+.dialog-ga-cukup .btn-field-accept-cancle .btn-cancle h1 {
+  font-size: 30px;
+}
+
+.dialog-ga-cukup .btn-field-accept-cancle .btn-accept {
+  background-color: #e96e7a;
+}
+
+.dialog-ga-cukup .btn-field-accept-cancle .btn-accept:hover {
+  background-color: #ff0019;
+}
+
+.dialog-ga-cukup .btn-field-accept-cancle .btn-accept {
+  display: none;
+}
+
+.dialog-ga-cukup .dialog-yes-no-top-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog-ga-cukup .dialog-yes-no-top-section h1 {
+  font-weight: 500;
+}
+
+.dialog-ga-cukup .dialog-yes-no-content img {
+  height: 400px;
+  width: 400px;
+}
+
+.dialog-ga-cukup .dialog-yes-no-content {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+}
+
+.dialog-ga-cukup .dialog-yes-no-content h1 {
+  font-weight: 400;
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+  margin: 0px;
 }

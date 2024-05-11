@@ -2,7 +2,7 @@
 require '../core/functions.php';
 require '../core/script.php';
 
-$barang = "SELECT * FROM barang WHERE qty > 0";
+$barang = "SELECT kode_barang, kode_supplier, nama_barang, qty, harga_item FROM barang WHERE qty > 0";
 $transaksi_pembeli = "SELECT * FROM transaksi_pembeli WHERE kode_petugas IS NULL";
 $pembeli = "SELECT * FROM pembeli";
 
@@ -191,6 +191,7 @@ $pembeli = "SELECT * FROM pembeli";
         const tabelthings = document.getElementsByClassName("table-database")[x];
         const tabel = tabelthings.children[1].children[0];
         const title = tabelthings.children[0].children[0];
+        tabelthings.style = null;
 
         console.log("things:");
         console.log(things);
@@ -226,7 +227,7 @@ $pembeli = "SELECT * FROM pembeli";
                 for (let index = 0; index < strTableHeader[x].length; index++) {
                     const element = things[i][strTableHeader[x][index]];
                     // console.log(element);
-                    tableContent += "<td>" + element + "</td>";
+                    tableContent += "<td style='max-width: 200px; overflow:hidden;'>" + element + "</td>";
                 }
                 tableContent += "</tr>";
                 tabel.innerHTML += tableContent;
@@ -405,24 +406,28 @@ $pembeli = "SELECT * FROM pembeli";
         }
         if (dialogPageAt == 1) {
             formDialog.children[0].textContent = "Beli ini?";
-            formWithTableDialog_HighlightIdx = 4;
+            formWithTableDialog_HighlightIdx = 2;
             // Material Text Form
             let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
             qtyTextBox.style.display = null;
             qtyTextBox.style.display = 'block';
             qtyTextBox.children[0].children[0].type = 'number';
 
-            qty_before = td[5].innerHTML;
+            qty_before = td[3].innerHTML;
             qtyTextBox.children[0].children[0].value = qty_before;
-            maxQtyEventListerner(qtyTextBox.children[0].children[0], qty_before, td[6].innerHTML);
+            maxQtyEventListerner(qtyTextBox.children[0].children[0], qty_before, td[4].innerHTML);
 
-            qtyTextBox.children[0].children[0].parentElement.parentElement.children[1].children[1].textContent = idrFormatter.format(Number(qtyTextBox.children[0].children[0].value) * Number(td[6].innerHTML));
+            qtyTextBox.children[0].children[0].parentElement.parentElement.children[1].children[1].textContent = idrFormatter.format(Number(qtyTextBox.children[0].children[0].value) * Number(td[4].innerHTML));
             qtyTextBox.children[0].children[1].textContent = 'QTY';
             // formTable.children[0].style.display = "none";
         }
 
-        if (formWithTableDialog_HighlightIdx == 4) {
-            highLightSelVal.textContent = `${td[formWithTableDialog_HighlightIdx].innerHTML} [${td[0].innerHTML}]`;
+        if (formWithTableDialog_HighlightIdx == 2) {
+            let namaBarang = td[formWithTableDialog_HighlightIdx].innerHTML;
+            if (namaBarang.length > 40) {
+                namaBarang = namaBarang.substring(0, 27) + '...';
+            }
+            highLightSelVal.textContent = `${namaBarang} [${td[0].innerHTML}]`;
         } else {
             highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
         }
@@ -430,6 +435,7 @@ $pembeli = "SELECT * FROM pembeli";
 
     var dialogPageAt = -1;
     let dialogValueToSubmit;
+    let addtionalValues;
 
     function showFormWithTable() {
         const formTable = document.getElementsByClassName("form-with-table")[0];
@@ -437,6 +443,7 @@ $pembeli = "SELECT * FROM pembeli";
         formTable.children[1].style.display = null;
         if (dialogPageAt < 0) {
             dialogValueToSubmit = new Map();
+            addtionalValues = new Map();
             tableLoader();
             const formAddData = document.getElementsByClassName("form-with-table")[0];
             const formAddDataFilter = document.getElementsByClassName(
@@ -465,18 +472,19 @@ $pembeli = "SELECT * FROM pembeli";
         dialogPageAt -= 1;
         if (x == null) {
             let tableField = document.getElementsByClassName("table-field");
+            const formAddDataFilter = document.getElementsByClassName(
+                "form-add-data-filter"
+            )[0];
+            formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
+            formAddDataFilter.style.pointerEvents = "none";
+            formAddDataFilter.onclick = null;
             for (let index = 1; index < tableField.length; index++) {
                 let parentId = getParentId_tableEditRow(tableField[index].children[0].id);
                 // console.log(tableField[index]);
                 // console.log(parentId);
                 dialogPageAt = -1;
                 const formAddData = document.getElementsByClassName("form-with-table")[0];
-                const formAddDataFilter = document.getElementsByClassName(
-                    "form-add-data-filter"
-                )[0];
-                formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0)`;
-                formAddDataFilter.style.pointerEvents = "none";
-                formAddDataFilter.onclick = null;
+
                 formAddData.style.top = "1500%";
                 const editField =
                     document.getElementsByClassName("table-edit-row")[parentId];
@@ -545,26 +553,13 @@ $pembeli = "SELECT * FROM pembeli";
             dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[1][0]), valueToSubmit[0]);
             dialogPageAt += 1;
         } else if (dialogPageAt == 1) {
-            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
-            for (let index = 3; index < strTableHeader[2].length; index++) {
-                if (index == 3) {
-                    dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), await pembeliMaxKd());
-                    continue;
-                }
-                if (index == 4) {
-                    continue;
-                }
-                if (index == 5) {
-                    let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
-                    dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), qtyTextBox.children[0].children[0].value);
-                    continue;
-                }
-                if (index == 6) {
-                    dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), Number(dialogValueToSubmit.get('qty_total')) * Number(valueToSubmit[index]));
-                    continue;
-                }
-                dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][index]), valueToSubmit[index]);
-            }
+            addtionalValues.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
+            dialogValueToSubmit.set('kode_transaksi_pembeli', await pembeliMaxKd());
+
+            let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
+            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][3]), qtyTextBox.children[0].children[0].value);
+            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][4]), Number(dialogValueToSubmit.get('qty_total')) * Number(valueToSubmit[4]));
+
             dialogPageAt += 1;
         }
 
@@ -578,9 +573,28 @@ $pembeli = "SELECT * FROM pembeli";
 
     async function completeDialog() {
         dialogValueToSubmit.set('tgl_transaksi', formatDateAndTime(new Date()));
+
+        let selectKdPembeli = await selectTable(`SELECT kode_transaksi_pembeli FROM barang WHERE kode_barang = '${addtionalValues.get('kode_barang')}'`);
+        console.log(selectKdPembeli);
+        if (selectKdPembeli[0]['kode_transaksi_pembeli'] != null) {
+            selectKdPembeli = selectKdPembeli[0]['kode_transaksi_pembeli'].split(';');
+        } else {
+            selectKdPembeli = [];
+        }
+        if (!selectKdPembeli.includes(dialogValueToSubmit.get('kode_transaksi_pembeli'))) {
+            selectKdPembeli.push(dialogValueToSubmit.get('kode_transaksi_pembeli'));
+        }
+        selectKdPembeli = selectKdPembeli.join(';');
+        await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_pembeli', selectKdPembeli);
+
+
         console.log(dialogValueToSubmit);
+        console.log(addtionalValues);
+
+
+
         await insert('transaksi_pembeli', dialogValueToSubmit);
-        await update('barang', 'kode_barang', dialogValueToSubmit.get('kode_barang'), 'qty', Number(qty_before) - Number(dialogValueToSubmit.get('qty_total')));
+        // await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'qty', Number(qty_before) - Number(dialogValueToSubmit.get('qty_total')));
         tableLoader();
     }
 </script>

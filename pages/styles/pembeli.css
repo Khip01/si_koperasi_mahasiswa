@@ -390,7 +390,7 @@ textarea:focus ~ .bar:before {
   padding: 10px 14px;
   transition: 0.35s;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  z-index: 5;
+  z-index: 4;
 }
 
 .nav-bottom:hover {
@@ -439,12 +439,13 @@ textarea:focus ~ .bar:before {
   position: absolute;
   max-width: 90%;
   max-height: 90vh;
-  top: 1500%;
+  top: 250%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: row;
   overflow-y: auto;
+  transition: 0.5s;
 }
 
 .form-with-table-dialog {
@@ -499,13 +500,14 @@ textarea:focus ~ .bar:before {
 .form-add-data-filter {
   z-index: 5;
   position: absolute;
-  width: 100vw;
-  height: 100vh;
+  width: 150vw;
+  height: 150vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0);
   pointer-events: none;
+  transition: 0.5s;
 }
 
 .top-bar-form-add-data {
