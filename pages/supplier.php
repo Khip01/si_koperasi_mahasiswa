@@ -817,7 +817,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             await deleteRow(tables_target[0], 'kode_barang', currentTd[0].innerHTML);
             closeLastRowEdit();
             tableLoader();
-            closeDialogYesNo();
+            closeDialogYesNo(0);
         }
         if (x == 1) {
             const parentTableField =
