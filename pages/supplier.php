@@ -431,29 +431,29 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             )[0];
             editRow_Kd = [];
             let kdId = 0;
-            for (let index = 0; index < td.length - 1; index++) {
+            for (let index = 1; index < td.length; index++) {
                 let value = td[index].innerHTML;
                 // console.log(value.length);
                 if (index == 2 || index == 3) {
                     if (value.length < 1 || value == 'null') {
-                        editFieldWrapper.children[index].style.pointerEvents = 'none';
-                        editFieldWrapper.children[index].children[0].children[1].textContent = 'No Editing For this >w<';
+                        editFieldWrapper.children[index - 1].style.pointerEvents = 'none';
+                        editFieldWrapper.children[index - 1].children[0].children[1].textContent = 'No Editing For this >w<';
                     } else {
-                        editFieldWrapper.children[index].children[0].style.pointerEvents = 'none';
-                        editFieldWrapper.children[index].children[0].children[1].textContent = `${strTableHeader[0][index]}`;
+                        editFieldWrapper.children[index - 1].children[0].style.pointerEvents = 'none';
+                        editFieldWrapper.children[index - 1].children[0].children[1].textContent = `${strTableHeader[0][index]}`;
                     }
                     editRow_Kd.push(value.split(';').filter(function(e) {
                         return e
                     }));
                     let currentKdId = kdId;
                     let currentKdBarang = td[0].innerHTML;
-                    editFieldWrapper.children[index].onclick = function() {
+                    editFieldWrapper.children[index - 1].onclick = function() {
                         showAddDataForm(currentKdId, currentKdBarang);
                     };
                     kdId += 1;
                     continue;
                 }
-                editFieldWrapper.children[index].children[0].children[0].value = value;
+                editFieldWrapper.children[index - 1].children[0].children[0].value = value;
             }
         }
     }
@@ -490,18 +490,20 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
 
         let valueToSubmit = new Map();
         let where_data = currentTd[0].innerHTML;
+        valueToSubmit.set('kode_barang', where_data);
         // let valueFromTableRow = [];
         for (let index = 0; index < editFieldWrapper.children.length; index++) {
-            if (index == 2 || index == 3) {
+            if (index == 1 || index == 2) {
                 continue;
             }
             let value = editFieldWrapper.children[index].children[0].children[0].value
             if (value == '') {
                 value = null;
             }
-            valueToSubmit.set(strTableHeader[parentID][index], value);
+            valueToSubmit.set(strTableHeader[parentID][index+1], value);
             // valueFromTableRow.push(value);
         }
+        console.log(valueToSubmit);
         for (let [key, value] of valueToSubmit) {
             await update(tables_target[parentID], 'kode_barang', where_data, key, valueToSubmit.get(key));
             where_data = valueToSubmit.get('kode_barang');
