@@ -139,6 +139,26 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         </div>
     </div>
 
+    <div class="dialog-ga-cukup">
+        <div class="dialog-yes-no-top-section">
+            <h1>Yahaha stok ga cukup</h1>
+        </div>
+        <div class="dialog-yes-no-content">
+            <h1></h1>
+            <img src="imgs/barang-habis.webp" />
+        </div>
+        <div class="btn-field-accept-cancle">
+            <div class="btn-cancle" onclick="closeDialogGadaBarang()">
+                <h1>Okaii</h1>
+            </div>
+            <div class="btn-accept" onclick="closeDialogGadaBarang()">
+                <h1>Refresh</h1>
+            </div>
+        </div>
+    </div>
+
+
+
     <div class="form-add-data">
         <div class="top-bar-form-add-data">
             <h1>Edit Data</h1>
@@ -600,6 +620,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
     function closeFormWithTable(x) {
         dialogPageAt -= 1;
         if (x == null) {
+            closeDialogGadaBarang();
             let tableField = document.getElementsByClassName("table-field");
             const formAddDataFilter = document.getElementsByClassName(
                 "form-add-data-filter"
@@ -693,7 +714,6 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                 showFormWithTable(showingDialogId);
             } else {
                 completeDialog(1);
-                closeFormWithTable(null);
             }
         }
     }
@@ -704,22 +724,32 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             await insert('barang', dialogValueToSubmit);
         }
         if (dialogId == 1) {
-            await update('transaksi_supplier', 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'),
-                'kode_supplier', dialogValueToSubmit.get('kode_supplier'));
-
             let selectKd = await selectTable('SELECT  kode_barang, kode_transaksi_supplier, qty FROM barang;');
-            
+
             for (let index = 0; index < selectKd.length; index++) {
                 let selectKdTransaksiSup = selectKd[index]['kode_transaksi_supplier'];
-                if(selectKdTransaksiSup == null) {
+                if (selectKdTransaksiSup == null) {
                     continue;
                 }
                 selectKdTransaksiSup = selectKdTransaksiSup.split(';');
                 if (selectKdTransaksiSup.includes(dialogValueToSubmit.get('kode_transaksi_supplier'))) {
-                    await update('barang', 'kode_barang', selectKd[index]['kode_barang'], 'qty', Number(selectKd[index]['qty']) - Number(dialogValueToSubmit.get('qty_total')));
+                    let qtyAfter = Number(selectKd[index]['qty']) - Number(dialogValueToSubmit.get('qty_total'));
+                    if (qtyAfter < 0) {
+                        console.log('sadaidhiuwdhapio');
+                        showDialogGadaBarang();
+                        return;
+                    }
+                    await update('barang', 'kode_barang', selectKd[index]['kode_barang'], 'qty', qtyAfter);
                 }
             }
+
+            await update('transaksi_supplier', 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'),
+                'kode_supplier', dialogValueToSubmit.get('kode_supplier'));
+
+            await update('transaksi_supplier', 'kode_transaksi_supplier', dialogValueToSubmit.get('kode_transaksi_supplier'),
+                'kode_supplier', dialogValueToSubmit.get('kode_supplier'));
         }
+        closeFormWithTable(null);
         tableLoader();
     }
 
@@ -832,6 +862,16 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
         closeAddDataForm();
         closeLastRowEdit();
         tableLoader();
+    }
+
+    function showDialogGadaBarang() {
+        const formYesNo = document.getElementsByClassName("dialog-ga-cukup")[0];
+        formYesNo.style.top = "50%";
+    }
+
+    function closeDialogGadaBarang() {
+        const formYesNo = document.getElementsByClassName("dialog-ga-cukup")[0];
+        formYesNo.style = null;
     }
 </script>
 <script>
