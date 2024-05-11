@@ -64,7 +64,6 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                 </div>
             </div>
             <div class="table-edit-row">
-
             </div>
         </div>
     </div>
@@ -130,10 +129,10 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             <h1>Ambatu Loli</h1>
         </div>
         <div class="btn-field-accept-cancle">
-            <div class="btn-cancle" onclick="closeDialogYesNo()">
+            <div class="btn-cancle" onclick="closeDialogYesNo(0)">
                 <h1>I'm change my mind</h1>
             </div>
-            <div class="btn-accept" onclick="acceptDialogYesNo()">
+            <div class="btn-accept" onclick="acceptDialogYesNo(0)">
                 <h1>I KNOW</h1>
             </div>
         </div>
@@ -239,7 +238,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
     ];
     const tableFormId = tables.length - 1;
     const formWithTableDialog =
-        '<div class="form-with-table-dialog"> <h1 id="form-with-table-dialog-title">Tambahkan?</h1> <div id="form-with-table-edit-row-section"> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> </div> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(this)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable(this)"> <h1>Untuk Nyata</h1> </div> </div> </div>';
+        '<div class="form-with-table-dialog"> <div class="table-edit-row-header"> <h1 id="form-with-table-dialog-title">Tambahkan?</h1> <div class="edit-row-btn-del" onclick="showDialogYesNo(1)"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" /> </svg> </div> </div> <div id="form-with-table-edit-row-section"> <h2 id="form-with-table-highlight-sel-val"></h2> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> <div class="material-text-box"> <div class="group"> <input type="text" required="required" /> <label>Search</label> </div> <div id="form-with-table-bottom-text-section"> <h3></h3> <h3></h3> </div> </div> </div> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" onclick="closeFormWithTable(this)"> <h1>Bukan</h1> </div> <div class="btn-accept" onclick="acceptFormWithTable(this)"> <h1>Untuk Nyata</h1> </div> </div> </div>';
     var formWithTableDialog_HighlightIdx = 2;
 
     var dialogStartAt = 1;
@@ -249,7 +248,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
     const editFieldOrigin =
         '<h1>Edit Data</h1> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
 
-    const editFieldOrigin_Delete = '<div class="table-edit-row-header"> <h1>Edit Data</h1> <div id="edit-row-btn-del" onclick="showDialogYesNo()"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" /> </svg> </div> </div> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
+    const editFieldOrigin_Delete = '<div class="table-edit-row-header"> <h1>Edit Data</h1> <div class="edit-row-btn-del" onclick="showDialogYesNo(0)"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" /> </svg> </div> </div> <div class="table-edit-field-wrapper"> </div> <div class="btn-field-accept-cancle"> <div class="btn-cancle" id="btn-discard" onclick="discardFormTextField(this)"> <h1>Discard</h1> </div> <div class="btn-accept" id="btn-save" onclick="saveFormTextField(this)"> <h1>Save</h1> </div> </div>';
 
     function getParentId_tableEditRow(x) {
         let id = x[x.length - 1];
@@ -538,7 +537,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
 
         console.log(dialogId);
         if (dialogId == 0) {
-            formDialog.children[0].textContent = "Isi ini dulu kak";
+            formDialog.children[0].children[0].textContent = "Isi ini dulu kak";
             formWithTableDialog_HighlightIdx = 0;
             highLightSelVal.display = 'none';
             let qtyTextBoxes = formDialog.children[1];
@@ -564,11 +563,20 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
 
         if (dialogId == 1) {
             if (dialogPageAt == 0) {
-                formDialog.children[0].textContent = "Siapa Supplier?";
+                formDialog.children[0].children[0].textContent = "Siapa Supplier?";
                 formWithTableDialog_HighlightIdx = 0;
             }
             if (dialogPageAt == 1) {
-                formDialog.children[0].textContent = "Acc?";
+                formDialog.children[0].children[0].textContent = "Acc?";
+                formDialog.children[0].children[1].style.display = 'block';
+                let dialogYesNo = document.getElementsByClassName('dialog-yes-no')[0];
+                dialogYesNo.children[2].children[0].onclick = function() {
+                    closeDialogYesNo(1);
+                }
+
+                dialogYesNo.children[2].children[1].onclick = function() {
+                    acceptDialogYesNo(1);
+                }
                 formWithTableDialog_HighlightIdx = 0;
             }
             highLightSelVal.textContent = td[formWithTableDialog_HighlightIdx].innerHTML;
@@ -596,6 +604,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             formAddDataFilter.style.pointerEvents = "all";
             formAddDataFilter.onclick = function() {
                 closeFormWithTable(null);
+                closeDialogYesNo(1);
             };
             formAddData.style.top = "50%";
             dialogPageAt = 0;
@@ -735,7 +744,6 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                 if (selectKdTransaksiSup.includes(dialogValueToSubmit.get('kode_transaksi_supplier'))) {
                     let qtyAfter = Number(selectKd[index]['qty']) - Number(dialogValueToSubmit.get('qty_total'));
                     if (qtyAfter < 0) {
-                        console.log('sadaidhiuwdhapio');
                         showDialogGadaBarang();
                         return;
                     }
@@ -755,38 +763,105 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
 
 
     // Dialog-Yes-No
-    function showDialogYesNo() {
-        const formYesNo = document.getElementsByClassName("dialog-yes-no")[0];
-        const formAddDataFilter = document.getElementsByClassName(
-            "form-add-data-filter"
-        )[0];
-        formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
-        formAddDataFilter.style.pointerEvents = "all";
-        formAddDataFilter.onclick = function() {
-            closeDialogYesNo(null);
-        };
-        formYesNo.style.top = "50%";
+    function showDialogYesNo(x) {
+        if (x == 0) {
+            const formYesNo = document.getElementsByClassName("dialog-yes-no")[0];
+            const formAddDataFilter = document.getElementsByClassName(
+                "form-add-data-filter"
+            )[0];
+            formAddDataFilter.style.backgroundColor = `rgba(0, 0, 0, 0.7)`;
+            formAddDataFilter.style.pointerEvents = "all";
+            formAddDataFilter.onclick = function() {
+                closeDialogYesNo(0);
+            };
+            formYesNo.style.top = "50%";
 
-        let question = `Hapus Data dengan Id: '${currentTd[0].innerHTML}' ?`;
+            let question = `Hapus Data dengan Id: '${currentTd[0].innerHTML}' ?`;
 
-        formYesNo.children[1].children[0].textContent = question;
+            formYesNo.children[1].children[0].textContent = question;
+        }
+
+        if (x == 1) {
+            const formYesNo = document.getElementsByClassName("dialog-yes-no")[0];
+            formYesNo.style.top = "50%";
+
+            let parentTableField =
+                document.getElementsByClassName("table-database")[3].parentElement;
+            const formDialog = parentTableField.getElementsByClassName("form-with-table-dialog")[0];
+            const highLightSelVal = formDialog.children[1].children[0];
+
+            let question = `Hapus Transaksi dengan Id: '${highLightSelVal.textContent}' ?`;
+            formYesNo.children[1].children[0].textContent = question;
+        }
+
     }
 
-    function closeDialogYesNo() {
-        const formYesNo = document.getElementsByClassName("dialog-yes-no")[0];
-        const formAddDataFilter = document.getElementsByClassName(
-            "form-add-data-filter"
-        )[0];
-        formAddDataFilter.style = null;
-        formAddDataFilter.onclick = null;
-        formYesNo.style = null;
+    function closeDialogYesNo(x) {
+        if (x == 0) {
+            const formYesNo = document.getElementsByClassName("dialog-yes-no")[0];
+            const formAddDataFilter = document.getElementsByClassName(
+                "form-add-data-filter"
+            )[0];
+            formAddDataFilter.style = null;
+            formAddDataFilter.onclick = null;
+            formYesNo.style = null;
+        }
+        if (x == 1) {
+            const formYesNo = document.getElementsByClassName("dialog-yes-no")[0];
+            formYesNo.style = null;
+        }
     }
 
-    async function acceptDialogYesNo() {
-        await deleteRow(tables_target[0], 'kode_barang', currentTd[0].innerHTML);
-        closeLastRowEdit();
-        tableLoader();
-        closeDialogYesNo();
+    async function acceptDialogYesNo(x) {
+        if (x == 0) {
+            await deleteRow(tables_target[0], 'kode_barang', currentTd[0].innerHTML);
+            closeLastRowEdit();
+            tableLoader();
+            closeDialogYesNo();
+        }
+        if (x == 1) {
+            const parentTableField =
+                document.getElementsByClassName("table-database")[3].parentElement;
+            const formDialog = parentTableField.getElementsByClassName("form-with-table-dialog")[0];
+            const highLightSelVal = formDialog.children[1].children[0];
+            let deleteKey = highLightSelVal.textContent;
+
+            let selectKd = await selectTable('SELECT kode_barang, kode_transaksi_supplier, kode_transaksi_pembeli FROM barang;');
+
+            await deleteRow('transaksi_supplier', 'kode_transaksi_supplier', deleteKey);
+
+            for (let index = 0; index < selectKd.length; index++) {
+                let selectKdTransaksiSup = selectKd[index]['kode_transaksi_supplier'];
+                if (selectKdTransaksiSup == null) {
+                    continue;
+                }
+                selectKdTransaksiSup = selectKdTransaksiSup.split(';');
+                if (selectKdTransaksiSup.includes(deleteKey)) {
+                    selectKdTransaksiSup.splice(selectKdTransaksiSup.indexOf(deleteKey), 1);
+                    console.log(selectKdTransaksiSup);
+                    selectKdTransaksiSup = selectKdTransaksiSup.join(';');
+                    await update('barang', 'kode_barang', selectKd[index]['kode_barang'], 'kode_transaksi_supplier', selectKdTransaksiSup);
+              
+                    // WARNING
+                    index = selectKd.length + 1;
+                }
+                
+                // selectKdTransaksiPem = selectKd[index]['kode_transaksi_pembeli'];
+                // selectKdTransaksiPem = selectKdTransaksiPem.split(';');
+                // deleteKey = `TP${deleteKey.substring(2, deleteKey.length)}`;
+                // if (selectKdTransaksiPem.includes(deleteKey)) {
+                //     selectKdTransaksiPem.splice(selectKdTransaksiPem.indexOf(deleteKey), 1);
+                //     console.log(selectKdTransaksiPem);
+                //     selectKdTransaksiPem = selectKdTransaksiPem.join(';');
+                //     await update('barang', 'kode_barang', selectKd[index]['kode_barang'], 'kode_transaksi_pembeli', selectKdTransaksiPem);
+                   
+                // }
+            }
+            
+
+            closeDialogYesNo(1);
+            tableLoader();
+        }
     }
 
     // FormEdit Kd

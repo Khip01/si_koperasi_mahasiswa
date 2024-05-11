@@ -238,7 +238,7 @@ th:last-child {
   min-width: 250px;
 }
 
-#edit-row-btn-del {
+.edit-row-btn-del {
   display: flex;
   background-color: #e96e7a;
   border-radius: 10px;
@@ -248,11 +248,11 @@ th:last-child {
   justify-content: center;
 }
 
-#edit-row-btn-del:hover {
+.edit-row-btn-del:hover {
   background-color: #ff0019;
 }
 
-#edit-row-btn-del svg {
+.edit-row-btn-del svg {
   width: 16px;
   height: 16px;
   padding: 10px;
@@ -560,6 +560,10 @@ textarea:focus ~ .bar:before {
   transition: 0.5s;
 }
 
+.form-with-table .table-edit-row-header .edit-row-btn-del{
+  display: none;
+}
+
 .form-with-table .table-field {
   display: none;
 }
@@ -571,9 +575,9 @@ textarea:focus ~ .bar:before {
   padding: 30px 10px 30px 1px;
 }
 
-.form-with-table-dialog #form-with-table-dialog-title {
+/* .form-with-table-dialog .table-edit-row-header #form-with-table-dialog-title {
   min-width: 17rem;
-}
+} */
 
 .form-with-table-dialog #form-with-table-edit-row-section {
   display: flex;
