@@ -552,7 +552,7 @@ $pembeli = "SELECT * FROM pembeli";
             dialogPageAt += 1;
         } else if (dialogPageAt == 1) {
             dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
-            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][3]), await pembeliMaxKd());
+            dialogValueToSubmit.set('kode_transaksi_pembeli', await pembeliMaxKd());
             for (let index = 3; index < strTableHeader[2].length; index++) {
                 if (index == 5) {
                     let qtyTextBox = document.getElementsByClassName("form-with-table-dialog")[1].children[1].children[1];
