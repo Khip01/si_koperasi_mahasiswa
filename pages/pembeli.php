@@ -543,6 +543,8 @@ $pembeli = "SELECT * FROM pembeli";
 
 
     async function acceptFormWithTable(x) {
+        // x.parentElement.parentElement.parentElement.style = null;
+
         const formAddData = editSelectedRowWidget;
         let valueToSubmit = [];
         for (let index = 0; index < formAddData.children.length; index++) {
@@ -551,6 +553,8 @@ $pembeli = "SELECT * FROM pembeli";
 
         if (dialogPageAt == 0) {
             dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[1][0]), valueToSubmit[0]);
+            x.parentElement.parentElement.parentElement.parentElement.style = null;
+            x.parentElement.parentElement.innerHTML = "";
             dialogPageAt += 1;
         } else if (dialogPageAt == 1) {
             addtionalValues.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);

@@ -386,7 +386,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             const editFieldWrapper = document.getElementsByClassName(
                 "table-edit-field-wrapper"
             )[0];
-            for (let index = 0; index < strTableHeader[x].length; index++) {
+            for (let index = 1; index < strTableHeader[x].length; index++) {
                 editFieldWrapper.innerHTML +=
                     '<div class="material-text-box"> <div class="group"> <input type="text" required="required"/> <label>' +
                     strTableHeader[x][index] +
@@ -431,7 +431,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             )[0];
             editRow_Kd = [];
             let kdId = 0;
-            for (let index = 0; index < td.length; index++) {
+            for (let index = 0; index < td.length - 1; index++) {
                 let value = td[index].innerHTML;
                 // console.log(value.length);
                 if (index == 2 || index == 3) {
@@ -710,6 +710,8 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
 
         if (showingDialogId == 1) {
             if (dialogPageAt == 0) {
+                x.parentElement.parentElement.parentElement.parentElement.style = null;
+                x.parentElement.parentElement.innerHTML = "";
                 dialogValueToSubmit.set(strTableHeader[2][0], valueFromTable[0]);
             }
             if (dialogPageAt == 1) {
@@ -819,7 +821,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             tableLoader();
             closeDialogYesNo(0);
         }
-        if (x == 1) {            
+        if (x == 1) {
             const parentTableField =
                 document.getElementsByClassName("table-database")[3].parentElement;
             const formDialog = parentTableField.getElementsByClassName("form-with-table-dialog")[0];
@@ -841,11 +843,11 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                     console.log(selectKdTransaksiSup);
                     selectKdTransaksiSup = selectKdTransaksiSup.join(';');
                     await update('barang', 'kode_barang', selectKd[index]['kode_barang'], 'kode_transaksi_supplier', selectKdTransaksiSup);
-              
+
                     // WARNING
                     index = selectKd.length + 1;
                 }
-                
+
                 // selectKdTransaksiPem = selectKd[index]['kode_transaksi_pembeli'];
                 // selectKdTransaksiPem = selectKdTransaksiPem.split(';');
                 // deleteKey = `TP${deleteKey.substring(2, deleteKey.length)}`;
@@ -854,10 +856,10 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
                 //     console.log(selectKdTransaksiPem);
                 //     selectKdTransaksiPem = selectKdTransaksiPem.join(';');
                 //     await update('barang', 'kode_barang', selectKd[index]['kode_barang'], 'kode_transaksi_pembeli', selectKdTransaksiPem);
-                   
+
                 // }
             }
-            
+
 
             closeDialogYesNo(1);
             closeLastRowEdit();
