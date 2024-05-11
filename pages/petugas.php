@@ -640,42 +640,37 @@ $petugas = "SELECT * FROM petugas";
 
     async function completeDialog() {
         dialogValueToSubmit.set('tgl_transaksi', formatDateAndTime(new Date()));
-        let supplierKdNew = await supplierMaxKd();
+        dialogValueToSubmit.set('kode_transaksi_supplier', await supplierMaxKd());
 
-        let selectKdSupplier = await selectTable(`SELECT kode_transaksi_supplier FROM barang WHERE kode_barang = '${addtionalValues.get('kode_barang')}'`);
-        if (selectKdSupplier[0]['kode_transaksi_supplier'] != null) {
-            selectKdSupplier = selectKdSupplier[0]['kode_transaksi_supplier'].split(';');
-        } else {
-            selectKdSupplier = [];
+        let selectKd = await selectTable('SELECT kode_barang, kode_transaksi_supplier, kode_transaksi_pembeli FROM barang;');
+        console.log(selectKd);
+        for (let index = 0; index < selectKd.length; index++) {
+            let selectKdTransaksiPem = selectKd[index]['kode_transaksi_pembeli'];
+            if (selectKdTransaksiPem == null) {
+                continue;
+            }
+            selectKdTransaksiPem = selectKdTransaksiPem.split(';');
+            let selectKdTransaksiSup = selectKd[index]['kode_transaksi_supplier'];
+            if (selectKdTransaksiSup == null) {
+                selectKdTransaksiSup = [];
+            } else {
+                selectKdTransaksiSup = selectKdTransaksiSup.split(';');
+            }
+
+            if (selectKdTransaksiPem.includes(addtionalValues.get('kode_transaksi_pembeli')) && !selectKdTransaksiSup.includes(dialogValueToSubmit.get('kode_transaksi_supplier'))) {
+                selectKdTransaksiSup.push(dialogValueToSubmit.get('kode_transaksi_supplier'));
+                selectKdTransaksiSup = selectKdTransaksiSup.join(';');
+                console.log(selectKdTransaksiSup);
+                await update('barang', 'kode_barang', selectKd[index]['kode_barang'], 'kode_transaksi_supplier', selectKdTransaksiSup);
+                break;
+            }
+
         }
-        if (!selectKdSupplier.includes(supplierKdNew)) {
-            selectKdSupplier.push(supplierKdNew);
-        }
-        selectKdSupplier = selectKdSupplier.join(';');
-        // console.log(selectKdSupplier);
-        await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_supplier', selectKdSupplier);
-
-
-        let selectKdPembeli = await selectTable(`SELECT kode_transaksi_pembeli FROM barang WHERE kode_barang = '${addtionalValues.get('kode_barang')}'`);
-        if (selectKdPembeli[0]['kode_transaksi_pembeli'] != null) {
-            selectKdPembeli = selectKdPembeli[0]['kode_transaksi_pembeli'].split(';');
-        } else {
-            selectKdPembeli = [];
-        }
-        if (!selectKdPembeli.includes(addtionalValues.get('kode_transaksi_pembeli'))) {
-            selectKdPembeli.push(addtionalValues.get('kode_transaksi_pembeli'));
-        }
-        selectKdPembeli = selectKdPembeli.join(';');
-        await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_pembeli', selectKdPembeli);
-
-
-        // console.log(selectKdSupplier);
-
-        dialogValueToSubmit.set('kode_transaksi_supplier', supplierKdNew);
+        
         console.log(dialogValueToSubmit);
         console.log(addtionalValues);
         await insert('transaksi_supplier', dialogValueToSubmit);
-        
+
         await update('transaksi_pembeli', 'kode_transaksi_pembeli', addtionalValues.get('kode_transaksi_pembeli'), 'kode_petugas ', dialogValueToSubmit.get('kode_petugas'))
         tableLoader();
     }

@@ -435,6 +435,7 @@ $pembeli = "SELECT * FROM pembeli";
 
     var dialogPageAt = -1;
     let dialogValueToSubmit;
+    let addtionalValues;
 
     function showFormWithTable() {
         const formTable = document.getElementsByClassName("form-with-table")[0];
@@ -442,6 +443,7 @@ $pembeli = "SELECT * FROM pembeli";
         formTable.children[1].style.display = null;
         if (dialogPageAt < 0) {
             dialogValueToSubmit = new Map();
+            addtionalValues = new Map();
             tableLoader();
             const formAddData = document.getElementsByClassName("form-with-table")[0];
             const formAddDataFilter = document.getElementsByClassName(
@@ -551,7 +553,7 @@ $pembeli = "SELECT * FROM pembeli";
             dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[1][0]), valueToSubmit[0]);
             dialogPageAt += 1;
         } else if (dialogPageAt == 1) {
-            dialogValueToSubmit.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
+            addtionalValues.set(toSubmitHeaderMap.get(strTableHeader[2][0]), valueToSubmit[0]);
             dialogValueToSubmit.set('kode_transaksi_pembeli', await pembeliMaxKd());
             for (let index = 3; index < strTableHeader[2].length; index++) {
                 if (index == 5) {
@@ -578,9 +580,28 @@ $pembeli = "SELECT * FROM pembeli";
 
     async function completeDialog() {
         dialogValueToSubmit.set('tgl_transaksi', formatDateAndTime(new Date()));
+        
+        let selectKdPembeli = await selectTable(`SELECT kode_transaksi_pembeli FROM barang WHERE kode_barang = '${addtionalValues.get('kode_barang')}'`);
+        console.log(selectKdPembeli);
+        if (selectKdPembeli[0]['kode_transaksi_pembeli'] != null) {
+            selectKdPembeli = selectKdPembeli[0]['kode_transaksi_pembeli'].split(';');
+        } else {
+            selectKdPembeli = [];
+        }
+        if (!selectKdPembeli.includes(dialogValueToSubmit.get('kode_transaksi_pembeli'))) {
+            selectKdPembeli.push(dialogValueToSubmit.get('kode_transaksi_pembeli'));
+        }
+        selectKdPembeli = selectKdPembeli.join(';');
+        await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'kode_transaksi_pembeli', selectKdPembeli);
+
+        
         console.log(dialogValueToSubmit);
+        console.log(addtionalValues);
+
+
+
         await insert('transaksi_pembeli', dialogValueToSubmit);
-        await update('barang', 'kode_barang', dialogValueToSubmit.get('kode_barang'), 'qty', Number(qty_before) - Number(dialogValueToSubmit.get('qty_total')));
+        // await update('barang', 'kode_barang', addtionalValues.get('kode_barang'), 'qty', Number(qty_before) - Number(dialogValueToSubmit.get('qty_total')));
         tableLoader();
     }
 </script>
