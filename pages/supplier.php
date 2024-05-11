@@ -819,7 +819,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             tableLoader();
             closeDialogYesNo(0);
         }
-        if (x == 1) {
+        if (x == 1) {            
             const parentTableField =
                 document.getElementsByClassName("table-database")[3].parentElement;
             const formDialog = parentTableField.getElementsByClassName("form-with-table-dialog")[0];
@@ -860,6 +860,7 @@ $transaksi_supplier = "SELECT * FROM transaksi_supplier WHERE kode_supplier IS N
             
 
             closeDialogYesNo(1);
+            closeLastRowEdit();
             tableLoader();
         }
     }
